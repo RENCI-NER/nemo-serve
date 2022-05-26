@@ -1,8 +1,8 @@
 import os
 
 from fastapi import FastAPI
-from src.ModelSingleton import ModelFactory, TokenClassificationModelWrapper
-from src.ApiDataStructs import Query
+from .ModelSingleton import ModelFactory, TokenClassificationModelWrapper
+from .ApiDataStructs import Query
 import uvicorn
 import logging
 
@@ -32,6 +32,5 @@ async def get_model_names():
     return ModelFactory.get_model_names()
 
 
-
 if __name__ == '__main__':
-    uvicorn.run(app=app, port=8080)
+    uvicorn.run(app, port=8080)
