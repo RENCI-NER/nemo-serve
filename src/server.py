@@ -1,8 +1,8 @@
 import os
 
 from fastapi import FastAPI
-from .ModelSingleton import ModelFactory, TokenClassificationModelWrapper
-from .ApiDataStructs import Query
+from src.ModelSingleton import ModelFactory, TokenClassificationModelWrapper
+from src.ApiDataStructs import Query
 import uvicorn
 import logging
 
