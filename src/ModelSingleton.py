@@ -1,7 +1,7 @@
 
 import logging
 
-# from nemo.collections.nlp.models import TokenClassificationModel
+from nemo.collections.nlp.models import TokenClassificationModel
 
 logger = logging.Logger("model-loader")
 
@@ -25,7 +25,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
     def __init__(self, model_path):
         """ Initializes NLP Model"""
         super(TokenClassificationModelWrapper, self).__init__()
-        # self.model = TokenClassificationModel.restore_from(model_path)
+        self.model = TokenClassificationModel.restore_from(model_path)
 
     def __call__(self, query_text):
         """ Runs prediction on text"""
@@ -44,7 +44,6 @@ class ModelFactory:
             logger.info(f"Model {name} already in class skipping initialization")
             return
         else:
-            # @TODO replace call with actual model init call
             logger.info(f"Initializing model {name}")
             assert issubclass(model_class, ModelWrapper), "Error please provide a subclass type of ModelWrapper"
             # initializes model and makes its prediction a callable
@@ -54,7 +53,6 @@ class ModelFactory:
     def query_model(model_name, query_text):
         if model_name not in ModelFactory.models:
             raise ModelNotFoundError(f"Model {model_name} not found")
-        # @TODO return model stuff
         # since we have model as a callable class we can just treat it like a function
         return ModelFactory.models[model_name](query_text)
 
@@ -62,9 +60,9 @@ class ModelFactory:
     def get_model_names():
         return list(ModelFactory.models.keys())
 
-
+# test this factory by setting the model path
 if __name__ == '__main__':
-    model_path = ""
-    ModelFactory.load_model('medmentions', model_path=model_path, model_class=TokenClassificationModelWrapper)
+    model_path = "/exp/trained_model.nemo"
+    ModelFactory.load_model('medmentions', path=model_path, model_class=TokenClassificationModelWrapper)
     result = ModelFactory.query_model('medmentions', "asthma is a disease")
     print(result)
