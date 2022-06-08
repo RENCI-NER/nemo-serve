@@ -31,9 +31,25 @@ class TokenClassificationModelWrapper(ModelWrapper):
         """ Runs prediction on text"""
         return self.model.add_predictions([query_text])
 
+class TokenClassificationModelWrapperMock(ModelWrapper):
+    def __init__(self, model_path):
+        """ Initializes NLP Model"""
+        print('hey')
+
+    def __call__(self, query_text):
+        """ Runs prediction on text"""
+        return ['woop']
 
 class ModelFactory:
+    # this is populated by calling load_model
+    # it stores instances
     models = {}
+    # register classes here
+    # when defining wrapper please register here
+    # when using the config the class to be used has to be registered here.
+    model_classes = {
+        "TokenClassificationWrapper": TokenClassificationModelWrapper
+    }
 
     def __init__(self):
         pass

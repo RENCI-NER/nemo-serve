@@ -1,0 +1,8 @@
+# config class for models loading
+# model_name:
+#   path: "path to model"
+#   class: "wrapper class"
+
+token_classification:
+  path: "/data/trained_model.nemo"
+  class: TokenClassificationWrapper

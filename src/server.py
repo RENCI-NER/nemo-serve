@@ -5,6 +5,7 @@ from src.ModelSingleton import ModelFactory, TokenClassificationModelWrapper
 from src.ApiDataStructs import Query
 import uvicorn
 import logging
+import yaml
 
 app = FastAPI()
 logger = logging.Logger("server")
@@ -12,10 +13,24 @@ logger = logging.Logger("server")
 
 @app.on_event("startup")
 def init_nlp_model():
-    logger.info("Loading nlp model")
-    path = os.environ.get("MODEL_PATH")
-    ModelFactory.load_model(name="token_classification", path=path, model_class=TokenClassificationModelWrapper)
-    logger.info(f"Loaded token_classification model from {path}")
+    logger.info("Loading config file")
+    config_file_path = os.environ.get('CONFIG_PATH',
+                                      os.path.join(
+                                          os.path.dirname(os.path.realpath(__file__)),
+                                          "..",
+                                          'config.yaml'
+                                      )
+                                      )
+    with open(config_file_path) as config_stream:
+        config = yaml.load(config_stream, Loader=yaml.SafeLoader)
+    for model_name in config:
+        cls = ModelFactory.model_classes.get(config[model_name]['class'])
+        path = config[model_name]['path']
+        if cls is None:
+            raise ValueError(f"model class {config[model_name]['class']} not found please use one of {ModelFactory.model_classes.keys()}, "
+                             f"Or add your wrapper to ModelFactory.model_classes dictionary")
+        ModelFactory.load_model(name=model_name, path=path, model_class=cls)
+        logger.info(f"Loaded {cls} model from {path} as {model_name}")
 
 
 @app.post("/annotate/")
