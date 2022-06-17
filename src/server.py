@@ -1,7 +1,7 @@
 import os
 
 from fastapi import FastAPI
-from src.ModelSingleton import ModelFactory, TokenClassificationModelWrapper
+from src.ModelSingleton import ModelFactory
 from src.ApiDataStructs import Query
 import uvicorn
 import logging
@@ -24,12 +24,27 @@ def init_nlp_model():
     with open(config_file_path) as config_stream:
         config = yaml.load(config_stream, Loader=yaml.SafeLoader)
     for model_name in config:
-        cls = ModelFactory.model_classes.get(config[model_name]['class'])
-        path = config[model_name]['path']
+        cls = None
+        gt_path = None
+        if model_name == 'token_classification':
+            cls = ModelFactory.model_classes.get(config[model_name]['class'])
+            path = config[model_name]['path']
+
+        elif model_name == 'sapbert':
+            path = config[model_name]['path']
+            cls = ModelFactory.model_classes.get(config[model_name]['class'])
+            gt_path = config[model_name]['ground_truth_data_path']
+            gt_id_path = config[model_name]['ground_truth_data_ids_path']
+
         if cls is None:
-            raise ValueError(f"model class {config[model_name]['class']} not found please use one of {ModelFactory.model_classes.keys()}, "
-                             f"Or add your wrapper to ModelFactory.model_classes dictionary")
-        ModelFactory.load_model(name=model_name, path=path, model_class=cls)
+            raise ValueError(
+                f"model class {config[model_name]['class']} not found please use one of {ModelFactory.model_classes.keys()}, "
+                f"Or add your wrapper to ModelFactory.model_classes dictionary")
+        if gt_path:
+            ModelFactory.load_model(name=model_name, path=path, model_class=cls, ground_truth_data_path=gt_path,
+                                    ground_truth_data_ids_path=gt_id_path)
+        else:
+            ModelFactory.load_model(name=model_name, path=path, model_class=cls)
         logger.info(f"Loaded {cls} model from {path} as {model_name}")
 
 
