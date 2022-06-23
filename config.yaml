@@ -8,6 +8,6 @@ token_classification:
   class: TokenClassificationWrapper
 sapbert:
   path: "/data/SapBERT-from-PubMedBERT-fulltext"
-  class: SapbertModelWrapper
+  class: SapbertWrapper
   ground_truth_data_path: "/data/pubmed_mesh_prediction_output.npy"
   ground_truth_data_ids_path: "/data/pubmed_mesh_name_ids.csv"

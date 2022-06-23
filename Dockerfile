@@ -3,7 +3,7 @@ FROM nvcr.io/nvidia/nemo:1.4.0
 RUN mkdir /var/web
 WORKDIR /var/web
 
-RUN git clone https://github.com/RENCI-NER/nemo-serve.git
+RUN git clone -b add-sapbert https://github.com/RENCI-NER/nemo-serve.git
 
 WORKDIR /var/web/nemo-serve
 
