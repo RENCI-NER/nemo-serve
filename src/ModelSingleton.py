@@ -6,7 +6,7 @@ from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
 
 
-logger = logging.Logger("model-loader")
+logger = logging.Logger("gunicorn.error")
 
 
 class ModelNotFoundError(Exception):
@@ -47,7 +47,7 @@ class TokenClassificationModelWrapperMock(ModelWrapper):
 class SapbertModelWrapper(ModelWrapper):
     def __init__(self, model_path, all_reps_path, all_reps_ids_path):
         """ Initializes NLP Model"""
-        super(TokenClassificationModelWrapper, self).__init__()
+        super(SapbertModelWrapper, self).__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModel.from_pretrained(model_path).cuda(0)
         self.all_reps_emb = np.load(all_reps_path)

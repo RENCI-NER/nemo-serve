@@ -13,7 +13,6 @@ logger = logging.getLogger('gunicorn.error')
 
 @app.on_event("startup")
 def init_nlp_model():
-    logger.info("Loading config file")
     config_file_path = os.environ.get('CONFIG_PATH',
                                       os.path.join(
                                           os.path.dirname(os.path.realpath(__file__)),
@@ -21,7 +20,6 @@ def init_nlp_model():
                                           'config.yaml'
                                       )
                                       )
-    logger.info(config_file_path)
     with open(config_file_path) as config_stream:
         config = yaml.load(config_stream, Loader=yaml.SafeLoader)
     logger.info(config)
@@ -39,13 +37,11 @@ def init_nlp_model():
             gt_path = config[model_name]['ground_truth_data_path']
             gt_id_path = config[model_name]['ground_truth_data_ids_path']
             logger.info(f'path: {path}, cls: {cls}, gt_path: {gt_path}, gt_id_path: {gt_id_path}')
-        logger.info(cls)
         if cls is None:
             raise ValueError(
                 f"model class {config[model_name]['class']} not found please use one of {ModelFactory.model_classes.keys()}, "
                 f"Or add your wrapper to ModelFactory.model_classes dictionary")
         if gt_path:
-            logger.info('before loading sapbert model')
             ModelFactory.load_model(name=model_name, path=path, model_class=cls, ground_truth_data_path=gt_path,
                                     ground_truth_data_ids_path=gt_id_path)
             logger.info('after loading sapbert model')
