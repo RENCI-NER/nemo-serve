@@ -6,3 +6,8 @@
 token_classification:
   path: "/data/trained_model.nemo"
   class: TokenClassificationWrapper
+sapbert:
+  path: "/data/SapBERT-from-PubMedBERT-fulltext"
+  class: SapbertWrapper
+  ground_truth_data_path: "/data/pubmed_mesh_prediction_output.npy"
+  ground_truth_data_ids_path: "/data/pubmed_mesh_name_ids.csv"
