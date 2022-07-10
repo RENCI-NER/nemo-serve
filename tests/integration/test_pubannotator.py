@@ -19,6 +19,7 @@ import pytest
 NEMOSERVE_URL = os.getenv('NEMOSERVE_URL', 'https://med-nemo.apps.renci.org/')
 ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 
+MIN_TEXT = 10
 MAX_TEXT = 100
 PUBMED_IDS_TO_TEST = [
     'PMID:7837719',         # https://pubmed.ncbi.nlm.nih.gov/7837719/
@@ -48,7 +49,7 @@ def test_with_pubannotator(pubmed_id):
     text = pubannotator['text']
     logging.info(f" - Text [{len(text)}]: {text}")
 
-    if len(text) < 10:
+    if len(text) < MIN_TEXT:
         pytest.fail(f"Text for {pubmed_id} is too small to be processed: {text}")
         return
 
