@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import logging
+from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
@@ -25,13 +26,47 @@ class ModelWrapper:
 
 class TokenClassificationModelWrapper(ModelWrapper):
     def __init__(self, model_path):
-        """ Initializes NLP Model"""
+        """ Initializes NLP Model
+        :param model_path: Path to model to load
+        """
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
 
+    def sliding_window(self, text, window_size=512, padding=5):
+        """
+        Tokenize original query into smaller chunks that the model is able to process
+        :param text: Text to split up
+        :param window_size: Max token size to split
+        :param padding: Number of tokens to include from previous split, to preserve context.
+        :return: Array of split text
+        """
+        words = text.split(' ')
+        window_end = False
+        current_index = 0
+        while not window_end:
+            current_string = []
+            for index, word in enumerate(words[current_index:]):
+                if len(current_string) >= window_size:
+                    yield current_string
+                    current_index += index - padding
+                    break
+                current_string.append(word)
+
+            if current_index + index == len(words) - 1:
+                window_end = True
+                yield current_string
+
     def __call__(self, query_text):
         """ Runs prediction on text"""
-        return self.model.add_predictions([query_text])
+        try:
+            queries = [x for x in self.sliding_window(query_text)]
+            all_predictions = self.model.add_predictions(queries)
+            return reduce(lambda x, y: x + y, all_predictions, [])
+        except Exception as E:
+            raise E
+        finally:
+            # reset the model, recover
+            self.model.train(mode=self.model.training)
 
 
 class TokenClassificationModelWrapperMock(ModelWrapper):
