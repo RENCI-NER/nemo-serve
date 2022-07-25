@@ -33,7 +33,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
 
-    def sliding_window(text, window_size=512):
+    def sliding_window(self, text, window_size=512):
         """
         Tokenize original query into smaller chunks that the model is able to process
         :param text: Text to split up
