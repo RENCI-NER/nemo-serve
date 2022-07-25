@@ -45,16 +45,16 @@ class TokenClassificationModelWrapper(ModelWrapper):
         current_index = 0
         while not window_end:
             current_string = []
-            for index, word in enumerate(sentences[current_index:]):
+            for index, sentence in enumerate(sentences[current_index:]):
                 if len(current_string) >= window_size:
-                    yield current_string
+                    yield " ".join(current_string)
                     current_index += index
                     break
-                current_string.append(word)
+                current_string.append(sentence)
 
             if current_index + index == len(sentences) - 1:
                 window_end = True
-                yield current_string
+                yield " ".join(current_string)
 
     def __call__(self, query_text):
         """ Runs prediction on text"""
