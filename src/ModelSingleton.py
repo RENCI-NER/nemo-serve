@@ -5,6 +5,7 @@ from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
+from nltk.tokenize import sent_tokenize
 
 
 logger = logging.Logger("gunicorn.error")
@@ -32,27 +33,26 @@ class TokenClassificationModelWrapper(ModelWrapper):
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
 
-    def sliding_window(self, text, window_size=512, padding=5):
+    def sliding_window(text, window_size=512):
         """
         Tokenize original query into smaller chunks that the model is able to process
         :param text: Text to split up
         :param window_size: Max token size to split
-        :param padding: Number of tokens to include from previous split, to preserve context.
         :return: Array of split text
         """
-        words = text.split(' ')
+        sentences = sent_tokenize(text)
         window_end = False
         current_index = 0
         while not window_end:
             current_string = []
-            for index, word in enumerate(words[current_index:]):
+            for index, word in enumerate(sentences[current_index:]):
                 if len(current_string) >= window_size:
                     yield current_string
-                    current_index += index - padding
+                    current_index += index
                     break
                 current_string.append(word)
 
-            if current_index + index == len(words) - 1:
+            if current_index + index == len(sentences) - 1:
                 window_end = True
                 yield current_string
 
