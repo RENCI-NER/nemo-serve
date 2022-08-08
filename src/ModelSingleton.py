@@ -62,7 +62,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text)]
-            all_predictions = [self.model.add_predictions([queries]) for x in queries ]
+            all_predictions = [self.model.add_predictions([x]) for x in queries]
             return reduce(lambda x, y: x + y, all_predictions, [])
         except Exception as E:
             raise E
