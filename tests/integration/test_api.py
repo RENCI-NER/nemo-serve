@@ -16,7 +16,7 @@ OPENAPI_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/openapi.json')
 DOCS_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/docs/')
 ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 MODELS_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/models/')
-
+MODELS_EXPECTED = os.getenv('MODELS_EXPECTED', 'tokenClassificationModel').split('|')
 
 def test_openapi():
     response = requests.get(OPENAPI_ENDPOINT)
@@ -42,13 +42,13 @@ def test_models():
     assert len(models) > 0
 
     # At the moment, we only support a single model.
-    assert models == ['tokenClassificationModel']
+    assert models == MODELS_EXPECTED
 
 
 def test_annotate():
     request = {
         "text": "Human brains fit inside human skulls. Influenza is caused by a virus.",
-        "model_name": "tokenClassificationModel"
+        "model_name": MODELS_EXPECTED[0]
     }
     response = requests.post(ANNOTATE_ENDPOINT, json=request)
     assert response.status_code == 200
