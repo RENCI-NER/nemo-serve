@@ -43,16 +43,18 @@ class TokenClassificationModelWrapper(ModelWrapper):
         sentences = sent_tokenize(text)
         window_end = False
         current_index = 0
+        splitted = 0
         while not window_end:
             current_string = []
             for index, sentence in enumerate(sentences[current_index:]):
-                if len(current_string) >= window_size:
+                if reduce(lambda x, y: x + len(y.split(" ")), current_string, 0) >= window_size:
                     yield " ".join(current_string)
                     current_index += index
                     break
                 current_string.append(sentence)
+                splitted += 1
 
-            if current_index + index == len(sentences) - 1:
+            if splitted == len(sentences):
                 window_end = True
                 yield " ".join(current_string)
 
