@@ -5,7 +5,7 @@ from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
-from nltk.tokenize import sent_tokenize
+from utils.tokenizer import tokenizer
 
 
 logger = logging.Logger("gunicorn.error")
@@ -40,7 +40,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         :param window_size: Max token size to split
         :return: Array of split text
         """
-        sentences = sent_tokenize(text)
+        sentences = tokenizer.tokenize(text)
         window_end = False
         current_index = 0
         splitted = 0
@@ -48,7 +48,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
             current_string = []
             for index, sentence in enumerate(sentences[current_index:]):
                 if reduce(lambda x, y: x + len(y.split(" ")), current_string, 0) >= window_size:
-                    yield " ".join(current_string)
+                    yield "".join(current_string)
                     current_index += index
                     break
                 current_string.append(sentence)
@@ -56,7 +56,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
             if splitted == len(sentences):
                 window_end = True
-                yield " ".join(current_string)
+                yield "".join(current_string)
 
     def _pubannotate(self, q, inferred):
         queries = [q.strip().split() for q in q]
@@ -96,7 +96,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                         }
                         denotations.append(denotation)
         return {
-            'text': ' '.join(q),
+            'text': ''.join(q),
             'denotations': denotations
         }
 
@@ -136,7 +136,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 'obj': span['obj'],
                 'text': span['text']
             } for span in denotations]
-            result['text'] += ' ' + a['text']
+            result['text'] += a['text']
             result['denotations'] += new_dennotations
         return result
 
