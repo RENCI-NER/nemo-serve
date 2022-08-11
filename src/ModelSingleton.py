@@ -125,7 +125,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
             if index == 0:
                 result = a
                 continue
-            offset = len(result['text']) + 1
+            offset = len(result['text'])
             denotations = a['denotations']
             new_dennotations = [{
                 'id': span['id'] + f'{index}',
