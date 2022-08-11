@@ -58,12 +58,92 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 window_end = True
                 yield " ".join(current_string)
 
+    def _pubannotate(self, q, inferred):
+        queries = [q.strip().split() for q in q]
+        ids_to_labels = {v: k for k, v in self.model._cfg.label_ids.items()}
+        start_idx = 0
+        end_idx = 0
+        denotations = []
+        for query in queries:
+            end_idx += len(query)
+            # extract predictions for the current query from the list of all predictions
+            preds = inferred[start_idx:end_idx]
+            start_idx = end_idx
+            for j, word in enumerate(query):
+                # strip out the punctuation to attach the entity tag to the word not to a punctuation mark
+                # that follows the word
+                if not word[-1].isalpha():
+                    word = word[:-1]
+                span_end = len(' '.join(query[:j + 1]))
+                span_start = 0 if j == 0 else span_end - len(word)
+
+                label = ids_to_labels[preds[j]]
+
+                if label != self.model._cfg.dataset.pad_label and label != '0':
+                    if label.startswith('I-'):
+                        denotations[-1]['span']['end'] = span_end
+                        denotations[-1]['text'] += " " + word
+                    else:
+                        label = label.replace('B-', '')
+                        denotation = {
+                            'id': f'I',
+                            'span': {
+                                'begin': span_start,
+                                'end': span_end
+                            },
+                            'obj': label,
+                            'text': word
+                        }
+                        denotations.append(denotation)
+        return {
+            'text': ' '.join(q),
+            'denotations': denotations
+        }
+
+    def __add_predictions(
+            self, queries, batch_size: int = 32
+    ):
+        """
+        Add predicted token labels to the queries. Use this method for debugging and prototyping.
+        Args:
+            queries: text
+            batch_size: batch size to use during inference.
+            output_file: file to save models predictions
+        Returns:
+            result: text with added entities
+        """
+        inferred = self.model._infer(queries, batch_size)
+        return self._pubannotate(queries, inferred)
+
+    @staticmethod
+    def _merge_pubtator_annotations(annotations):
+        result = {
+            "text": "",
+            "denotations": []
+        }
+        for index, a in enumerate(annotations):
+            if index == 0:
+                result = a
+                continue
+            offset = len(result['text']) + 1
+            denotations = a['denotations']
+            new_dennotations = [{
+                'id': span['id'] + f'{index}',
+                'span': {
+                    'begin': span['span']['begin'] + offset,
+                    'end': span['span']['end'] + offset
+                }
+            } for span in denotations]
+            result['text'] += ' ' + a['text']
+            result['denotations'] += new_dennotations
+        return result
+
     def __call__(self, query_text):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text, 300)]
-            all_predictions = [self.model.add_predictions([x]) for x in queries]
-            return reduce(lambda x, y: x + y, all_predictions, [])
+            all_predictions = [self.__add_predictions([x]) for x in queries]
+            return self._merge_pubtator_annotations(all_predictions)
         except Exception as E:
             raise E
         finally:
