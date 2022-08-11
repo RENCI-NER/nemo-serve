@@ -86,7 +86,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                     else:
                         label = label.replace('B-', '')
                         denotation = {
-                            'id': f'I',
+                            'id': f'I{j}-',
                             'span': {
                                 'begin': span_start,
                                 'end': span_end
