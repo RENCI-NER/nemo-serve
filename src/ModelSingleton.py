@@ -132,7 +132,9 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 'span': {
                     'begin': span['span']['begin'] + offset,
                     'end': span['span']['end'] + offset
-                }
+                },
+                'obj': span['obj'],
+                'text': span['text']
             } for span in denotations]
             result['text'] += ' ' + a['text']
             result['denotations'] += new_dennotations
