@@ -74,12 +74,19 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 # that follows the word
                 if not word[-1].isalpha():
                     word = word[:-1]
-                span_end = len(' '.join(query[:j + 1]))
-                span_start = 0 if j == 0 else span_end - len(word)
+                pad = 0 if j == 0 else 1
+                span_start = len(' '.join(query[:j])) + pad
+                span_end = span_start + len(word)
 
                 label = ids_to_labels[preds[j]]
 
-                if label != self.model._cfg.dataset.pad_label and label != '0':
+                is_not_pad_label = (label != self.model._cfg.dataset.pad_label and label != '0')
+
+                if not is_not_pad_label:
+                    # For things like fitness to practice where model labels it as fitness[B-biolink:NamedThing] to[0] practice[I-biolink:NamedThing]
+                    if j + 1 < len(query) and ids_to_labels[preds[j + 1]].startswith('I-'):
+                        denotations[-1]['text'] += " " + word
+                else:
                     if label.startswith('I-'):
                         denotations[-1]['span']['end'] = span_end
                         denotations[-1]['text'] += " " + word
