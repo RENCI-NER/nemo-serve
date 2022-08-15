@@ -2,3 +2,8 @@ fastapi
 uvicorn
 pyyaml
 requests
+nemo-toolkit
+numpy
+pandas
+transformers
+pytest
