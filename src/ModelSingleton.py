@@ -115,7 +115,6 @@ class TokenClassificationModelWrapper(ModelWrapper):
         Args:
             queries: text
             batch_size: batch size to use during inference.
-            output_file: file to save models predictions
         Returns:
             result: text with added entities
         """
@@ -123,7 +122,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         return self._pubannotate(queries, inferred)
 
     @staticmethod
-    def _merge_pubtator_annotations(annotations):
+    def _merge_pub_annotator_annotations(annotations):
         result = {
             "text": "",
             "denotations": []
@@ -134,7 +133,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 continue
             offset = len(result['text'])
             denotations = a['denotations']
-            new_dennotations = [{
+            new_denotations = [{
                 'id': span['id'] + f'{index}',
                 'span': {
                     'begin': span['span']['begin'] + offset,
@@ -144,7 +143,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 'text': span['text']
             } for span in denotations]
             result['text'] += a['text']
-            result['denotations'] += new_dennotations
+            result['denotations'] += new_denotations
         return result
 
     def __call__(self, query_text):
@@ -152,7 +151,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         try:
             queries = [x for x in self.sliding_window(query_text, 300)]
             all_predictions = [self.__add_predictions([x]) for x in queries]
-            return self._merge_pubtator_annotations(all_predictions)
+            return self._merge_pub_annotator_annotations(all_predictions)
         except Exception as E:
             raise E
         finally:
