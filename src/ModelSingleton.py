@@ -5,7 +5,7 @@ from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
-from nltk.tokenize import sent_tokenize
+from utils.tokenizer import tokenizer
 
 
 logger = logging.Logger("gunicorn.error")
@@ -40,7 +40,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         :param window_size: Max token size to split
         :return: Array of split text
         """
-        sentences = sent_tokenize(text)
+        sentences = tokenizer.tokenize(text)
         window_end = False
         current_index = 0
         splitted = 0
@@ -48,7 +48,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
             current_string = []
             for index, sentence in enumerate(sentences[current_index:]):
                 if reduce(lambda x, y: x + len(y.split(" ")), current_string, 0) >= window_size:
-                    yield " ".join(current_string)
+                    yield "".join(current_string)
                     current_index += index
                     break
                 current_string.append(sentence)
@@ -56,14 +56,102 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
             if splitted == len(sentences):
                 window_end = True
-                yield " ".join(current_string)
+                yield "".join(current_string)
+
+    def _pubannotate(self, q, inferred):
+        queries = [q.strip().split() for q in q]
+        ids_to_labels = {v: k for k, v in self.model._cfg.label_ids.items()}
+        start_idx = 0
+        end_idx = 0
+        denotations = []
+        for query in queries:
+            end_idx += len(query)
+            # extract predictions for the current query from the list of all predictions
+            preds = inferred[start_idx:end_idx]
+            start_idx = end_idx
+            for j, word in enumerate(query):
+                # strip out the punctuation to attach the entity tag to the word not to a punctuation mark
+                # that follows the word
+                if not word[-1].isalpha():
+                    word = word[:-1]
+                pad = 0 if j == 0 else 1
+                span_start = len(' '.join(query[:j])) + pad
+                span_end = span_start + len(word)
+
+                label = ids_to_labels[preds[j]]
+
+                is_not_pad_label = (label != self.model._cfg.dataset.pad_label and label != '0')
+
+                if not is_not_pad_label:
+                    # For things like fitness to practice where model labels it as fitness[B-biolink:NamedThing] to[0] practice[I-biolink:NamedThing]
+                    if j + 1 < len(query) and ids_to_labels[preds[j + 1]].startswith('I-'):
+                        denotations[-1]['text'] += " " + word
+                else:
+                    if label.startswith('I-'):
+                        denotations[-1]['span']['end'] = span_end
+                        denotations[-1]['text'] += " " + word
+                    else:
+                        label = label.replace('B-', '')
+                        denotation = {
+                            'id': f'I{j}-',
+                            'span': {
+                                'begin': span_start,
+                                'end': span_end
+                            },
+                            'obj': label,
+                            'text': word
+                        }
+                        denotations.append(denotation)
+        return {
+            'text': ''.join(q),
+            'denotations': denotations
+        }
+
+    def __add_predictions(
+            self, queries, batch_size: int = 32
+    ):
+        """
+        Add predicted token labels to the queries. Use this method for debugging and prototyping.
+        Args:
+            queries: text
+            batch_size: batch size to use during inference.
+        Returns:
+            result: text with added entities
+        """
+        inferred = self.model._infer(queries, batch_size)
+        return self._pubannotate(queries, inferred)
+
+    @staticmethod
+    def _merge_pub_annotator_annotations(annotations):
+        result = {
+            "text": "",
+            "denotations": []
+        }
+        for index, a in enumerate(annotations):
+            if index == 0:
+                result = a
+                continue
+            offset = len(result['text'])
+            denotations = a['denotations']
+            new_denotations = [{
+                'id': span['id'] + f'{index}',
+                'span': {
+                    'begin': span['span']['begin'] + offset,
+                    'end': span['span']['end'] + offset
+                },
+                'obj': span['obj'],
+                'text': span['text']
+            } for span in denotations]
+            result['text'] += a['text']
+            result['denotations'] += new_denotations
+        return result
 
     def __call__(self, query_text):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text, 300)]
-            all_predictions = [self.model.add_predictions([x]) for x in queries]
-            return reduce(lambda x, y: x + y, all_predictions, [])
+            all_predictions = [self.__add_predictions([x]) for x in queries]
+            return self._merge_pub_annotator_annotations(all_predictions)
         except Exception as E:
             raise E
         finally:
