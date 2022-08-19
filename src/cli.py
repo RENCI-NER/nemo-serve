@@ -36,7 +36,7 @@ def append_json_to_file(data, output_path):
     :return: None
     """
     with open(output_path, 'a') as stream:
-        stream.write(json.dumps(data))
+        stream.write(json.dumps(data) + "\n")
 
 def process(input_file_path, output_file_path, model_name):
     """
