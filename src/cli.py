@@ -67,11 +67,14 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--model", help="Model to run", default=None)
     args = parser.parse_args()
 
-    config = args.config_path
+    config = args.config_file
     input_file = args.input_file
-    output_file = args.output_files
+    output_file = args.output_file
+    model_name = args.model
     init_models(config_file_path=config)
-
+    process(input_file=input_file,
+            output_file_path=output_file,
+            model_name=model_name)
 
 
 
