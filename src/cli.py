@@ -72,7 +72,7 @@ if __name__ == "__main__":
     output_file = args.output_file
     model_name = args.model
     init_models(config_file_path=config)
-    process(input_file=input_file,
+    process(input_file_path=input_file,
             output_file_path=output_file,
             model_name=model_name)
 
