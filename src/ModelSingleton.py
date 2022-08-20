@@ -85,7 +85,8 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
                 if not is_not_pad_label:
                     # For things like fitness to practice where model labels it as fitness[B-biolink:NamedThing] to[0] practice[I-biolink:NamedThing]
-                    if j + 1 < len(query) and ids_to_labels[preds[j + 1]].startswith('I-'):
+                    # @TODO: investigate why [ De no ##vo ma ##li ##gna ##ncy following re ##nal transplant ##ation ] would return I-biolink without a B-
+                    if len(denotations) and j + 1 < len(query) and ids_to_labels[preds[j + 1]].startswith('I-'):
                         denotations[-1]['text'] += " " + word
                 else:
                     if label.startswith('I-'):
