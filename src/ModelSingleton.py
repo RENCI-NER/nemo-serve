@@ -89,11 +89,11 @@ class TokenClassificationModelWrapper(ModelWrapper):
                     if len(denotations) and j + 1 < len(query) and ids_to_labels[preds[j + 1]].startswith('I-'):
                         denotations[-1]['text'] += " " + word
                 else:
-                    if label.startswith('I-'):
+                    if label.startswith('I-') and len(denotations):
                         denotations[-1]['span']['end'] = span_end
                         denotations[-1]['text'] += " " + word
                     else:
-                        label = label.replace('B-', '')
+                        label = label.replace('B-', '').replace('I-', '')
                         denotation = {
                             'id': f'I{j}-',
                             'span': {
