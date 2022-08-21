@@ -151,7 +151,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
     def __call__(self, query_text):
         """ Runs prediction on text"""
         try:
-            queries = [x for x in self.sliding_window(query_text, 150)]
+            queries = [x for x in self.sliding_window(query_text, 100)]
             all_predictions = [self.__add_predictions([x]) for x in queries]
             return self._merge_pub_annotator_annotations(all_predictions)
         except Exception as E:
