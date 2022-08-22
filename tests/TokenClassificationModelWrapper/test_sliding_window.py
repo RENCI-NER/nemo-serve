@@ -2,7 +2,7 @@
 A basic test for ModelSingleton.
 """
 
-from src.ModelSingleton import TokenClassificationModelWrapper
+from ModelSingleton import TokenClassificationModelWrapper
 from unittest.mock import Mock
 
 
