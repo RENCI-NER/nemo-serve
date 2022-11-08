@@ -19,7 +19,11 @@ import requests
 import pytest
 
 NEMOSERVE_URL = os.getenv('NEMOSERVE_URL', 'https://med-nemo.apps.renci.org/')
-ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
+TOKEN_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
+
+SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://med-nemo-sapbert.apps.renci.org/')
+SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
+
 OUTPUT_DIR = "tests/integration/data/test_pubannotator"
 
 MIN_TEXT = 10
@@ -63,11 +67,51 @@ def test_with_pubannotator(pubmed_id):
         "model_name": 'token_classification'
     }
     print(f"Request: {request}")
-    response = requests.post(ANNOTATE_ENDPOINT, json=request, verify=False)
+    response = requests.post(TOKEN_ANNOTATE_ENDPOINT, json=request)
     print(f"Response: {response.content}")
     assert response.status_code == 200
     annotated = response.json()
     logging.info(f" - Nemo: {annotated}")
+
+    # For each annotation, query it with SAPBERT.
+    track_sapbert = []
+    track_token_classification = annotated['denotations']
+    for token in track_token_classification:
+        text = token['text']
+
+        if not text:
+            logging.error(f"Token {token} does not have any text!")
+            continue
+
+        logging.debug(f"Querying SAPBERT with {token['text']}")
+        request = {
+            "text": token['text'],
+            "model_name": "sapbert"
+        }
+        response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
+        logging.debug(f"Response from SAPBERT: {response.content}")
+        assert response.status_code == 200
+
+        result = response.json()
+        if not result:
+            logging.warning(f"Could not annotate text {token['text']} in Sapbert: {response}")
+            continue
+
+        denotation = dict(token)
+        denotation['obj'] = "MESH:" + result[1] + " (" + result[0] + ")"
+        #denotation['label'] = result[0]
+        track_sapbert.append(
+            denotation
+        )
+
+    annotated['tracks'] = [{
+        'project': TOKEN_ANNOTATE_ENDPOINT,
+        'denotations': track_token_classification
+    }, {
+        'project': SAPBERT_ANNOTATE_ENDPOINT,
+        'denotations': track_sapbert
+    }]
+    del annotated['denotations']
 
     # Write this out an output file.
     filename = re.sub(r'[^A-Za-z0-9_]', '_', pubmed_id) + ".json"
