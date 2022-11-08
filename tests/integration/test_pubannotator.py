@@ -9,8 +9,10 @@ This is an integration test: it will test the endpoint you set the
 NEMOSERVE_URL environmental variable to, but will default to
 https://med-nemo.apps.renci.org/
 """
+import json
 import logging
 import os
+import re
 import urllib.parse
 
 import requests
@@ -18,6 +20,7 @@ import pytest
 
 NEMOSERVE_URL = os.getenv('NEMOSERVE_URL', 'https://med-nemo.apps.renci.org/')
 ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
+OUTPUT_DIR = "tests/integration/data/test_pubannotator"
 
 MIN_TEXT = 10
 MAX_TEXT = 100
@@ -53,15 +56,21 @@ def test_with_pubannotator(pubmed_id):
         pytest.fail(f"Text for {pubmed_id} is too small to be processed: {text}")
         return
 
-    text = text[:MAX_TEXT]
+    # TODO: use /models to get model_name
 
     request = {
         "text": text,
-        "model_name": 'tokenClassificationModel'
+        "model_name": 'token_classification'
     }
     print(f"Request: {request}")
-    response = requests.post(ANNOTATE_ENDPOINT, json=request)
+    response = requests.post(ANNOTATE_ENDPOINT, json=request, verify=False)
     print(f"Response: {response.content}")
     assert response.status_code == 200
     annotated = response.json()
     logging.info(f" - Nemo: {annotated}")
+
+    # Write this out an output file.
+    filename = re.sub(r'[^A-Za-z0-9_]', '_', pubmed_id) + ".json"
+    with open(os.path.join(OUTPUT_DIR, filename), "w") as f:
+        json.dump(annotated, f, sort_keys=True, indent=2)
+
