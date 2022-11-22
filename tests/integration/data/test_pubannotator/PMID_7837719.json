@@ -1,0 +1,1023 @@
+{
+  "text": "[Time-course of adenosine deaminase activity in the cerebrospinal fluid in patients with tuberculous meningitis].\nThe level of adenosine deaminase (ADA) activity in the cerebrospinal fluid is used as a supportive diagnostic measure for tuberculous meningitis. However the time-course of adenosine deaminase activity of the cerebrospinal fluid in patients with tuberculous meningitis remains unknown. The present study describes 4 patients with tuberculous meningitis in whom ADA activity in the cerebrospinal fluid was serially determined in order to clarify the effects of anti-tuberculous chemotherapy on ADA activity in the cerebrospinal fluid. In two of these patients the ADA did not show a high activity in the early stage of the disease. But in all cases the ADA showed a high activity after all, and gradually declined and reached the normal level at approximately 1 month after the initiation of chemotherapy. It seems that the decrease in the ADA activity was seen when T cells in the cerebrospinal fluid returned to a static state upon removal of mycobacterial antigen by the treatment. The level of ADA in the cerebrospinal fluid is considered to be one of the useful measures for diagnosis and follow-up in patients with tuberculous meningitis.",
+  "tracks": [
+    {
+      "denotations": [
+        {
+          "id": "I2-",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 16,
+            "end": 44
+          },
+          "text": "adenosine deaminase activity"
+        },
+        {
+          "id": "I7-",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 52,
+            "end": 71
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I10-",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 75,
+            "end": 83
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I12-",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 89,
+            "end": 112
+          },
+          "text": "tuberculous meningitis]"
+        },
+        {
+          "id": "I20-",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 153,
+            "end": 161
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I23-",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 169,
+            "end": 188
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I30-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 213,
+            "end": 223
+          },
+          "text": "diagnostic"
+        },
+        {
+          "id": "I31-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 224,
+            "end": 231
+          },
+          "text": "measure"
+        },
+        {
+          "id": "I33-",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 236,
+            "end": 258
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I37-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 272,
+            "end": 283
+          },
+          "text": "time-course"
+        },
+        {
+          "id": "I39-",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 287,
+            "end": 315
+          },
+          "text": "adenosine deaminase activity"
+        },
+        {
+          "id": "I44-",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 323,
+            "end": 342
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I47-",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 346,
+            "end": 354
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I49-",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 360,
+            "end": 382
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I55-",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 412,
+            "end": 417
+          },
+          "text": "study"
+        },
+        {
+          "id": "I58-",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 430,
+            "end": 438
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I60-",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 444,
+            "end": 466
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I64-",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 475,
+            "end": 478
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I65-",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 479,
+            "end": 487
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I68-",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 495,
+            "end": 514
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I78-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 563,
+            "end": 573
+          },
+          "text": "effects of"
+        },
+        {
+          "id": "I80-",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 574,
+            "end": 590
+          },
+          "text": "anti-tuberculous"
+        },
+        {
+          "id": "I81-",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 591,
+            "end": 603
+          },
+          "text": "chemotherapy"
+        },
+        {
+          "id": "I83-",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 607,
+            "end": 610
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I84-",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 611,
+            "end": 619
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I87-",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 627,
+            "end": 646
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I93-",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 664,
+            "end": 672
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I95-",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 677,
+            "end": 680
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I101-",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 701,
+            "end": 709
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I104-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 717,
+            "end": 728
+          },
+          "text": "early stage"
+        },
+        {
+          "id": "I108-",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 736,
+            "end": 743
+          },
+          "text": "disease"
+        },
+        {
+          "id": "I3-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 756,
+            "end": 761
+          },
+          "text": "cases"
+        },
+        {
+          "id": "I5-1",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 766,
+            "end": 769
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I9-1",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 784,
+            "end": 792
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I13-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 808,
+            "end": 826
+          },
+          "text": "gradually declined"
+        },
+        {
+          "id": "I18-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 843,
+            "end": 849
+          },
+          "text": "normal"
+        },
+        {
+          "id": "I19-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 850,
+            "end": 855
+          },
+          "text": "level"
+        },
+        {
+          "id": "I21-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 859,
+            "end": 872
+          },
+          "text": "approximately"
+        },
+        {
+          "id": "I23-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 875,
+            "end": 880
+          },
+          "text": "month"
+        },
+        {
+          "id": "I26-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 891,
+            "end": 901
+          },
+          "text": "initiation"
+        },
+        {
+          "id": "I28-1",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 905,
+            "end": 917
+          },
+          "text": "chemotherapy"
+        },
+        {
+          "id": "I33-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 937,
+            "end": 945
+          },
+          "text": "decrease"
+        },
+        {
+          "id": "I36-1",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 953,
+            "end": 956
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I37-1",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 957,
+            "end": 965
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I45-1",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 995,
+            "end": 1014
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I53-1",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 1047,
+            "end": 1054
+          },
+          "text": "removal"
+        },
+        {
+          "id": "I55-1",
+          "obj": "biolink:ChemicalEntity",
+          "span": {
+            "begin": 1058,
+            "end": 1079
+          },
+          "text": "mycobacterial antigen"
+        },
+        {
+          "id": "I59-1",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 1087,
+            "end": 1096
+          },
+          "text": "treatment"
+        },
+        {
+          "id": "I61-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1102,
+            "end": 1107
+          },
+          "text": "level"
+        },
+        {
+          "id": "I63-1",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 1111,
+            "end": 1114
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I66-1",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 1122,
+            "end": 1141
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I75-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1173,
+            "end": 1188
+          },
+          "text": "useful measures"
+        },
+        {
+          "id": "I78-1",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 1193,
+            "end": 1202
+          },
+          "text": "diagnosis"
+        },
+        {
+          "id": "I80-1",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 1207,
+            "end": 1216
+          },
+          "text": "follow-up"
+        },
+        {
+          "id": "I82-1",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 1220,
+            "end": 1228
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I84-1",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 1234,
+            "end": 1256
+          },
+          "text": "tuberculous meningitis"
+        }
+      ],
+      "project": "https://med-nemo.apps.renci.org/annotate/"
+    },
+    {
+      "denotations": [
+        {
+          "id": "I2-",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 16,
+            "end": 44
+          },
+          "text": "adenosine deaminase activity"
+        },
+        {
+          "id": "I7-",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 52,
+            "end": 71
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I10-",
+          "obj": "MESH:D010361 (Patients)",
+          "span": {
+            "begin": 75,
+            "end": 83
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I12-",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal)",
+          "span": {
+            "begin": 89,
+            "end": 112
+          },
+          "text": "tuberculous meningitis]"
+        },
+        {
+          "id": "I20-",
+          "obj": "MESH:D006802 (Human Activities)",
+          "span": {
+            "begin": 153,
+            "end": 161
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I23-",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 169,
+            "end": 188
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I30-",
+          "obj": "MESH:D003933 (Diagnosis)",
+          "span": {
+            "begin": 213,
+            "end": 223
+          },
+          "text": "diagnostic"
+        },
+        {
+          "id": "I31-",
+          "obj": "MESH:D008792 (Metric System)",
+          "span": {
+            "begin": 224,
+            "end": 231
+          },
+          "text": "measure"
+        },
+        {
+          "id": "I33-",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal)",
+          "span": {
+            "begin": 236,
+            "end": 258
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I37-",
+          "obj": "MESH:D013995 (Time)",
+          "span": {
+            "begin": 272,
+            "end": 283
+          },
+          "text": "time-course"
+        },
+        {
+          "id": "I39-",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 287,
+            "end": 315
+          },
+          "text": "adenosine deaminase activity"
+        },
+        {
+          "id": "I44-",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 323,
+            "end": 342
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I47-",
+          "obj": "MESH:D010361 (Patients)",
+          "span": {
+            "begin": 346,
+            "end": 354
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I49-",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal)",
+          "span": {
+            "begin": 360,
+            "end": 382
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I55-",
+          "obj": "MESH:D000068397 (Clinical Study)",
+          "span": {
+            "begin": 412,
+            "end": 417
+          },
+          "text": "study"
+        },
+        {
+          "id": "I58-",
+          "obj": "MESH:D010361 (Patients)",
+          "span": {
+            "begin": 430,
+            "end": 438
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I60-",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal)",
+          "span": {
+            "begin": 444,
+            "end": 466
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I64-",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 475,
+            "end": 478
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I65-",
+          "obj": "MESH:D006802 (Human Activities)",
+          "span": {
+            "begin": 479,
+            "end": 487
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I68-",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 495,
+            "end": 514
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I78-",
+          "obj": "MESH:D045505 (Physiological Effects of Drugs)",
+          "span": {
+            "begin": 563,
+            "end": 573
+          },
+          "text": "effects of"
+        },
+        {
+          "id": "I80-",
+          "obj": "MESH:D000995 (Antitubercular Agents)",
+          "span": {
+            "begin": 574,
+            "end": 590
+          },
+          "text": "anti-tuberculous"
+        },
+        {
+          "id": "I81-",
+          "obj": "MESH:D004358 (Drug Therapy)",
+          "span": {
+            "begin": 591,
+            "end": 603
+          },
+          "text": "chemotherapy"
+        },
+        {
+          "id": "I83-",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 607,
+            "end": 610
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I84-",
+          "obj": "MESH:D006802 (Human Activities)",
+          "span": {
+            "begin": 611,
+            "end": 619
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I87-",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 627,
+            "end": 646
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I93-",
+          "obj": "MESH:D010361 (Patients)",
+          "span": {
+            "begin": 664,
+            "end": 672
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I95-",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 677,
+            "end": 680
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I101-",
+          "obj": "MESH:D006802 (Human Activities)",
+          "span": {
+            "begin": 701,
+            "end": 709
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I104-",
+          "obj": "MESH:D042241 (Early Diagnosis)",
+          "span": {
+            "begin": 717,
+            "end": 728
+          },
+          "text": "early stage"
+        },
+        {
+          "id": "I108-",
+          "obj": "MESH:D004194 (Disease)",
+          "span": {
+            "begin": 736,
+            "end": 743
+          },
+          "text": "disease"
+        },
+        {
+          "id": "I3-1",
+          "obj": "MESH:D002363 (Case Reports)",
+          "span": {
+            "begin": 756,
+            "end": 761
+          },
+          "text": "cases"
+        },
+        {
+          "id": "I5-1",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 766,
+            "end": 769
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I9-1",
+          "obj": "MESH:D006802 (Human Activities)",
+          "span": {
+            "begin": 784,
+            "end": 792
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I13-1",
+          "obj": "MESH:D000075902 (Clinical Deterioration)",
+          "span": {
+            "begin": 808,
+            "end": 826
+          },
+          "text": "gradually declined"
+        },
+        {
+          "id": "I18-1",
+          "obj": "MESH:D006706 (Homeostasis)",
+          "span": {
+            "begin": 843,
+            "end": 849
+          },
+          "text": "normal"
+        },
+        {
+          "id": "I19-1",
+          "obj": "MESH:D016422 (Letter)",
+          "span": {
+            "begin": 850,
+            "end": 855
+          },
+          "text": "level"
+        },
+        {
+          "id": "I21-1",
+          "obj": "MESH:D033242 (Minors)",
+          "span": {
+            "begin": 859,
+            "end": 872
+          },
+          "text": "approximately"
+        },
+        {
+          "id": "I23-1",
+          "obj": "MESH:D016081 (Moon)",
+          "span": {
+            "begin": 875,
+            "end": 880
+          },
+          "text": "month"
+        },
+        {
+          "id": "I26-1",
+          "obj": "MESH:D061785 (Transcription Initiation, Genetic)",
+          "span": {
+            "begin": 891,
+            "end": 901
+          },
+          "text": "initiation"
+        },
+        {
+          "id": "I28-1",
+          "obj": "MESH:D004358 (Drug Therapy)",
+          "span": {
+            "begin": 905,
+            "end": 917
+          },
+          "text": "chemotherapy"
+        },
+        {
+          "id": "I33-1",
+          "obj": "MESH:D015536 (Down-Regulation)",
+          "span": {
+            "begin": 937,
+            "end": 945
+          },
+          "text": "decrease"
+        },
+        {
+          "id": "I36-1",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 953,
+            "end": 956
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I37-1",
+          "obj": "MESH:D006802 (Human Activities)",
+          "span": {
+            "begin": 957,
+            "end": 965
+          },
+          "text": "activity"
+        },
+        {
+          "id": "I45-1",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 995,
+            "end": 1014
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I53-1",
+          "obj": "MESH:D020878 (Device Removal)",
+          "span": {
+            "begin": 1047,
+            "end": 1054
+          },
+          "text": "removal"
+        },
+        {
+          "id": "I55-1",
+          "obj": "MESH:D009161 (Mycobacterium)",
+          "span": {
+            "begin": 1058,
+            "end": 1079
+          },
+          "text": "mycobacterial antigen"
+        },
+        {
+          "id": "I59-1",
+          "obj": "MESH:D013812 (Therapeutics)",
+          "span": {
+            "begin": 1087,
+            "end": 1096
+          },
+          "text": "treatment"
+        },
+        {
+          "id": "I61-1",
+          "obj": "MESH:D016422 (Letter)",
+          "span": {
+            "begin": 1102,
+            "end": 1107
+          },
+          "text": "level"
+        },
+        {
+          "id": "I63-1",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 1111,
+            "end": 1114
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I66-1",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid)",
+          "span": {
+            "begin": 1122,
+            "end": 1141
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I75-1",
+          "obj": "MESH:D062527 (Meaningful Use)",
+          "span": {
+            "begin": 1173,
+            "end": 1188
+          },
+          "text": "useful measures"
+        },
+        {
+          "id": "I78-1",
+          "obj": "MESH:D003933 (Diagnosis)",
+          "span": {
+            "begin": 1193,
+            "end": 1202
+          },
+          "text": "diagnosis"
+        },
+        {
+          "id": "I80-1",
+          "obj": "MESH:D005500 (Follow-Up Studies)",
+          "span": {
+            "begin": 1207,
+            "end": 1216
+          },
+          "text": "follow-up"
+        },
+        {
+          "id": "I82-1",
+          "obj": "MESH:D010361 (Patients)",
+          "span": {
+            "begin": 1220,
+            "end": 1228
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I84-1",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal)",
+          "span": {
+            "begin": 1234,
+            "end": 1256
+          },
+          "text": "tuberculous meningitis"
+        }
+      ],
+      "project": "https://med-nemo-sapbert.apps.renci.org/annotate/"
+    }
+  ]
+}
