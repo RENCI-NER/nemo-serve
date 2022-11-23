@@ -196,9 +196,9 @@ class SapbertModelWrapper(ModelWrapper):
             nn_index = np.argmin(dist)
             return [self.all_reps_names[nn_index], self.all_reps_ids[nn_index], round(dist[0, nn_index], 3)]
         count_dist = np.argpartition(dist, count, axis=None)
-        result_dist = np.sort(dist[0, count_dist[:count]])
-        indices = np.concatenate([np.where(dist==d) for d in result_dist]).ravel()
-        return [[self.all_reps_names[idx], self.all_reps_ids[idx], round(dist[0, idx], 3)] for idx in indices]
+        result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
+        indices = np.unique(np.concatenate([np.where(dist == d) for d in result_dist])).ravel()
+        return [[self.all_reps_names[idx], self.all_reps_ids[idx], round(dist[0, idx], 3)] for idx in indices[:count]]
 
 
 class ModelFactory:
