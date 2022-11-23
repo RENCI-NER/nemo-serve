@@ -195,8 +195,6 @@ class SapbertModelWrapper(ModelWrapper):
         if count == 1:
             nn_index = np.argmin(dist)
             return [self.all_reps_names[nn_index], self.all_reps_ids[nn_index]]
-        if count >= len(dist):
-            return []
         count_dist = np.argpartition(dist, count)
         result_dist = np.sort(dist[count_dist[:count]])
         indices = np.concatenate([np.where(dist==d) for d in result_dist]).ravel()
