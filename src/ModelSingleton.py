@@ -198,9 +198,7 @@ class SapbertModelWrapper(ModelWrapper):
         count_dist = np.argpartition(dist, count, axis=None)
         result_dist = np.sort(dist[0, count_dist[:count]])
         indices = np.concatenate([np.where(dist==d) for d in result_dist]).ravel()
-
-        return [[self.all_reps_names[idx], self.all_reps_ids[idx], round(score, 3)] for idx, score in zip(indices,
-                                                                                                          result_dist)]
+        return [[self.all_reps_names[idx], self.all_reps_ids[idx], round(dist[0, idx], 3)] for idx in indices]
 
 
 class ModelFactory:
