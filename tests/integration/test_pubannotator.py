@@ -94,14 +94,13 @@ def test_with_pubannotator(pubmed_id):
     logging.info(f" - Nemo result: {annotated}")
 
     # For each annotation, query it with SAPBERT.
+    count_sapbert_annotations = 0
     track_sapbert = []
     track_token_classification = annotated['denotations']
     for token in track_token_classification:
         text = token['text']
 
-        if not text:
-            logging.error(f"Token {token} does not have any text!")
-            continue
+        assert text, f"Token {token} does not have any text!"
 
         logging.debug(f"Querying SAPBERT with {token['text']}")
         request = {
@@ -113,9 +112,7 @@ def test_with_pubannotator(pubmed_id):
         assert response.status_code == 200
 
         result = response.json()
-        if not result:
-            logging.warning(f"Could not annotate text {token['text']} in Sapbert: {response}")
-            continue
+        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}"
 
         denotation = dict(token)
         denotation['obj'] = f"MESH:{result[1]} ({result[0]}, score: {result[2]})"
@@ -126,6 +123,8 @@ def test_with_pubannotator(pubmed_id):
         track_sapbert.append(
             denotation
         )
+
+    assert count_sapbert_annotations > 0, f"No SAPBERT annotations found for {pubmed_id}, given these BioMegatron annotations: {track_token_classification}"
 
     # Write the annotations from Nemo-Serve and SAPBERT into the output file as separate tracks.
     annotated['tracks'] = [{
