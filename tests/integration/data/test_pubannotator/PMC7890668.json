@@ -2332,7 +2332,7 @@
       "denotations": [
         {
           "id": "I1-",
-          "obj": "MESH:D018511 (Systems Integration)",
+          "obj": "MESH:D018511 (Systems Integration, score: 9.887)",
           "span": {
             "begin": 11,
             "end": 22
@@ -2341,7 +2341,7 @@
         },
         {
           "id": "I4-",
-          "obj": "MESH:D000077488 (Data Science)",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
           "span": {
             "begin": 41,
             "end": 45
@@ -2350,7 +2350,7 @@
         },
         {
           "id": "I7-",
-          "obj": "MESH:D031301 (Robinia)",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
           "span": {
             "begin": 55,
             "end": 62
@@ -2359,7 +2359,7 @@
         },
         {
           "id": "I11-",
-          "obj": "MESH:D017418 (Meta-Analysis)",
+          "obj": "MESH:D017418 (Meta-Analysis, score: 12.87)",
           "span": {
             "begin": 90,
             "end": 97
@@ -2368,7 +2368,7 @@
         },
         {
           "id": "I17-",
-          "obj": "MESH:D058873 (Pandemics)",
+          "obj": "MESH:D058873 (Pandemics, score: 2.453)",
           "span": {
             "begin": 126,
             "end": 134
@@ -2377,7 +2377,7 @@
         },
         {
           "id": "I23-",
-          "obj": "MESH:D051188 (Knowledge Bases)",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 6.039)",
           "span": {
             "begin": 168,
             "end": 181
@@ -2386,7 +2386,7 @@
         },
         {
           "id": "I29-",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 222,
             "end": 232
@@ -2395,7 +2395,7 @@
         },
         {
           "id": "I30-",
-          "obj": "MESH:D009769 (Object Attachment)",
+          "obj": "MESH:D009769 (Object Attachment, score: 11.789)",
           "span": {
             "begin": 233,
             "end": 240
@@ -2404,7 +2404,7 @@
         },
         {
           "id": "I35-",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
           "span": {
             "begin": 270,
             "end": 278
@@ -2413,7 +2413,7 @@
         },
         {
           "id": "I37-",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 289,
             "end": 299
@@ -2422,7 +2422,7 @@
         },
         {
           "id": "I38-",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
           "span": {
             "begin": 300,
             "end": 315
@@ -2431,7 +2431,7 @@
         },
         {
           "id": "I41-",
-          "obj": "MESH:D000090462 (Infodemiology)",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
           "span": {
             "begin": 321,
             "end": 332
@@ -2440,7 +2440,7 @@
         },
         {
           "id": "I44-",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 345,
             "end": 355
@@ -2449,7 +2449,7 @@
         },
         {
           "id": "I45-",
-          "obj": "MESH:D008091 (Literature)",
+          "obj": "MESH:D008091 (Literature, score: 0.007)",
           "span": {
             "begin": 356,
             "end": 366
@@ -2458,7 +2458,7 @@
         },
         {
           "id": "I61-",
-          "obj": "MESH:D013404 (Suggestion)",
+          "obj": "MESH:D013404 (Suggestion, score: 12.692)",
           "span": {
             "begin": 466,
             "end": 476
@@ -2467,7 +2467,7 @@
         },
         {
           "id": "I66-",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.1)",
           "span": {
             "begin": 509,
             "end": 514
@@ -2476,7 +2476,7 @@
         },
         {
           "id": "I68-",
-          "obj": "MESH:D015510 (Clinical Medicine)",
+          "obj": "MESH:D015510 (Clinical Medicine, score: 8.953)",
           "span": {
             "begin": 519,
             "end": 527
@@ -2485,7 +2485,7 @@
         },
         {
           "id": "I69-",
-          "obj": "MESH:D015198 (Designer Drugs)",
+          "obj": "MESH:D015198 (Designer Drugs, score: 11.593)",
           "span": {
             "begin": 528,
             "end": 543
@@ -2494,7 +2494,7 @@
         },
         {
           "id": "I76-",
-          "obj": "MESH:D023361 (Validation Study)",
+          "obj": "MESH:D023361 (Validation Study, score: 12.407)",
           "span": {
             "begin": 588,
             "end": 600
@@ -2503,7 +2503,7 @@
         },
         {
           "id": "I77-",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
           "span": {
             "begin": 601,
             "end": 609
@@ -2512,7 +2512,7 @@
         },
         {
           "id": "I79-",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
           "span": {
             "begin": 613,
             "end": 617
@@ -2521,7 +2521,7 @@
         },
         {
           "id": "I80-",
-          "obj": "MESH:D020228 (Pharmacologic Actions)",
+          "obj": "MESH:D020228 (Pharmacologic Actions, score: 10.981)",
           "span": {
             "begin": 618,
             "end": 624
@@ -2530,7 +2530,7 @@
         },
         {
           "id": "I83-",
-          "obj": "MESH:D000077626 (Implementation Science)",
+          "obj": "MESH:D000077626 (Implementation Science, score: 7.853)",
           "span": {
             "begin": 643,
             "end": 657
@@ -2539,7 +2539,7 @@
         },
         {
           "id": "I93-",
-          "obj": "MESH:D013664 (Teaching Materials)",
+          "obj": "MESH:D013664 (Teaching Materials, score: 11.968)",
           "span": {
             "begin": 734,
             "end": 746
@@ -2548,7 +2548,7 @@
         },
         {
           "id": "I97-",
-          "obj": "MESH:D031301 (Robinia)",
+          "obj": "MESH:D031301 (Robinia, score: 14.685)",
           "span": {
             "begin": 764,
             "end": 818
@@ -2557,7 +2557,7 @@
         },
         {
           "id": "I106-",
-          "obj": "MESH:D004526 (Efficiency)",
+          "obj": "MESH:D004526 (Efficiency, score: 11.346)",
           "span": {
             "begin": 851,
             "end": 860
@@ -2566,7 +2566,7 @@
         },
         {
           "id": "I107-",
-          "obj": "MESH:D004364 (Pharmaceutical Preparations)",
+          "obj": "MESH:D004364 (Pharmaceutical Preparations, score: 11.081)",
           "span": {
             "begin": 861,
             "end": 872
@@ -2575,7 +2575,7 @@
         },
         {
           "id": "I117-",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.1)",
           "span": {
             "begin": 923,
             "end": 928
@@ -2584,7 +2584,7 @@
         },
         {
           "id": "I123-",
-          "obj": "MESH:D058873 (Pandemics)",
+          "obj": "MESH:D058873 (Pandemics, score: 2.453)",
           "span": {
             "begin": 958,
             "end": 966
@@ -2593,7 +2593,7 @@
         },
         {
           "id": "I11-1",
-          "obj": "MESH:D004364 (Pharmaceutical Preparations)",
+          "obj": "MESH:D004364 (Pharmaceutical Preparations, score: 11.081)",
           "span": {
             "begin": 1043,
             "end": 1054
@@ -2602,7 +2602,7 @@
         },
         {
           "id": "I12-1",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 1056,
             "end": 1066
@@ -2611,7 +2611,7 @@
         },
         {
           "id": "I13-1",
-          "obj": "MESH:D003196 (Computer Graphics)",
+          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
           "span": {
             "begin": 1067,
             "end": 1083
@@ -2620,7 +2620,7 @@
         },
         {
           "id": "I19-1",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 1107,
             "end": 1117
@@ -2629,7 +2629,7 @@
         },
         {
           "id": "I20-1",
-          "obj": "MESH:D009769 (Object Attachment)",
+          "obj": "MESH:D009769 (Object Attachment, score: 11.789)",
           "span": {
             "begin": 1118,
             "end": 1125
@@ -2638,7 +2638,7 @@
         },
         {
           "id": "I37-1",
-          "obj": "MESH:D008564 (Membrane Potentials)",
+          "obj": "MESH:D008564 (Membrane Potentials, score: 11.261)",
           "span": {
             "begin": 1232,
             "end": 1241
@@ -2647,7 +2647,7 @@
         },
         {
           "id": "I38-1",
-          "obj": "MESH:D019727 (Proxy)",
+          "obj": "MESH:D019727 (Proxy, score: 13.083)",
           "span": {
             "begin": 1242,
             "end": 1251
@@ -2656,7 +2656,7 @@
         },
         {
           "id": "I39-1",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.1)",
           "span": {
             "begin": 1252,
             "end": 1257
@@ -2665,7 +2665,7 @@
         },
         {
           "id": "I45-1",
-          "obj": "MESH:D007398 (Interpersonal Relations)",
+          "obj": "MESH:D007398 (Interpersonal Relations, score: 11.181)",
           "span": {
             "begin": 1286,
             "end": 1299
@@ -2674,7 +2674,7 @@
         },
         {
           "id": "I47-1",
-          "obj": "MESH:D051188 (Knowledge Bases)",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 13.559)",
           "span": {
             "begin": 1308,
             "end": 1329
@@ -2683,7 +2683,7 @@
         },
         {
           "id": "I54-1",
-          "obj": "MESH:D031301 (Robinia)",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
           "span": {
             "begin": 1350,
             "end": 1357
@@ -2692,7 +2692,7 @@
         },
         {
           "id": "I55-1",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
           "span": {
             "begin": 1358,
             "end": 1373
@@ -2701,7 +2701,7 @@
         },
         {
           "id": "I63-1",
-          "obj": "MESH:D000090462 (Infodemiology)",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
           "span": {
             "begin": 1414,
             "end": 1425
@@ -2710,7 +2710,7 @@
         },
         {
           "id": "I66-1",
-          "obj": "MESH:D011642 (Publications)",
+          "obj": "MESH:D011642 (Publications, score: 0.007)",
           "span": {
             "begin": 1438,
             "end": 1450
@@ -2719,7 +2719,7 @@
         },
         {
           "id": "I69-1",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 10.993)",
           "span": {
             "begin": 1461,
             "end": 1478
@@ -2728,7 +2728,7 @@
         },
         {
           "id": "I90-1",
-          "obj": "MESH:D008091 (Literature)",
+          "obj": "MESH:D008091 (Literature, score: 12.1)",
           "span": {
             "begin": 1628,
             "end": 1637
@@ -2737,7 +2737,7 @@
         },
         {
           "id": "I91-1",
-          "obj": "MESH:D008373 (Manuscripts as Topic)",
+          "obj": "MESH:D008373 (Manuscripts as Topic, score: 10.489)",
           "span": {
             "begin": 1638,
             "end": 1653
@@ -2746,7 +2746,7 @@
         },
         {
           "id": "I94-1",
-          "obj": "MESH:D009275 (Names)",
+          "obj": "MESH:D009275 (Names, score: 13.083)",
           "span": {
             "begin": 1659,
             "end": 1678
@@ -2755,7 +2755,7 @@
         },
         {
           "id": "I3-2",
-          "obj": "MESH:D000077488 (Data Science)",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
           "span": {
             "begin": 1771,
             "end": 1775
@@ -2764,7 +2764,7 @@
         },
         {
           "id": "I6-2",
-          "obj": "MESH:D020478 (Form)",
+          "obj": "MESH:D020478 (Form, score: 9.146)",
           "span": {
             "begin": 1783,
             "end": 1789
@@ -2773,7 +2773,7 @@
         },
         {
           "id": "I7-2",
-          "obj": "MESH:D028661 (Complicity)",
+          "obj": "MESH:D028661 (Complicity, score: 12.105)",
           "span": {
             "begin": 1790,
             "end": 1800
@@ -2782,7 +2782,7 @@
         },
         {
           "id": "I11-2",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
           "span": {
             "begin": 1820,
             "end": 1835
@@ -2791,7 +2791,7 @@
         },
         {
           "id": "I15-2",
-          "obj": "MESH:D020494 (Phrases)",
+          "obj": "MESH:D020494 (Phrases, score: 10.335)",
           "span": {
             "begin": 1851,
             "end": 1859
@@ -2800,7 +2800,7 @@
         },
         {
           "id": "I17-2",
-          "obj": "MESH:D020494 (Phrases)",
+          "obj": "MESH:D020494 (Phrases, score: 10.335)",
           "span": {
             "begin": 1863,
             "end": 1871
@@ -2809,7 +2809,7 @@
         },
         {
           "id": "I19-2",
-          "obj": "MESH:D002452 (Cell Count)",
+          "obj": "MESH:D002452 (Cell Count, score: 9.577)",
           "span": {
             "begin": 1877,
             "end": 1883
@@ -2818,7 +2818,7 @@
         },
         {
           "id": "I21-2",
-          "obj": "MESH:D020502 (Terminology)",
+          "obj": "MESH:D020502 (Terminology, score: 11.613)",
           "span": {
             "begin": 1887,
             "end": 1904
@@ -2827,7 +2827,7 @@
         },
         {
           "id": "I25-2",
-          "obj": "MESH:D060085 (Coinfection)",
+          "obj": "MESH:D060085 (Coinfection, score: 12.708)",
           "span": {
             "begin": 1913,
             "end": 1927
@@ -2836,7 +2836,7 @@
         },
         {
           "id": "I36-2",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 0.006)",
           "span": {
             "begin": 1981,
             "end": 1990
@@ -2845,7 +2845,7 @@
         },
         {
           "id": "I49-2",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 2095,
             "end": 2105
@@ -2854,7 +2854,7 @@
         },
         {
           "id": "I50-2",
-          "obj": "MESH:D020502 (Terminology)",
+          "obj": "MESH:D020502 (Terminology, score: 12.44)",
           "span": {
             "begin": 2106,
             "end": 2122
@@ -2863,7 +2863,7 @@
         },
         {
           "id": "I55-2",
-          "obj": "MESH:D015994 (Incidence)",
+          "obj": "MESH:D015994 (Incidence, score: 13.464)",
           "span": {
             "begin": 2139,
             "end": 2159
@@ -2872,7 +2872,7 @@
         },
         {
           "id": "I62-2",
-          "obj": "MESH:D020494 (Phrases)",
+          "obj": "MESH:D020494 (Phrases, score: 10.335)",
           "span": {
             "begin": 2185,
             "end": 2193
@@ -2881,7 +2881,7 @@
         },
         {
           "id": "I71-2",
-          "obj": "MESH:D063990 (Gene Ontology)",
+          "obj": "MESH:D063990 (Gene Ontology, score: 8.69)",
           "span": {
             "begin": 2240,
             "end": 2248
@@ -2890,7 +2890,7 @@
         },
         {
           "id": "I72-2",
-          "obj": "MESH:D058977 (Molecular Sequence Annotation)",
+          "obj": "MESH:D058977 (Molecular Sequence Annotation, score: 11.413)",
           "span": {
             "begin": 2249,
             "end": 2259
@@ -2899,7 +2899,7 @@
         },
         {
           "id": "I73-2",
-          "obj": "MESH:D000077488 (Data Science)",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
           "span": {
             "begin": 2260,
             "end": 2264
@@ -2908,7 +2908,7 @@
         },
         {
           "id": "I76-2",
-          "obj": "MESH:D014764 (Viral Proteins)",
+          "obj": "MESH:D014764 (Viral Proteins, score: 0.008)",
           "span": {
             "begin": 2273,
             "end": 2287
@@ -2917,7 +2917,7 @@
         },
         {
           "id": "I81-2",
-          "obj": "MESH:D000086402 (SARS-CoV-2)",
+          "obj": "MESH:D000086402 (SARS-CoV-2, score: 0.011)",
           "span": {
             "begin": 2308,
             "end": 2318
@@ -2926,7 +2926,7 @@
         },
         {
           "id": "I86-2",
-          "obj": "MESH:D016107 (Epidermolysis Bullosa Acquisita)",
+          "obj": "MESH:D016107 (Epidermolysis Bullosa Acquisita, score: 13.367)",
           "span": {
             "begin": 2345,
             "end": 2348
@@ -2935,7 +2935,7 @@
         },
         {
           "id": "I94-2",
-          "obj": "MESH:D000078303 (Data Aggregation)",
+          "obj": "MESH:D000078303 (Data Aggregation, score: 12.67)",
           "span": {
             "begin": 2437,
             "end": 2464
@@ -2944,7 +2944,7 @@
         },
         {
           "id": "I98-2",
-          "obj": "MESH:D044423 (Kelp)",
+          "obj": "MESH:D044423 (Kelp, score: 13.817)",
           "span": {
             "begin": 2470,
             "end": 2473
@@ -2953,7 +2953,7 @@
         },
         {
           "id": "I105-2",
-          "obj": "MESH:D046348 (Gophers)",
+          "obj": "MESH:D046348 (Gophers, score: 13.017)",
           "span": {
             "begin": 2537,
             "end": 2540
@@ -2962,7 +2962,7 @@
         },
         {
           "id": "I106-2",
-          "obj": "MESH:D000077488 (Data Science)",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
           "span": {
             "begin": 2541,
             "end": 2545
@@ -2971,7 +2971,7 @@
         },
         {
           "id": "I111-2",
-          "obj": "MESH:D003196 (Computer Graphics)",
+          "obj": "MESH:D003196 (Computer Graphics, score: 10.059)",
           "span": {
             "begin": 2577,
             "end": 2582
@@ -2980,7 +2980,7 @@
         },
         {
           "id": "I4-3",
-          "obj": "MESH:D019991 (Database)",
+          "obj": "MESH:D019991 (Database, score: 0.007)",
           "span": {
             "begin": 2608,
             "end": 2616
@@ -2989,7 +2989,7 @@
         },
         {
           "id": "I6-3",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
           "span": {
             "begin": 2621,
             "end": 2636
@@ -2998,7 +2998,7 @@
         },
         {
           "id": "I9-3",
-          "obj": "MESH:D008198 (Lymph Nodes)",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 8.487)",
           "span": {
             "begin": 2646,
             "end": 2651
@@ -3007,7 +3007,7 @@
         },
         {
           "id": "I13-3",
-          "obj": "MESH:D011506 (Proteins)",
+          "obj": "MESH:D011506 (Proteins, score: 0.008)",
           "span": {
             "begin": 2663,
             "end": 2671
@@ -3016,7 +3016,7 @@
         },
         {
           "id": "I15-3",
-          "obj": "MESH:D020224 (Expressed Sequence Tags)",
+          "obj": "MESH:D020224 (Expressed Sequence Tags, score: 14.029)",
           "span": {
             "begin": 2678,
             "end": 2687
@@ -3025,7 +3025,7 @@
         },
         {
           "id": "I18-3",
-          "obj": "MESH:D020502 (Terminology)",
+          "obj": "MESH:D020502 (Terminology, score: 8.926)",
           "span": {
             "begin": 2705,
             "end": 2710
@@ -3034,7 +3034,7 @@
         },
         {
           "id": "I20-3",
-          "obj": "MESH:D063990 (Gene Ontology)",
+          "obj": "MESH:D063990 (Gene Ontology, score: 11.134)",
           "span": {
             "begin": 2717,
             "end": 2719
@@ -3043,7 +3043,7 @@
         },
         {
           "id": "I30-3",
-          "obj": "MESH:D020489 (Outline)",
+          "obj": "MESH:D020489 (Outline, score: 13.195)",
           "span": {
             "begin": 2773,
             "end": 2778
@@ -3052,7 +3052,7 @@
         },
         {
           "id": "I39-3",
-          "obj": "MESH:D031301 (Robinia)",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
           "span": {
             "begin": 2824,
             "end": 2831
@@ -3061,7 +3061,7 @@
         },
         {
           "id": "I42-3",
-          "obj": "MESH:D003379 (Countertransference)",
+          "obj": "MESH:D003379 (Countertransference, score: 13.099)",
           "span": {
             "begin": 2840,
             "end": 2853
@@ -3070,7 +3070,7 @@
         },
         {
           "id": "I43-3",
-          "obj": "MESH:D020489 (Outline)",
+          "obj": "MESH:D020489 (Outline, score: 13.195)",
           "span": {
             "begin": 2854,
             "end": 2859
@@ -3079,7 +3079,7 @@
         },
         {
           "id": "I46-3",
-          "obj": "MESH:D008040 (Genetic Linkage)",
+          "obj": "MESH:D008040 (Genetic Linkage, score: 11.162)",
           "span": {
             "begin": 2870,
             "end": 2878
@@ -3088,7 +3088,7 @@
         },
         {
           "id": "I50-3",
-          "obj": "MESH:D009949 (Orientation)",
+          "obj": "MESH:D009949 (Orientation, score: 11.295)",
           "span": {
             "begin": 2902,
             "end": 2916
@@ -3097,7 +3097,7 @@
         },
         {
           "id": "I61-3",
-          "obj": "MESH:D045473 (SARS Virus)",
+          "obj": "MESH:D045473 (SARS Virus, score: 5.439)",
           "span": {
             "begin": 2965,
             "end": 2974
@@ -3106,7 +3106,7 @@
         },
         {
           "id": "I62-3",
-          "obj": "MESH:D012816 (Signs and Symptoms)",
+          "obj": "MESH:D012816 (Signs and Symptoms, score: 7.468)",
           "span": {
             "begin": 2976,
             "end": 2984
@@ -3115,7 +3115,7 @@
         },
         {
           "id": "I64-3",
-          "obj": "MESH:D007062 (Identification, Psychological)",
+          "obj": "MESH:D007062 (Identification, Psychological, score: 11.72)",
           "span": {
             "begin": 2989,
             "end": 2999
@@ -3124,7 +3124,7 @@
         },
         {
           "id": "I74-3",
-          "obj": "MESH:D016420 (Comment)",
+          "obj": "MESH:D016420 (Comment, score: 5.648)",
           "span": {
             "begin": 3196,
             "end": 3206
@@ -3133,7 +3133,7 @@
         },
         {
           "id": "I80-3",
-          "obj": "MESH:D000090462 (Infodemiology)",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
           "span": {
             "begin": 3235,
             "end": 3246
@@ -3142,7 +3142,7 @@
         },
         {
           "id": "I87-3",
-          "obj": "MESH:D019991 (Database)",
+          "obj": "MESH:D019991 (Database, score: 0.007)",
           "span": {
             "begin": 3287,
             "end": 3295
@@ -3151,7 +3151,7 @@
         },
         {
           "id": "I89-3",
-          "obj": "MESH:D020489 (Outline)",
+          "obj": "MESH:D020489 (Outline, score: 13.195)",
           "span": {
             "begin": 3299,
             "end": 3304
@@ -3160,7 +3160,7 @@
         },
         {
           "id": "I95-3",
-          "obj": "MESH:D010641 (Phenotype)",
+          "obj": "MESH:D010641 (Phenotype, score: 4.301)",
           "span": {
             "begin": 3334,
             "end": 3344
@@ -3169,7 +3169,7 @@
         },
         {
           "id": "I99-3",
-          "obj": "MESH:D007256 (Information Systems)",
+          "obj": "MESH:D007256 (Information Systems, score: 9.321)",
           "span": {
             "begin": 3362,
             "end": 3380
@@ -3178,7 +3178,7 @@
         },
         {
           "id": "I104-3",
-          "obj": "MESH:D019991 (Database)",
+          "obj": "MESH:D019991 (Database, score: 3.732)",
           "span": {
             "begin": 3399,
             "end": 3408
@@ -3187,7 +3187,7 @@
         },
         {
           "id": "I112-3",
-          "obj": "MESH:D000077488 (Data Science)",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
           "span": {
             "begin": 3448,
             "end": 3452
@@ -3196,7 +3196,7 @@
         },
         {
           "id": "I119-3",
-          "obj": "MESH:D066289 (Data Curation)",
+          "obj": "MESH:D066289 (Data Curation, score: 10.509)",
           "span": {
             "begin": 3553,
             "end": 3569
@@ -3205,7 +3205,7 @@
         },
         {
           "id": "I5-4",
-          "obj": "MESH:D051188 (Knowledge Bases)",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 12.201)",
           "span": {
             "begin": 3599,
             "end": 3623
@@ -3214,7 +3214,7 @@
         },
         {
           "id": "I8-4",
-          "obj": "MESH:D009355 (Neomycin)",
+          "obj": "MESH:D009355 (Neomycin, score: 14.519)",
           "span": {
             "begin": 3624,
             "end": 3629
@@ -3223,7 +3223,7 @@
         },
         {
           "id": "I12-4",
-          "obj": "MESH:D000081406 (Cyclophilin D)",
+          "obj": "MESH:D000081406 (Cyclophilin D, score: 10.976)",
           "span": {
             "begin": 3663,
             "end": 3669
@@ -3232,7 +3232,7 @@
         },
         {
           "id": "I15-4",
-          "obj": "MESH:D000077558 (Big Data)",
+          "obj": "MESH:D000077558 (Big Data, score: 12.949)",
           "span": {
             "begin": 3680,
             "end": 3702
@@ -3241,7 +3241,7 @@
         },
         {
           "id": "I18-4",
-          "obj": "MESH:D020475 (Examination Questions)",
+          "obj": "MESH:D020475 (Examination Questions, score: 11.577)",
           "span": {
             "begin": 3703,
             "end": 3710
@@ -3250,7 +3250,7 @@
         },
         {
           "id": "I23-4",
-          "obj": "MESH:D056910 (Republic of Korea)",
+          "obj": "MESH:D056910 (Republic of Korea, score: 13.192)",
           "span": {
             "begin": 3743,
             "end": 3745
@@ -3259,7 +3259,7 @@
         },
         {
           "id": "I50-4",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 8.783)",
           "span": {
             "begin": 3880,
             "end": 3899
@@ -3268,7 +3268,7 @@
         },
         {
           "id": "I54-4",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 3922,
             "end": 3933
@@ -3277,7 +3277,7 @@
         },
         {
           "id": "I57-4",
-          "obj": "MESH:D003920 (Diabetes Mellitus)",
+          "obj": "MESH:D003920 (Diabetes Mellitus, score: 6.095)",
           "span": {
             "begin": 3939,
             "end": 3954
@@ -3286,7 +3286,7 @@
         },
         {
           "id": "I61-4",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
           "span": {
             "begin": 3961,
             "end": 3965
@@ -3295,7 +3295,7 @@
         },
         {
           "id": "I65-4",
-          "obj": "MESH:D016430 (Clinical Trial)",
+          "obj": "MESH:D016430 (Clinical Trial, score: 3.527)",
           "span": {
             "begin": 3985,
             "end": 4000
@@ -3304,7 +3304,7 @@
         },
         {
           "id": "I70-4",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 4065,
             "end": 4076
@@ -3313,7 +3313,7 @@
         },
         {
           "id": "I72-4",
-          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4)",
+          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 7.421)",
           "span": {
             "begin": 4086,
             "end": 4107
@@ -3322,7 +3322,7 @@
         },
         {
           "id": "I77-4",
-          "obj": "MESH:D006728 (Hormones)",
+          "obj": "MESH:D006728 (Hormones, score: 0.008)",
           "span": {
             "begin": 4133,
             "end": 4141
@@ -3331,7 +3331,7 @@
         },
         {
           "id": "I79-4",
-          "obj": "MESH:D000078790 (Insulin Secretion)",
+          "obj": "MESH:D000078790 (Insulin Secretion, score: 8.198)",
           "span": {
             "begin": 4154,
             "end": 4172
@@ -3340,7 +3340,7 @@
         },
         {
           "id": "I88-4",
-          "obj": "MESH:D015854 (Up-Regulation)",
+          "obj": "MESH:D015854 (Up-Regulation, score: 11.078)",
           "span": {
             "begin": 4206,
             "end": 4219
@@ -3349,7 +3349,7 @@
         },
         {
           "id": "I90-4",
-          "obj": "MESH:D010361 (Patients)",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
             "begin": 4223,
             "end": 4231
@@ -3358,7 +3358,7 @@
         },
         {
           "id": "I92-4",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2)",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.204)",
           "span": {
             "begin": 4237,
             "end": 4240
@@ -3367,7 +3367,7 @@
         },
         {
           "id": "I3-5",
-          "obj": "MESH:D010361 (Patients)",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
             "begin": 4277,
             "end": 4285
@@ -3376,7 +3376,7 @@
         },
         {
           "id": "I5-5",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2)",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.204)",
           "span": {
             "begin": 4291,
             "end": 4294
@@ -3385,7 +3385,7 @@
         },
         {
           "id": "I8-5",
-          "obj": "MESH:D012306 (Risk)",
+          "obj": "MESH:D012306 (Risk, score: 8.164)",
           "span": {
             "begin": 4302,
             "end": 4313
@@ -3394,7 +3394,7 @@
         },
         {
           "id": "I13-5",
-          "obj": "MESH:D016638 (Critical Illness)",
+          "obj": "MESH:D016638 (Critical Illness, score: 13.603)",
           "span": {
             "begin": 4333,
             "end": 4348
@@ -3403,7 +3403,7 @@
         },
         {
           "id": "I19-5",
-          "obj": "MESH:D015854 (Up-Regulation)",
+          "obj": "MESH:D015854 (Up-Regulation, score: 10.352)",
           "span": {
             "begin": 4369,
             "end": 4378
@@ -3412,7 +3412,7 @@
         },
         {
           "id": "I20-5",
-          "obj": "MESH:D015870 (Gene Expression)",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.916)",
           "span": {
             "begin": 4379,
             "end": 4389
@@ -3421,7 +3421,7 @@
         },
         {
           "id": "I23-5",
-          "obj": "MESH:D058605 (Host-Derived Cellular Factors)",
+          "obj": "MESH:D058605 (Host-Derived Cellular Factors, score: 11.734)",
           "span": {
             "begin": 4397,
             "end": 4410
@@ -3430,7 +3430,7 @@
         },
         {
           "id": "I25-5",
-          "obj": "MESH:D031002 (Acer)",
+          "obj": "MESH:D031002 (Acer, score: 10.497)",
           "span": {
             "begin": 4411,
             "end": 4414
@@ -3439,7 +3439,7 @@
         },
         {
           "id": "I36-5",
-          "obj": "MESH:D020475 (Examination Questions)",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.078)",
           "span": {
             "begin": 4470,
             "end": 4475
@@ -3448,7 +3448,7 @@
         },
         {
           "id": "I38-5",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 9.783)",
           "span": {
             "begin": 4480,
             "end": 4499
@@ -3457,7 +3457,7 @@
         },
         {
           "id": "I39-5",
-          "obj": "MESH:D010152 (Pair Bond)",
+          "obj": "MESH:D010152 (Pair Bond, score: 10.413)",
           "span": {
             "begin": 4501,
             "end": 4505
@@ -3466,7 +3466,7 @@
         },
         {
           "id": "I41-5",
-          "obj": "MESH:D020475 (Examination Questions)",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.078)",
           "span": {
             "begin": 4511,
             "end": 4516
@@ -3475,7 +3475,7 @@
         },
         {
           "id": "I42-5",
-          "obj": "MESH:D003196 (Computer Graphics)",
+          "obj": "MESH:D003196 (Computer Graphics, score: 10.059)",
           "span": {
             "begin": 4517,
             "end": 4522
@@ -3484,7 +3484,7 @@
         },
         {
           "id": "I44-5",
-          "obj": "MESH:D001680 (Biographies as Topic)",
+          "obj": "MESH:D001680 (Biographies as Topic, score: 13.95)",
           "span": {
             "begin": 4528,
             "end": 4540
@@ -3493,7 +3493,7 @@
         },
         {
           "id": "I47-5",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 11.411)",
           "span": {
             "begin": 4545,
             "end": 4573
@@ -3502,7 +3502,7 @@
         },
         {
           "id": "I48-5",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.159)",
           "span": {
             "begin": 4575,
             "end": 4582
@@ -3511,7 +3511,7 @@
         },
         {
           "id": "I50-5",
-          "obj": "MESH:D001680 (Biographies as Topic)",
+          "obj": "MESH:D001680 (Biographies as Topic, score: 13.95)",
           "span": {
             "begin": 4588,
             "end": 4600
@@ -3520,7 +3520,7 @@
         },
         {
           "id": "I53-5",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 11.47)",
           "span": {
             "begin": 4605,
             "end": 4633
@@ -3529,7 +3529,7 @@
         },
         {
           "id": "I54-5",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.159)",
           "span": {
             "begin": 4635,
             "end": 4642
@@ -3538,7 +3538,7 @@
         },
         {
           "id": "I56-5",
-          "obj": "MESH:D000287 (Administration, Topical)",
+          "obj": "MESH:D000287 (Administration, Topical, score: 12.167)",
           "span": {
             "begin": 4646,
             "end": 4653
@@ -3547,7 +3547,7 @@
         },
         {
           "id": "I61-5",
-          "obj": "MESH:D008722 (Methods)",
+          "obj": "MESH:D008722 (Methods, score: 12.352)",
           "span": {
             "begin": 4685,
             "end": 4696
@@ -3556,7 +3556,7 @@
         },
         {
           "id": "I62-5",
-          "obj": "MESH:D063132 (Connectome)",
+          "obj": "MESH:D063132 (Connectome, score: 10.946)",
           "span": {
             "begin": 4697,
             "end": 4708
@@ -3565,7 +3565,7 @@
         },
         {
           "id": "I64-5",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 4717,
             "end": 4728
@@ -3574,7 +3574,7 @@
         },
         {
           "id": "I72-5",
-          "obj": "MESH:D016896 (Treatment Outcome)",
+          "obj": "MESH:D016896 (Treatment Outcome, score: 11.794)",
           "span": {
             "begin": 4774,
             "end": 4792
@@ -3583,7 +3583,7 @@
         },
         {
           "id": "I77-5",
-          "obj": "MESH:D064420 (Drug-Related Side Effects and Adverse Reactions)",
+          "obj": "MESH:D064420 (Drug-Related Side Effects and Adverse Reactions, score: 9.203)",
           "span": {
             "begin": 4814,
             "end": 4826
@@ -3592,7 +3592,7 @@
         },
         {
           "id": "I82-5",
-          "obj": "MESH:D014584 (User-Computer Interface)",
+          "obj": "MESH:D014584 (User-Computer Interface, score: 4.781)",
           "span": {
             "begin": 4848,
             "end": 4862
@@ -3601,7 +3601,7 @@
         },
         {
           "id": "I85-5",
-          "obj": "MESH:D020475 (Examination Questions)",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.078)",
           "span": {
             "begin": 4866,
             "end": 4871
@@ -3610,7 +3610,7 @@
         },
         {
           "id": "I91-5",
-          "obj": "MESH:D008198 (Lymph Nodes)",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 8.487)",
           "span": {
             "begin": 4910,
             "end": 4915
@@ -3619,7 +3619,7 @@
         },
         {
           "id": "I98-5",
-          "obj": "MESH:D001697 (Biomedical and Dental Materials)",
+          "obj": "MESH:D001697 (Biomedical and Dental Materials, score: 12.025)",
           "span": {
             "begin": 4950,
             "end": 4968
@@ -3628,7 +3628,7 @@
         },
         {
           "id": "I102-5",
-          "obj": "MESH:D008198 (Lymph Nodes)",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 11.757)",
           "span": {
             "begin": 4978,
             "end": 4984
@@ -3637,7 +3637,7 @@
         },
         {
           "id": "I106-5",
-          "obj": "MESH:D005796 (Genes)",
+          "obj": "MESH:D005796 (Genes, score: 2.872)",
           "span": {
             "begin": 4994,
             "end": 4998
@@ -3646,7 +3646,7 @@
         },
         {
           "id": "I7-6",
-          "obj": "MESH:D008198 (Lymph Nodes)",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 8.487)",
           "span": {
             "begin": 5042,
             "end": 5047
@@ -3655,7 +3655,7 @@
         },
         {
           "id": "I27-6",
-          "obj": "MESH:D010641 (Phenotype)",
+          "obj": "MESH:D010641 (Phenotype, score: 5.993)",
           "span": {
             "begin": 5143,
             "end": 5153
@@ -3664,7 +3664,7 @@
         },
         {
           "id": "I28-6",
-          "obj": "MESH:D000071253 (Metadata)",
+          "obj": "MESH:D000071253 (Metadata, score: 12.335)",
           "span": {
             "begin": 5154,
             "end": 5161
@@ -3673,7 +3673,7 @@
         },
         {
           "id": "I36-6",
-          "obj": "MESH:D005796 (Genes)",
+          "obj": "MESH:D005796 (Genes, score: 2.872)",
           "span": {
             "begin": 5196,
             "end": 5200
@@ -3682,7 +3682,7 @@
         },
         {
           "id": "I40-6",
-          "obj": "MESH:D010641 (Phenotype)",
+          "obj": "MESH:D010641 (Phenotype, score: 5.993)",
           "span": {
             "begin": 5214,
             "end": 5224
@@ -3691,7 +3691,7 @@
         },
         {
           "id": "I41-6",
-          "obj": "MESH:D000071253 (Metadata)",
+          "obj": "MESH:D000071253 (Metadata, score: 12.335)",
           "span": {
             "begin": 5225,
             "end": 5232
@@ -3700,7 +3700,7 @@
         },
         {
           "id": "I54-6",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 5303,
             "end": 5314
@@ -3709,7 +3709,7 @@
         },
         {
           "id": "I57-6",
-          "obj": "MESH:D020475 (Examination Questions)",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.078)",
           "span": {
             "begin": 5331,
             "end": 5336
@@ -3718,7 +3718,7 @@
         },
         {
           "id": "I60-6",
-          "obj": "MESH:D016467 (Monograph)",
+          "obj": "MESH:D016467 (Monograph, score: 11.685)",
           "span": {
             "begin": 5350,
             "end": 5359
@@ -3727,7 +3727,7 @@
         },
         {
           "id": "I61-6",
-          "obj": "MESH:D000077002 (GRADE Approach)",
+          "obj": "MESH:D000077002 (GRADE Approach, score: 12.977)",
           "span": {
             "begin": 5360,
             "end": 5366
@@ -3736,7 +3736,7 @@
         },
         {
           "id": "I64-6",
-          "obj": "MESH:D000465 (Algorithms)",
+          "obj": "MESH:D000465 (Algorithms, score: 4.102)",
           "span": {
             "begin": 5373,
             "end": 5382
@@ -3745,7 +3745,7 @@
         },
         {
           "id": "I67-6",
-          "obj": "MESH:D031301 (Robinia)",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
           "span": {
             "begin": 5398,
             "end": 5405
@@ -3754,7 +3754,7 @@
         },
         {
           "id": "I74-6",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.159)",
           "span": {
             "begin": 5438,
             "end": 5445
@@ -3763,7 +3763,7 @@
         },
         {
           "id": "I78-6",
-          "obj": "MESH:D033182 (Intention)",
+          "obj": "MESH:D033182 (Intention, score: 11.965)",
           "span": {
             "begin": 5459,
             "end": 5468
@@ -3772,7 +3772,7 @@
         },
         {
           "id": "I81-6",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 5477,
             "end": 5488
@@ -3781,7 +3781,7 @@
         },
         {
           "id": "I82-6",
-          "obj": "MESH:D016430 (Clinical Trial)",
+          "obj": "MESH:D016430 (Clinical Trial, score: 0.008)",
           "span": {
             "begin": 5489,
             "end": 5503
@@ -3790,7 +3790,7 @@
         },
         {
           "id": "I89-6",
-          "obj": "MESH:D000077002 (GRADE Approach)",
+          "obj": "MESH:D000077002 (GRADE Approach, score: 12.977)",
           "span": {
             "begin": 5562,
             "end": 5568
@@ -3799,7 +3799,7 @@
         },
         {
           "id": "I93-6",
-          "obj": "MESH:D011014 (Pneumonia)",
+          "obj": "MESH:D011014 (Pneumonia, score: 3.657)",
           "span": {
             "begin": 5588,
             "end": 5608
@@ -3808,7 +3808,7 @@
         },
         {
           "id": "I94-6",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2)",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.204)",
           "span": {
             "begin": 5610,
             "end": 5613
@@ -3817,7 +3817,7 @@
         },
         {
           "id": "I96-6",
-          "obj": "MESH:D006973 (Hypertension)",
+          "obj": "MESH:D006973 (Hypertension, score: 10.623)",
           "span": {
             "begin": 5618,
             "end": 5644
@@ -3826,7 +3826,7 @@
         },
         {
           "id": "I100-6",
-          "obj": "MESH:D001244 (Association)",
+          "obj": "MESH:D001244 (Association, score: 9.259)",
           "span": {
             "begin": 5659,
             "end": 5674
@@ -3835,7 +3835,7 @@
         },
         {
           "id": "I0-7",
-          "obj": "MESH:D005796 (Genes)",
+          "obj": "MESH:D005796 (Genes, score: 0.007)",
           "span": {
             "begin": 5685,
             "end": 5690
@@ -3844,7 +3844,7 @@
         },
         {
           "id": "I1-7",
-          "obj": "MESH:D001244 (Association)",
+          "obj": "MESH:D001244 (Association, score: 9.259)",
           "span": {
             "begin": 5691,
             "end": 5706
@@ -3853,7 +3853,7 @@
         },
         {
           "id": "I4-7",
-          "obj": "MESH:D004194 (Disease)",
+          "obj": "MESH:D004194 (Disease, score: 12.671)",
           "span": {
             "begin": 5713,
             "end": 5723
@@ -3862,7 +3862,7 @@
         },
         {
           "id": "I9-7",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 5743,
             "end": 5754
@@ -3871,7 +3871,7 @@
         },
         {
           "id": "I15-7",
-          "obj": "MESH:D011014 (Pneumonia)",
+          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
           "span": {
             "begin": 5783,
             "end": 5792
@@ -3880,7 +3880,7 @@
         },
         {
           "id": "I24-7",
-          "obj": "MESH:D005796 (Genes)",
+          "obj": "MESH:D005796 (Genes, score: 0.007)",
           "span": {
             "begin": 5834,
             "end": 5839
@@ -3889,7 +3889,7 @@
         },
         {
           "id": "I27-7",
-          "obj": "MESH:D016212 (Transforming Growth Factor beta)",
+          "obj": "MESH:D016212 (Transforming Growth Factor beta, score: 0.01)",
           "span": {
             "begin": 5851,
             "end": 5882
@@ -3898,7 +3898,7 @@
         },
         {
           "id": "I33-7",
-          "obj": "MESH:D007266 (Inhibition, Psychological)",
+          "obj": "MESH:D007266 (Inhibition, Psychological, score: 7.46)",
           "span": {
             "begin": 5897,
             "end": 5907
@@ -3907,7 +3907,7 @@
         },
         {
           "id": "I39-7",
-          "obj": "MESH:D004198 (Disease Susceptibility)",
+          "obj": "MESH:D004198 (Disease Susceptibility, score: 5.596)",
           "span": {
             "begin": 5938,
             "end": 5952
@@ -3916,7 +3916,7 @@
         },
         {
           "id": "I41-7",
-          "obj": "MESH:D011014 (Pneumonia)",
+          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
           "span": {
             "begin": 5956,
             "end": 5965
@@ -3925,7 +3925,7 @@
         },
         {
           "id": "I43-7",
-          "obj": "MESH:D051379 (Mice)",
+          "obj": "MESH:D051379 (Mice, score: 0.007)",
           "span": {
             "begin": 5969,
             "end": 5973
@@ -3934,7 +3934,7 @@
         },
         {
           "id": "I46-7",
-          "obj": "MESH:D010403 (Penicillin Resistance)",
+          "obj": "MESH:D010403 (Penicillin Resistance, score: 11.638)",
           "span": {
             "begin": 5981,
             "end": 6000
@@ -3943,7 +3943,7 @@
         },
         {
           "id": "I47-7",
-          "obj": "MESH:D010641 (Phenotype)",
+          "obj": "MESH:D010641 (Phenotype, score: 0.008)",
           "span": {
             "begin": 6001,
             "end": 6010
@@ -3952,7 +3952,7 @@
         },
         {
           "id": "I53-7",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 10.954)",
           "span": {
             "begin": 6044,
             "end": 6100
@@ -3961,7 +3961,7 @@
         },
         {
           "id": "I61-7",
-          "obj": "MESH:D059467 (Transcriptome)",
+          "obj": "MESH:D059467 (Transcriptome, score: 9.726)",
           "span": {
             "begin": 6109,
             "end": 6119
@@ -3970,7 +3970,7 @@
         },
         {
           "id": "I62-7",
-          "obj": "MESH:D016422 (Letter)",
+          "obj": "MESH:D016422 (Letter, score: 13.312)",
           "span": {
             "begin": 6120,
             "end": 6126
@@ -3979,7 +3979,7 @@
         },
         {
           "id": "I68-7",
-          "obj": "MESH:D039604 (Answering Services)",
+          "obj": "MESH:D039604 (Answering Services, score: 12.679)",
           "span": {
             "begin": 6152,
             "end": 6158
@@ -3988,7 +3988,7 @@
         },
         {
           "id": "I72-7",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 6179,
             "end": 6190
@@ -3997,7 +3997,7 @@
         },
         {
           "id": "I74-7",
-          "obj": "MESH:D007266 (Inhibition, Psychological)",
+          "obj": "MESH:D007266 (Inhibition, Psychological, score: 8.649)",
           "span": {
             "begin": 6195,
             "end": 6202
@@ -4006,7 +4006,7 @@
         },
         {
           "id": "I76-7",
-          "obj": "MESH:D014158 (Transcription, Genetic)",
+          "obj": "MESH:D014158 (Transcription, Genetic, score: 6.366)",
           "span": {
             "begin": 6210,
             "end": 6223
@@ -4015,7 +4015,7 @@
         },
         {
           "id": "I80-7",
-          "obj": "MESH:D015854 (Up-Regulation)",
+          "obj": "MESH:D015854 (Up-Regulation, score: 10.467)",
           "span": {
             "begin": 6242,
             "end": 6250
@@ -4024,7 +4024,7 @@
         },
         {
           "id": "I81-7",
-          "obj": "MESH:D010361 (Patients)",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
             "begin": 6251,
             "end": 6259
@@ -4033,7 +4033,7 @@
         },
         {
           "id": "I82-7",
-          "obj": "MESH:D012306 (Risk)",
+          "obj": "MESH:D012306 (Risk, score: 0.006)",
           "span": {
             "begin": 6261,
             "end": 6265
@@ -4042,7 +4042,7 @@
         },
         {
           "id": "I86-7",
-          "obj": "MESH:D012769 (Shock)",
+          "obj": "MESH:D012769 (Shock, score: 14.27)",
           "span": {
             "begin": 6285,
             "end": 6291
@@ -4051,7 +4051,7 @@
         },
         {
           "id": "I87-7",
-          "obj": "MESH:D011014 (Pneumonia)",
+          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
           "span": {
             "begin": 6292,
             "end": 6301
@@ -4060,7 +4060,7 @@
         },
         {
           "id": "I97-7",
-          "obj": "MESH:D012769 (Shock)",
+          "obj": "MESH:D012769 (Shock, score: 14.27)",
           "span": {
             "begin": 6349,
             "end": 6355
@@ -4069,7 +4069,7 @@
         },
         {
           "id": "I98-7",
-          "obj": "MESH:D010336 (Pathology)",
+          "obj": "MESH:D010336 (Pathology, score: 6.932)",
           "span": {
             "begin": 6356,
             "end": 6367
@@ -4078,7 +4078,7 @@
         },
         {
           "id": "I103-7",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2)",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.204)",
           "span": {
             "begin": 6388,
             "end": 6391
@@ -4087,7 +4087,7 @@
         },
         {
           "id": "I104-7",
-          "obj": "MESH:D010361 (Patients)",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
             "begin": 6392,
             "end": 6400
@@ -4096,7 +4096,7 @@
         },
         {
           "id": "I107-7",
-          "obj": "MESH:D007266 (Inhibition, Psychological)",
+          "obj": "MESH:D007266 (Inhibition, Psychological, score: 7.46)",
           "span": {
             "begin": 6411,
             "end": 6421
@@ -4105,7 +4105,7 @@
         },
         {
           "id": "I7-8",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 6477,
             "end": 6488
@@ -4114,7 +4114,7 @@
         },
         {
           "id": "I14-8",
-          "obj": "MESH:D058605 (Host-Derived Cellular Factors)",
+          "obj": "MESH:D058605 (Host-Derived Cellular Factors, score: 11.734)",
           "span": {
             "begin": 6538,
             "end": 6551
@@ -4123,7 +4123,7 @@
         },
         {
           "id": "I17-8",
-          "obj": "MESH:D045473 (SARS Virus)",
+          "obj": "MESH:D045473 (SARS Virus, score: 5.439)",
           "span": {
             "begin": 6556,
             "end": 6565
@@ -4132,7 +4132,7 @@
         },
         {
           "id": "I19-8",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 11.47)",
           "span": {
             "begin": 6574,
             "end": 6602
@@ -4141,7 +4141,7 @@
         },
         {
           "id": "I22-8",
-          "obj": "MESH:D015536 (Down-Regulation)",
+          "obj": "MESH:D015536 (Down-Regulation, score: 5.024)",
           "span": {
             "begin": 6615,
             "end": 6629
@@ -4150,7 +4150,7 @@
         },
         {
           "id": "I24-8",
-          "obj": "MESH:D031002 (Acer)",
+          "obj": "MESH:D031002 (Acer, score: 10.497)",
           "span": {
             "begin": 6633,
             "end": 6636
@@ -4159,7 +4159,7 @@
         },
         {
           "id": "I25-8",
-          "obj": "MESH:D015870 (Gene Expression)",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.916)",
           "span": {
             "begin": 6638,
             "end": 6648
@@ -4168,7 +4168,7 @@
         },
         {
           "id": "I27-8",
-          "obj": "MESH:D008168 (Lung)",
+          "obj": "MESH:D008168 (Lung, score: 0.006)",
           "span": {
             "begin": 6652,
             "end": 6656
@@ -4177,7 +4177,7 @@
         },
         {
           "id": "I28-8",
-          "obj": "MESH:D014024 (Tissues)",
+          "obj": "MESH:D014024 (Tissues, score: 3.216)",
           "span": {
             "begin": 6657,
             "end": 6663
@@ -4186,7 +4186,7 @@
         },
         {
           "id": "I31-8",
-          "obj": "MESH:D001244 (Association)",
+          "obj": "MESH:D001244 (Association, score: 9.259)",
           "span": {
             "begin": 6673,
             "end": 6688
@@ -4195,7 +4195,7 @@
         },
         {
           "id": "I33-8",
-          "obj": "MESH:D012769 (Shock)",
+          "obj": "MESH:D012769 (Shock, score: 14.27)",
           "span": {
             "begin": 6689,
             "end": 6695
@@ -4204,7 +4204,7 @@
         },
         {
           "id": "I35-8",
-          "obj": "MESH:D000066891 (Critical Care Outcomes)",
+          "obj": "MESH:D000066891 (Critical Care Outcomes, score: 10.307)",
           "span": {
             "begin": 6705,
             "end": 6722
@@ -4213,7 +4213,7 @@
         },
         {
           "id": "I41-8",
-          "obj": "MESH:D015870 (Gene Expression)",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.916)",
           "span": {
             "begin": 6753,
             "end": 6763
@@ -4222,7 +4222,7 @@
         },
         {
           "id": "I43-8",
-          "obj": "MESH:D031002 (Acer)",
+          "obj": "MESH:D031002 (Acer, score: 10.497)",
           "span": {
             "begin": 6767,
             "end": 6770
@@ -4231,7 +4231,7 @@
         },
         {
           "id": "I45-8",
-          "obj": "MESH:D015854 (Up-Regulation)",
+          "obj": "MESH:D015854 (Up-Regulation, score: 10.352)",
           "span": {
             "begin": 6775,
             "end": 6784
@@ -4240,7 +4240,7 @@
         },
         {
           "id": "I47-8",
-          "obj": "MESH:D010361 (Patients)",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
             "begin": 6788,
             "end": 6796
@@ -4249,7 +4249,7 @@
         },
         {
           "id": "I49-8",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2)",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.204)",
           "span": {
             "begin": 6802,
             "end": 6805
@@ -4258,7 +4258,7 @@
         },
         {
           "id": "I51-8",
-          "obj": "MESH:D031002 (Acer)",
+          "obj": "MESH:D031002 (Acer, score: 10.497)",
           "span": {
             "begin": 6813,
             "end": 6816
@@ -4267,7 +4267,7 @@
         },
         {
           "id": "I54-8",
-          "obj": "MESH:D057911 (Angiotensin Receptor Antagonists)",
+          "obj": "MESH:D057911 (Angiotensin Receptor Antagonists, score: 4.273)",
           "span": {
             "begin": 6832,
             "end": 6861
@@ -4276,7 +4276,7 @@
         },
         {
           "id": "I60-8",
-          "obj": "MESH:D016896 (Treatment Outcome)",
+          "obj": "MESH:D016896 (Treatment Outcome, score: 10.791)",
           "span": {
             "begin": 6883,
             "end": 6888
@@ -4285,7 +4285,7 @@
         },
         {
           "id": "I61-8",
-          "obj": "MESH:D009272 (Persons)",
+          "obj": "MESH:D009272 (Persons, score: 8.458)",
           "span": {
             "begin": 6889,
             "end": 6900
@@ -4294,7 +4294,7 @@
         },
         {
           "id": "I78-8",
-          "obj": "MESH:D000284 (Administration, Oral)",
+          "obj": "MESH:D000284 (Administration, Oral, score: 10.331)",
           "span": {
             "begin": 7001,
             "end": 7015
@@ -4303,7 +4303,7 @@
         },
         {
           "id": "I80-8",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 7019,
             "end": 7030
@@ -4312,7 +4312,7 @@
         },
         {
           "id": "I82-8",
-          "obj": "MESH:D015854 (Up-Regulation)",
+          "obj": "MESH:D015854 (Up-Regulation, score: 7.956)",
           "span": {
             "begin": 7045,
             "end": 7056
@@ -4321,7 +4321,7 @@
         },
         {
           "id": "I83-8",
-          "obj": "MESH:D031002 (Acer)",
+          "obj": "MESH:D031002 (Acer, score: 10.497)",
           "span": {
             "begin": 7057,
             "end": 7060
@@ -4330,7 +4330,7 @@
         },
         {
           "id": "I84-8",
-          "obj": "MESH:D015870 (Gene Expression)",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.916)",
           "span": {
             "begin": 7062,
             "end": 7072
@@ -4339,7 +4339,7 @@
         },
         {
           "id": "I92-8",
-          "obj": "MESH:D004719 (Endomyocardial Fibrosis)",
+          "obj": "MESH:D004719 (Endomyocardial Fibrosis, score: 9.0)",
           "span": {
             "begin": 7125,
             "end": 7141
@@ -4348,7 +4348,7 @@
         },
         {
           "id": "I95-8",
-          "obj": "MESH:D023421 (Models, Animal)",
+          "obj": "MESH:D023421 (Models, Animal, score: 3.692)",
           "span": {
             "begin": 7145,
             "end": 7158
@@ -4357,7 +4357,7 @@
         },
         {
           "id": "I3-9",
-          "obj": "MESH:D035501 (Uncertainty)",
+          "obj": "MESH:D035501 (Uncertainty, score: 10.441)",
           "span": {
             "begin": 7170,
             "end": 7177
@@ -4366,7 +4366,7 @@
         },
         {
           "id": "I5-9",
-          "obj": "MESH:D015854 (Up-Regulation)",
+          "obj": "MESH:D015854 (Up-Regulation, score: 7.836)",
           "span": {
             "begin": 7181,
             "end": 7193
@@ -4375,7 +4375,7 @@
         },
         {
           "id": "I6-9",
-          "obj": "MESH:D031002 (Acer)",
+          "obj": "MESH:D031002 (Acer, score: 10.497)",
           "span": {
             "begin": 7194,
             "end": 7197
@@ -4384,7 +4384,7 @@
         },
         {
           "id": "I9-9",
-          "obj": "MESH:D024803 (Biomedical Enhancement)",
+          "obj": "MESH:D024803 (Biomedical Enhancement, score: 13.369)",
           "span": {
             "begin": 7208,
             "end": 7218
@@ -4393,7 +4393,7 @@
         },
         {
           "id": "I11-9",
-          "obj": "MESH:D017809 (Fatal Outcome)",
+          "obj": "MESH:D017809 (Fatal Outcome, score: 13.649)",
           "span": {
             "begin": 7222,
             "end": 7233
@@ -4402,7 +4402,7 @@
         },
         {
           "id": "I13-9",
-          "obj": "MESH:D010361 (Patients)",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
             "begin": 7237,
             "end": 7245
@@ -4411,7 +4411,7 @@
         },
         {
           "id": "I17-9",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2)",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.204)",
           "span": {
             "begin": 7269,
             "end": 7272
@@ -4420,7 +4420,7 @@
         },
         {
           "id": "I20-9",
-          "obj": "MESH:D007600 (Judgment)",
+          "obj": "MESH:D007600 (Judgment, score: 11.155)",
           "span": {
             "begin": 7293,
             "end": 7302
@@ -4429,7 +4429,7 @@
         },
         {
           "id": "I21-9",
-          "obj": "MESH:D030881 (Disclosure)",
+          "obj": "MESH:D030881 (Disclosure, score: 12.665)",
           "span": {
             "begin": 7303,
             "end": 7310
@@ -4438,7 +4438,7 @@
         },
         {
           "id": "I23-9",
-          "obj": "MESH:D019587 (Dietary Supplements)",
+          "obj": "MESH:D019587 (Dietary Supplements, score: 13.505)",
           "span": {
             "begin": 7314,
             "end": 7324
@@ -4447,7 +4447,7 @@
         },
         {
           "id": "I24-9",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.159)",
           "span": {
             "begin": 7325,
             "end": 7332
@@ -4456,7 +4456,7 @@
         },
         {
           "id": "I26-9",
-          "obj": "MESH:D000069476 (Linagliptin)",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
           "span": {
             "begin": 7341,
             "end": 7352
@@ -4465,7 +4465,7 @@
         },
         {
           "id": "I35-9",
-          "obj": "MESH:D001669 (Biochemical Phenomena)",
+          "obj": "MESH:D001669 (Biochemical Phenomena, score: 5.185)",
           "span": {
             "begin": 7411,
             "end": 7422
@@ -4474,7 +4474,7 @@
         },
         {
           "id": "I36-9",
-          "obj": "MESH:D053898 (Biosynthetic Pathways)",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
           "span": {
             "begin": 7423,
             "end": 7431
@@ -4483,7 +4483,7 @@
         },
         {
           "id": "I37-9",
-          "obj": "MESH:D001244 (Association)",
+          "obj": "MESH:D001244 (Association, score: 6.992)",
           "span": {
             "begin": 7432,
             "end": 7443
@@ -4492,7 +4492,7 @@
         },
         {
           "id": "I39-9",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
           "span": {
             "begin": 7446,
             "end": 7450
@@ -4501,7 +4501,7 @@
         },
         {
           "id": "I48-9",
-          "obj": "MESH:D012306 (Risk)",
+          "obj": "MESH:D012306 (Risk, score: 12.771)",
           "span": {
             "begin": 7515,
             "end": 7526
@@ -4510,7 +4510,7 @@
         },
         {
           "id": "I49-9",
-          "obj": "MESH:D000068036 (Graphic Novel)",
+          "obj": "MESH:D000068036 (Graphic Novel, score: 11.455)",
           "span": {
             "begin": 7527,
             "end": 7532
@@ -4519,7 +4519,7 @@
         },
         {
           "id": "I50-9",
-          "obj": "MESH:D007600 (Judgment)",
+          "obj": "MESH:D007600 (Judgment, score: 11.777)",
           "span": {
             "begin": 7533,
             "end": 7543
@@ -4528,7 +4528,7 @@
         },
         {
           "id": "I57-9",
-          "obj": "MESH:D051188 (Knowledge Bases)",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 6.039)",
           "span": {
             "begin": 7613,
             "end": 7626
@@ -4537,7 +4537,7 @@
         },
         {
           "id": "I59-9",
-          "obj": "MESH:D064878 (Web Browser)",
+          "obj": "MESH:D064878 (Web Browser, score: 9.979)",
           "span": {
             "begin": 7631,
             "end": 7641
@@ -4546,7 +4546,7 @@
         },
         {
           "id": "I65-9",
-          "obj": "MESH:D031301 (Robinia)",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
           "span": {
             "begin": 7671,
             "end": 7678
@@ -4555,7 +4555,7 @@
         },
         {
           "id": "I66-9",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 7679,
             "end": 7689
@@ -4564,7 +4564,7 @@
         },
         {
           "id": "I67-9",
-          "obj": "MESH:D019359 (Knowledge)",
+          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
           "span": {
             "begin": 7690,
             "end": 7705
@@ -4573,7 +4573,7 @@
         },
         {
           "id": "I70-9",
-          "obj": "MESH:D000090462 (Infodemiology)",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
           "span": {
             "begin": 7711,
             "end": 7722
@@ -4582,7 +4582,7 @@
         },
         {
           "id": "I74-9",
-          "obj": "MESH:D011642 (Publications)",
+          "obj": "MESH:D011642 (Publications, score: 6.696)",
           "span": {
             "begin": 7746,
             "end": 7755
@@ -4591,7 +4591,7 @@
         },
         {
           "id": "I75-9",
-          "obj": "MESH:D035843 (Biomedical Research)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
           "span": {
             "begin": 7756,
             "end": 7766
@@ -4600,7 +4600,7 @@
         },
         {
           "id": "I76-9",
-          "obj": "MESH:D000090462 (Infodemiology)",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
           "span": {
             "begin": 7767,
             "end": 7778
@@ -4609,7 +4609,7 @@
         },
         {
           "id": "I81-9",
-          "obj": "MESH:D002363 (Case Reports)",
+          "obj": "MESH:D002363 (Case Reports, score: 10.544)",
           "span": {
             "begin": 7813,
             "end": 7817
@@ -4618,7 +4618,7 @@
         },
         {
           "id": "I89-9",
-          "obj": "MESH:D003210 (Concept Formation)",
+          "obj": "MESH:D003210 (Concept Formation, score: 13.165)",
           "span": {
             "begin": 7865,
             "end": 7875
@@ -4627,7 +4627,7 @@
         },
         {
           "id": "I92-9",
-          "obj": "MESH:D013404 (Suggestion)",
+          "obj": "MESH:D013404 (Suggestion, score: 12.692)",
           "span": {
             "begin": 7891,
             "end": 7901
@@ -4636,7 +4636,7 @@
         },
         {
           "id": "I94-9",
-          "obj": "MESH:D004358 (Drug Therapy)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
           "span": {
             "begin": 7913,
             "end": 7917
@@ -4645,7 +4645,7 @@
         },
         {
           "id": "I95-9",
-          "obj": "MESH:D058492 (Drug Repositioning)",
+          "obj": "MESH:D058492 (Drug Repositioning, score: 9.752)",
           "span": {
             "begin": 7918,
             "end": 7929
