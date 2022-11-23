@@ -118,7 +118,8 @@ def test_with_pubannotator(pubmed_id):
             continue
 
         denotation = dict(token)
-        denotation['obj'] = f"MESH:{result[1]} ({result[0]})"
+        denotation['obj'] = f"MESH:{result[1]} ({result[0]}, score: {result[2]})"
+        count_sapbert_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.
         # denotation['label'] = result[0]
