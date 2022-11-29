@@ -197,10 +197,10 @@ class SapbertModelWrapper(ModelWrapper):
             return [self.all_reps_names[nn_index], self.all_reps_ids[nn_index], round(dist[0, nn_index], 3)]
         count_dist = np.argpartition(dist, count, axis=None)
         result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
-        logger.error(f'result_dist: {result_dist}, shape: {result_dist.shape}')
-        logger.error(f'concatenated: {[np.where(dist.flatten() == d) for d in result_dist]}')
-        indices = np.concatenate([np.where(dist.flatten() == d) for d in result_dist]).ravel()
-        logger.error(f'indices: {indices}')
+        result_dist = np.unique(result_dist)
+        indices = np.unique(
+            np.asarray([np.asarray(np.where(dist.flatten() == d)).flatten() for d in result_dist])
+        ).ravel()
         return [[self.all_reps_names[idx], self.all_reps_ids[idx], round(dist[0, idx], 3)] for idx in indices[:count]]
 
 
