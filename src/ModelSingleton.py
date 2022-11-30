@@ -194,7 +194,11 @@ class SapbertModelWrapper(ModelWrapper):
         dist = cdist(cls_rep.cpu().detach().numpy(), self.all_reps_emb)
         if count == 1:
             nn_index = np.argmin(dist)
-            return [self.all_reps_names[nn_index], self.all_reps_ids[nn_index], round(dist[0, nn_index], 3)]
+            return [{
+                "MESH term": self.all_reps_names[nn_index],
+                "MESH ID": self.all_reps_ids[nn_index],
+                "Distance score": round(dist[0, nn_index], 3)
+            }]
         count_dist = np.argpartition(dist, count, axis=None)
         result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
         indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten()) for d in result_dist]
