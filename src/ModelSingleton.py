@@ -199,7 +199,14 @@ class SapbertModelWrapper(ModelWrapper):
         result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
         indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten()) for d in result_dist]
         indices = sum(indices, [])
-        return [[self.all_reps_names[idx], self.all_reps_ids[idx], round(dist[0, idx], 3)] for idx in indices[:count]]
+        return [
+            {
+                "MESH term": self.all_reps_names[idx],
+                "MESH ID": self.all_reps_ids[idx],
+                "Distance score": round(dist[0, idx], 3)
+            }
+            for idx in indices[:count]
+        ]
 
 
 class ModelFactory:
