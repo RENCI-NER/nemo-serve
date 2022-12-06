@@ -1,0 +1,393 @@
+{
+  "text": "COVID-KOP: Integrating Emerging COVID-19 Data with the ROBOKOP Database.\nSUMMARY: In response to the COVID-19 pandemic, we established COVID-KOP, a new knowledgebase integrating the existing ROBOKOP biomedical knowledge graph with information from recent biomedical literature on COVID-19 annotated in the CORD-19 collection. COVID-KOP can be used effectively to generate new hypotheses concerning repurposing of known drugs and clinical drug candidates against COVID-19 by establishing respective confirmatory pathways of drug action.\nAVAILABILITY: COVID-KOP is freely accessible at https://covidkop.renci.org/. For code and instructions for the original ROBOKOP, see: https://github.com/NCATS-Gamma/robokop.",
+  "tracks": [
+    {
+      "denotations": [
+        {
+          "id": "I4-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 41,
+            "end": 45
+          },
+          "text": "Data"
+        },
+        {
+          "id": "I7-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 55,
+            "end": 62
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I21-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 152,
+            "end": 165
+          },
+          "text": "knowledgebase"
+        },
+        {
+          "id": "I22-",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 166,
+            "end": 177
+          },
+          "text": "integrating"
+        },
+        {
+          "id": "I25-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 191,
+            "end": 198
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I26-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 199,
+            "end": 209
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I27-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 210,
+            "end": 225
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I30-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 231,
+            "end": 242
+          },
+          "text": "information"
+        },
+        {
+          "id": "I33-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 255,
+            "end": 265
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I34-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 266,
+            "end": 276
+          },
+          "text": "literature"
+        },
+        {
+          "id": "I50-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 376,
+            "end": 386
+          },
+          "text": "hypotheses"
+        },
+        {
+          "id": "I52-",
+          "obj": "biolink:Phenomenon",
+          "span": {
+            "begin": 398,
+            "end": 409
+          },
+          "text": "repurposing"
+        },
+        {
+          "id": "I55-",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 419,
+            "end": 424
+          },
+          "text": "drugs"
+        },
+        {
+          "id": "I57-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 429,
+            "end": 437
+          },
+          "text": "clinical"
+        },
+        {
+          "id": "I58-",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 438,
+            "end": 453
+          },
+          "text": "drug candidates"
+        },
+        {
+          "id": "I65-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 498,
+            "end": 510
+          },
+          "text": "confirmatory"
+        },
+        {
+          "id": "I66-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 511,
+            "end": 519
+          },
+          "text": "pathways"
+        },
+        {
+          "id": "I68-",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 523,
+            "end": 527
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I69-",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 528,
+            "end": 534
+          },
+          "text": "action"
+        },
+        {
+          "id": "I80-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 626,
+            "end": 638
+          },
+          "text": "instructions"
+        },
+        {
+          "id": "I84-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 656,
+            "end": 663
+          },
+          "text": "ROBOKOP"
+        }
+      ],
+      "project": "https://med-nemo.apps.renci.org/annotate/"
+    },
+    {
+      "denotations": [
+        {
+          "id": "I4-",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "span": {
+            "begin": 41,
+            "end": 45
+          },
+          "text": "Data"
+        },
+        {
+          "id": "I7-",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
+          "span": {
+            "begin": 55,
+            "end": 62
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I21-",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 6.039)",
+          "span": {
+            "begin": 152,
+            "end": 165
+          },
+          "text": "knowledgebase"
+        },
+        {
+          "id": "I22-",
+          "obj": "MESH:D018511 (Systems Integration, score: 9.887)",
+          "span": {
+            "begin": 166,
+            "end": 177
+          },
+          "text": "integrating"
+        },
+        {
+          "id": "I25-",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
+          "span": {
+            "begin": 191,
+            "end": 198
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I26-",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
+          "span": {
+            "begin": 199,
+            "end": 209
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I27-",
+          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
+          "span": {
+            "begin": 210,
+            "end": 225
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I30-",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
+          "span": {
+            "begin": 231,
+            "end": 242
+          },
+          "text": "information"
+        },
+        {
+          "id": "I33-",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
+          "span": {
+            "begin": 255,
+            "end": 265
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I34-",
+          "obj": "MESH:D008091 (Literature, score: 0.007)",
+          "span": {
+            "begin": 266,
+            "end": 276
+          },
+          "text": "literature"
+        },
+        {
+          "id": "I50-",
+          "obj": "MESH:D013404 (Suggestion, score: 12.692)",
+          "span": {
+            "begin": 376,
+            "end": 386
+          },
+          "text": "hypotheses"
+        },
+        {
+          "id": "I52-",
+          "obj": "MESH:D058492 (Drug Repositioning, score: 9.752)",
+          "span": {
+            "begin": 398,
+            "end": 409
+          },
+          "text": "repurposing"
+        },
+        {
+          "id": "I55-",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.1)",
+          "span": {
+            "begin": 419,
+            "end": 424
+          },
+          "text": "drugs"
+        },
+        {
+          "id": "I57-",
+          "obj": "MESH:D015510 (Clinical Medicine, score: 8.953)",
+          "span": {
+            "begin": 429,
+            "end": 437
+          },
+          "text": "clinical"
+        },
+        {
+          "id": "I58-",
+          "obj": "MESH:D015198 (Designer Drugs, score: 11.593)",
+          "span": {
+            "begin": 438,
+            "end": 453
+          },
+          "text": "drug candidates"
+        },
+        {
+          "id": "I65-",
+          "obj": "MESH:D023361 (Validation Study, score: 12.407)",
+          "span": {
+            "begin": 498,
+            "end": 510
+          },
+          "text": "confirmatory"
+        },
+        {
+          "id": "I66-",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
+          "span": {
+            "begin": 511,
+            "end": 519
+          },
+          "text": "pathways"
+        },
+        {
+          "id": "I68-",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "span": {
+            "begin": 523,
+            "end": 527
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I69-",
+          "obj": "MESH:D020228 (Pharmacologic Actions, score: 10.981)",
+          "span": {
+            "begin": 528,
+            "end": 534
+          },
+          "text": "action"
+        },
+        {
+          "id": "I80-",
+          "obj": "MESH:D013664 (Teaching Materials, score: 11.968)",
+          "span": {
+            "begin": 626,
+            "end": 638
+          },
+          "text": "instructions"
+        },
+        {
+          "id": "I84-",
+          "obj": "MESH:D031301 (Robinia, score: 11.611)",
+          "span": {
+            "begin": 656,
+            "end": 663
+          },
+          "text": "ROBOKOP"
+        }
+      ],
+      "project": "https://med-nemo-sapbert.apps.renci.org/annotate/"
+    }
+  ]
+}
