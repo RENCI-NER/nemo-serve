@@ -195,9 +195,9 @@ class SapbertModelWrapper(ModelWrapper):
         if count == 1:
             nn_index = np.argmin(dist)
             return [{
-                "MESH term": self.all_reps_names[nn_index],
-                "MESH ID": self.all_reps_ids[nn_index],
-                "Distance score": round(dist[0, nn_index], 3)
+                "label": self.all_reps_names[nn_index],
+                "curie": self.all_reps_ids[nn_index],
+                "distance_score": round(dist[0, nn_index], 3)
             }]
         count_dist = np.argpartition(dist, count, axis=None)
         result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
