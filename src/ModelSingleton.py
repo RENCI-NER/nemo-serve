@@ -205,9 +205,9 @@ class SapbertModelWrapper(ModelWrapper):
         indices = sum(indices, [])
         return [
             {
-                "MESH term": self.all_reps_names[idx],
-                "MESH ID": self.all_reps_ids[idx],
-                "Distance score": round(dist[0, idx], 3)
+                "label": self.all_reps_names[idx],
+                "curie": self.all_reps_ids[idx],
+                "distance_score": round(dist[0, idx], 3)
             }
             for idx in indices[:count]
         ]
