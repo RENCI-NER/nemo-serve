@@ -1,3 +1,4 @@
+import ast
 import numpy as np
 import pandas as pd
 import logging
@@ -180,7 +181,11 @@ class SapbertModelWrapper(ModelWrapper):
         self.all_reps_emb = np.load(all_reps_path)
         all_reps_name_ids = pd.read_csv(all_reps_ids_path, header=0, dtype=str)
         self.all_reps_names = all_reps_name_ids['Name']
-        self.all_reps_ids = all_reps_name_ids['ID']
+        try:
+            # handle ID column for babel ground truth data which includes id to type mapping dict
+            self.all_reps_ids = all_reps_name_ids['ID'].map(lambda d: ast.literal_eval(d))
+        except ValueError:
+            self.all_reps_ids = all_reps_name_ids['ID']
 
     def __call__(self, query_text, count):
         """ Runs prediction on text"""
