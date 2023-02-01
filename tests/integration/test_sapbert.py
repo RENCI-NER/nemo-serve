@@ -20,20 +20,25 @@ def test_identify():
     Test whether SAPBert can identify some concepts.
     """
     test_cases = [
-        ['human brain', ['Brain', 'D001921']],
-        ['human skulls', ['Skull', 'D012886']],
-        ['influenza', ['Influenza, Human', 'D007251']],
-        ['virus', ['Viruses', 'D014780']]
+        ['human brain', {'label': 'Brain', 'curie': 'D001921'}],
+        ['human skulls', {'label': 'Skull', 'curie': 'D012886'}],
+        ['influenza', {'label': 'Influenza, Human', 'curie': 'D007251'}],
+        ['virus', {'label': 'Viruses', 'curie': 'D014780'}]
     ]
 
     for test_case in test_cases:
         query_text = test_case[0]
         expected_result = test_case[1]
 
+        # Retrieve a single term for the input.
         response = requests.post(ANNOTATE_ENDPOINT, json={
             "text": query_text,
-            "model_name": "sapbert"
+            "model_name": "sapbert",
+            "count": 1
         })
         assert response.status_code == 200
         annotated = response.json()
-        assert annotated == expected_result
+        assert len(annotated) == 1
+        first_result = annotated[0]
+        assert first_result['label'] == expected_result['label']
+        assert first_result['curie'] == expected_result['curie']
