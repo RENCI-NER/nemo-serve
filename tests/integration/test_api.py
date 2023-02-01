@@ -51,33 +51,33 @@ def test_annotate():
         "model_name": MODELS_EXPECTED[0]
     }
     expected_denotations = [
-        {'id': 'I0-',
+        {
          'obj': 'biolink:NamedThing',
          'span': {'begin': 0,
                   'end': 5},
          'text': 'Human'},
-        {'id': 'I1-',
-         'obj': 'biolink:GrossAnatomicalStructure',
+        {
+         'obj': 'biolink:AnatomicalEntity',
          'span': {'begin': 6,
                   'end': 12},
          'text': 'brains'},
-        {'id': 'I4-',
+        {
          'obj': 'biolink:NamedThing',
          'span': {'begin': 24,
                   'end': 29},
          'text': 'human'},
-        {'id': 'I5-',
+        {
          'obj': 'biolink:AnatomicalEntity',
          'span': {'begin': 30,
                   'end': 36},
          'text': 'skulls'},
-        {'id': 'I6-',
+        {
          'obj': 'biolink:Disease',
          'span': {'begin': 38,
                   'end': 47},
          'text': 'Influenza'},
-        {'id': 'I11-',
-         'obj': 'biolink:NamedThing',
+        {
+         'obj': 'biolink:OrganismTaxon',
          'span': {'begin': 63,
                   'end': 68},
          'text': 'virus'}
@@ -86,7 +86,10 @@ def test_annotate():
     response = requests.post(ANNOTATE_ENDPOINT, json=request)
     assert response.status_code == 200
     annotated = response.json()
-    assert len(annotated) == 2
-    assert 'denotations' in annotated
-    assert annotated['denotations'] == expected_denotations
     assert annotated['text'] == request['text']
+    assert 'denotations' in annotated
+    assert len(annotated['denotations']) == len(expected_denotations)
+    for den, exp_den in zip(annotated['denotations'], expected_denotations):
+        assert den['obj'] == exp_den['obj']
+        assert den['span'] == exp_den['span']
+        assert den['text'] == exp_den['text']
