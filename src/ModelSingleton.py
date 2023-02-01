@@ -5,7 +5,7 @@ from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
-from utils.tokenizer import tokenizer
+from src.utils.tokenizer import tokenizer
 import yaml
 
 
