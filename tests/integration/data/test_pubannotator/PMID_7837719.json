@@ -514,7 +514,7 @@
       "denotations": [
         {
           "id": "I2-",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.013)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.014)",
           "span": {
             "begin": 16,
             "end": 44
@@ -523,7 +523,7 @@
         },
         {
           "id": "I7-",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 52,
             "end": 71
@@ -541,7 +541,7 @@
         },
         {
           "id": "I12-",
-          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 8.815)",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 8.812)",
           "span": {
             "begin": 89,
             "end": 112
@@ -550,7 +550,7 @@
         },
         {
           "id": "I20-",
-          "obj": "MESH:D006802 (Human Activities, score: 11.028)",
+          "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
             "begin": 153,
             "end": 161
@@ -559,7 +559,7 @@
         },
         {
           "id": "I23-",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 169,
             "end": 188
@@ -568,7 +568,7 @@
         },
         {
           "id": "I30-",
-          "obj": "MESH:D003933 (Diagnosis, score: 6.988)",
+          "obj": "MESH:D003933 (Diagnosis, score: 6.987)",
           "span": {
             "begin": 213,
             "end": 223
@@ -577,7 +577,7 @@
         },
         {
           "id": "I31-",
-          "obj": "MESH:D008792 (Metric System, score: 13.043)",
+          "obj": "MESH:D008792 (Metric System, score: 13.041)",
           "span": {
             "begin": 224,
             "end": 231
@@ -586,7 +586,7 @@
         },
         {
           "id": "I33-",
-          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.104)",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.103)",
           "span": {
             "begin": 236,
             "end": 258
@@ -595,7 +595,7 @@
         },
         {
           "id": "I37-",
-          "obj": "MESH:D013995 (Time, score: 9.856)",
+          "obj": "MESH:D013995 (Time, score: 9.855)",
           "span": {
             "begin": 272,
             "end": 283
@@ -604,7 +604,7 @@
         },
         {
           "id": "I39-",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.013)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.014)",
           "span": {
             "begin": 287,
             "end": 315
@@ -613,7 +613,7 @@
         },
         {
           "id": "I44-",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 323,
             "end": 342
@@ -631,7 +631,7 @@
         },
         {
           "id": "I49-",
-          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.104)",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.103)",
           "span": {
             "begin": 360,
             "end": 382
@@ -640,7 +640,7 @@
         },
         {
           "id": "I55-",
-          "obj": "MESH:D000068397 (Clinical Study, score: 9.056)",
+          "obj": "MESH:D000068397 (Clinical Study, score: 9.058)",
           "span": {
             "begin": 412,
             "end": 417
@@ -658,7 +658,7 @@
         },
         {
           "id": "I60-",
-          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.104)",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.103)",
           "span": {
             "begin": 444,
             "end": 466
@@ -667,7 +667,7 @@
         },
         {
           "id": "I64-",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.973)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
             "begin": 475,
             "end": 478
@@ -676,7 +676,7 @@
         },
         {
           "id": "I65-",
-          "obj": "MESH:D006802 (Human Activities, score: 11.028)",
+          "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
             "begin": 479,
             "end": 487
@@ -685,7 +685,7 @@
         },
         {
           "id": "I68-",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 495,
             "end": 514
@@ -703,7 +703,7 @@
         },
         {
           "id": "I80-",
-          "obj": "MESH:D000995 (Antitubercular Agents, score: 7.193)",
+          "obj": "MESH:D000995 (Antitubercular Agents, score: 7.195)",
           "span": {
             "begin": 574,
             "end": 590
@@ -712,7 +712,7 @@
         },
         {
           "id": "I81-",
-          "obj": "MESH:D004358 (Drug Therapy, score: 10.611)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.609)",
           "span": {
             "begin": 591,
             "end": 603
@@ -721,7 +721,7 @@
         },
         {
           "id": "I83-",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.973)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
             "begin": 607,
             "end": 610
@@ -730,7 +730,7 @@
         },
         {
           "id": "I84-",
-          "obj": "MESH:D006802 (Human Activities, score: 11.028)",
+          "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
             "begin": 611,
             "end": 619
@@ -739,7 +739,7 @@
         },
         {
           "id": "I87-",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 627,
             "end": 646
@@ -757,7 +757,7 @@
         },
         {
           "id": "I95-",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.973)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
             "begin": 677,
             "end": 680
@@ -766,7 +766,7 @@
         },
         {
           "id": "I101-",
-          "obj": "MESH:D006802 (Human Activities, score: 11.028)",
+          "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
             "begin": 701,
             "end": 709
@@ -784,7 +784,7 @@
         },
         {
           "id": "I108-",
-          "obj": "MESH:D004194 (Disease, score: 0.008)",
+          "obj": "MESH:D004194 (Disease, score: 0.007)",
           "span": {
             "begin": 736,
             "end": 743
@@ -793,7 +793,7 @@
         },
         {
           "id": "I3-1",
-          "obj": "MESH:D002363 (Case Reports, score: 10.384)",
+          "obj": "MESH:D002363 (Case Reports, score: 10.385)",
           "span": {
             "begin": 756,
             "end": 761
@@ -802,7 +802,7 @@
         },
         {
           "id": "I5-1",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.973)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
             "begin": 766,
             "end": 769
@@ -811,7 +811,7 @@
         },
         {
           "id": "I9-1",
-          "obj": "MESH:D006802 (Human Activities, score: 11.028)",
+          "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
             "begin": 784,
             "end": 792
@@ -820,7 +820,7 @@
         },
         {
           "id": "I13-1",
-          "obj": "MESH:D000075902 (Clinical Deterioration, score: 11.79)",
+          "obj": "MESH:D000075902 (Clinical Deterioration, score: 11.792)",
           "span": {
             "begin": 808,
             "end": 826
@@ -829,7 +829,7 @@
         },
         {
           "id": "I18-1",
-          "obj": "MESH:D006706 (Homeostasis, score: 12.861)",
+          "obj": "MESH:D006706 (Homeostasis, score: 12.862)",
           "span": {
             "begin": 843,
             "end": 849
@@ -838,7 +838,7 @@
         },
         {
           "id": "I19-1",
-          "obj": "MESH:D016422 (Letter, score: 13.354)",
+          "obj": "MESH:D016422 (Letter, score: 13.353)",
           "span": {
             "begin": 850,
             "end": 855
@@ -856,7 +856,7 @@
         },
         {
           "id": "I23-1",
-          "obj": "MESH:D016081 (Moon, score: 12.068)",
+          "obj": "MESH:D016081 (Moon, score: 12.069)",
           "span": {
             "begin": 875,
             "end": 880
@@ -874,7 +874,7 @@
         },
         {
           "id": "I28-1",
-          "obj": "MESH:D004358 (Drug Therapy, score: 10.611)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.609)",
           "span": {
             "begin": 905,
             "end": 917
@@ -883,7 +883,7 @@
         },
         {
           "id": "I33-1",
-          "obj": "MESH:D015536 (Down-Regulation, score: 8.497)",
+          "obj": "MESH:D015536 (Down-Regulation, score: 8.498)",
           "span": {
             "begin": 937,
             "end": 945
@@ -892,7 +892,7 @@
         },
         {
           "id": "I36-1",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.973)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
             "begin": 953,
             "end": 956
@@ -901,7 +901,7 @@
         },
         {
           "id": "I37-1",
-          "obj": "MESH:D006802 (Human Activities, score: 11.028)",
+          "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
             "begin": 957,
             "end": 965
@@ -910,7 +910,7 @@
         },
         {
           "id": "I45-1",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 995,
             "end": 1014
@@ -919,7 +919,7 @@
         },
         {
           "id": "I53-1",
-          "obj": "MESH:D020878 (Device Removal, score: 10.037)",
+          "obj": "MESH:D020878 (Device Removal, score: 10.038)",
           "span": {
             "begin": 1047,
             "end": 1054
@@ -937,7 +937,7 @@
         },
         {
           "id": "I59-1",
-          "obj": "MESH:D013812 (Therapeutics, score: 10.534)",
+          "obj": "MESH:D013812 (Therapeutics, score: 10.532)",
           "span": {
             "begin": 1087,
             "end": 1096
@@ -946,7 +946,7 @@
         },
         {
           "id": "I61-1",
-          "obj": "MESH:D016422 (Letter, score: 13.354)",
+          "obj": "MESH:D016422 (Letter, score: 13.353)",
           "span": {
             "begin": 1102,
             "end": 1107
@@ -955,7 +955,7 @@
         },
         {
           "id": "I63-1",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.973)",
+          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
             "begin": 1111,
             "end": 1114
@@ -964,7 +964,7 @@
         },
         {
           "id": "I66-1",
-          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.009)",
+          "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
             "begin": 1122,
             "end": 1141
@@ -973,7 +973,7 @@
         },
         {
           "id": "I75-1",
-          "obj": "MESH:D062527 (Meaningful Use, score: 11.685)",
+          "obj": "MESH:D062527 (Meaningful Use, score: 11.684)",
           "span": {
             "begin": 1173,
             "end": 1188
@@ -982,7 +982,7 @@
         },
         {
           "id": "I78-1",
-          "obj": "MESH:D003933 (Diagnosis, score: 0.008)",
+          "obj": "MESH:D003933 (Diagnosis, score: 0.007)",
           "span": {
             "begin": 1193,
             "end": 1202
@@ -1009,7 +1009,7 @@
         },
         {
           "id": "I84-1",
-          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.104)",
+          "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.103)",
           "span": {
             "begin": 1234,
             "end": 1256
