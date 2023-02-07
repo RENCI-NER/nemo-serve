@@ -113,9 +113,10 @@ def test_with_pubannotator(pubmed_id):
 
         result = response.json()
         assert result, f"Could not annotate text {token['text']} in Sapbert: {response}"
+        first_result = result[0]
 
         denotation = dict(token)
-        denotation['obj'] = f"MESH:{result[1]} ({result[0]}, score: {result[2]})"
+        denotation['obj'] = f"MESH:{first_result['curie']} ({first_result['label']}, score: {first_result['distance_score']})"
         count_sapbert_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.

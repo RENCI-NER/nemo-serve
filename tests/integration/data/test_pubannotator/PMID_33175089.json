@@ -208,7 +208,7 @@
         },
         {
           "id": "I7-",
-          "obj": "MESH:D031301 (Robinia, score: 11.611)",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
           "span": {
             "begin": 55,
             "end": 62
@@ -217,7 +217,7 @@
         },
         {
           "id": "I21-",
-          "obj": "MESH:D051188 (Knowledge Bases, score: 6.039)",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 6.041)",
           "span": {
             "begin": 152,
             "end": 165
@@ -235,7 +235,7 @@
         },
         {
           "id": "I25-",
-          "obj": "MESH:D031301 (Robinia, score: 11.611)",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
           "span": {
             "begin": 191,
             "end": 198
@@ -244,7 +244,7 @@
         },
         {
           "id": "I26-",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
           "span": {
             "begin": 199,
             "end": 209
@@ -253,7 +253,7 @@
         },
         {
           "id": "I27-",
-          "obj": "MESH:D019359 (Knowledge, score: 11.264)",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
           "span": {
             "begin": 210,
             "end": 225
@@ -262,7 +262,7 @@
         },
         {
           "id": "I30-",
-          "obj": "MESH:D000090462 (Infodemiology, score: 10.337)",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
           "span": {
             "begin": 231,
             "end": 242
@@ -271,7 +271,7 @@
         },
         {
           "id": "I33-",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.641)",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
           "span": {
             "begin": 255,
             "end": 265
@@ -280,7 +280,7 @@
         },
         {
           "id": "I34-",
-          "obj": "MESH:D008091 (Literature, score: 0.007)",
+          "obj": "MESH:D008091 (Literature, score: 0.008)",
           "span": {
             "begin": 266,
             "end": 276
@@ -289,7 +289,7 @@
         },
         {
           "id": "I50-",
-          "obj": "MESH:D013404 (Suggestion, score: 12.692)",
+          "obj": "MESH:D013404 (Suggestion, score: 12.691)",
           "span": {
             "begin": 376,
             "end": 386
@@ -298,7 +298,7 @@
         },
         {
           "id": "I52-",
-          "obj": "MESH:D058492 (Drug Repositioning, score: 9.752)",
+          "obj": "MESH:D058492 (Drug Repositioning, score: 9.751)",
           "span": {
             "begin": 398,
             "end": 409
@@ -307,7 +307,7 @@
         },
         {
           "id": "I55-",
-          "obj": "MESH:D004358 (Drug Therapy, score: 10.1)",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
           "span": {
             "begin": 419,
             "end": 424
@@ -325,7 +325,7 @@
         },
         {
           "id": "I58-",
-          "obj": "MESH:D015198 (Designer Drugs, score: 11.593)",
+          "obj": "MESH:D015198 (Designer Drugs, score: 11.594)",
           "span": {
             "begin": 438,
             "end": 453
@@ -379,7 +379,7 @@
         },
         {
           "id": "I84-",
-          "obj": "MESH:D031301 (Robinia, score: 11.611)",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
           "span": {
             "begin": 656,
             "end": 663
