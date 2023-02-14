@@ -197,7 +197,9 @@ class SapbertModelWrapper(ModelWrapper):
             toks_cuda[k] = v.cuda(0)
         output = self.model(**toks_cuda)
         cls_rep = output[0][:, 0, :]
-        vector = cls_rep.cpu().detach().numpy().tolist()
+        vector = cls_rep.cpu().detach().numpy()
+        print(type(vector))
+        print(vector)
         if similarity == "cosine":
             return self.elastic_client.search_cosine(
                 query_vector=vector,
