@@ -198,6 +198,8 @@ class SapbertModelWrapper(ModelWrapper):
         output = self.model(**toks_cuda)
         cls_rep = output[0][:, 0, :]
         vector = cls_rep.cpu().detach().numpy().tolist()[0]
+        logger.info(f"Calculated Vector of {len(vector)} dims,")
+        logger.info("sending vector to elasticsearch")
         if similarity == "cosine":
             return self.elastic_client.search_cosine(
                 query_vector=vector,
