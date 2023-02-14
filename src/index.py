@@ -37,7 +37,7 @@ def iter_files(np_file, name_id_file, id_type_file):
               "id" : c,
               "embedding": vector.tolist(),
               "name" : n_id_arr['Name'][counter],
-              "category": type_id_dict[curie]
+              "category": type_id_dict[c]
             }
             counter += 1
             yield es_object
