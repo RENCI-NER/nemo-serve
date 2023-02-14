@@ -2,3 +2,6 @@ fastapi
 uvicorn
 pyyaml
 requests
+elasticsearch[async]==8.6.1
+numpy
+pandas
