@@ -24,7 +24,7 @@ def get_id_type_dict(file_path):
     return result
 
 
-def iter_files(np_file, name_id_file, id_type_file):
+def iter_files(np_file, name_id_file, id_type_file, index_name):
     np_arr = open_numpy_pickle(np_file)
     n_id_arr = open_csv(name_id_file)
     type_id_dict = get_id_type_dict(id_type_file)
@@ -40,11 +40,14 @@ def iter_files(np_file, name_id_file, id_type_file):
               "category": type_id_dict[c]
             }
             counter += 1
-            yield es_object
+            yield {
+                "_index": index_name,
+                "_source": es_object
+            }
 
 
 def index_docs(elastic_connection, np_file, name_id_file, id_type_file):
     client = SAPElastic(**elastic_connection)
     client.delete_index()
     client.create_index()
-    client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file))
+    client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, elastic_connection['index']))
