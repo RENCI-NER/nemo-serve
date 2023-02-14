@@ -285,7 +285,12 @@ def init_models(config_file_path):
 # test this factory by setting the model path
 if __name__ == '__main__':
     model_path = "/models/SapBERT-fine-tuned-babel"
-    ModelFactory.load_model('sap', path=model_path, model_class=TokenClassificationModelWrapper)
+    with open('../config.yaml') as stream:
+        x = yaml.load(stream, yaml.FullLoader)
+
+    ModelFactory.load_model('sap', path=model_path, model_class=SapbertModelWrapper,extra_params={
+        "elasticsearch": x["sapbert"]["elasticsearch"]
+    })
     text = "asthma"
     result = ModelFactory.query_model('sap', text)
     print(result)
