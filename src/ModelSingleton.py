@@ -6,6 +6,7 @@ from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
 from src.utils.tokenizer import tokenizer
+from src.utils.SAPElastic import SAPElastic
 import yaml
 
 
@@ -172,17 +173,22 @@ class TokenClassificationModelWrapperMock(ModelWrapper):
 
 
 class SapbertModelWrapper(ModelWrapper):
-    def __init__(self, model_path, all_reps_path, all_reps_ids_path):
+    """
+        host: "http://localhost:9200"
+    username: "elastic"
+    password: ""
+    index: "sap_index"
+    """
+    def __init__(self, model_path, elastic_search_config):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModel.from_pretrained(model_path).cuda(0)
-        self.all_reps_emb = np.load(all_reps_path)
-        all_reps_name_ids = pd.read_csv(all_reps_ids_path, header=0, dtype=str)
-        self.all_reps_names = all_reps_name_ids['Name']
-        self.all_reps_ids = all_reps_name_ids['ID']
+        self.elastic_client = SAPElastic(
+            **elastic_search_config
+        )
 
-    def __call__(self, query_text, count):
+    def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
         """ Runs prediction on text"""
         toks = self.tokenizer.batch_encode_plus([query_text], padding="max_length", max_length=25, truncation=True,
                                                 return_tensors="pt")
@@ -191,26 +197,20 @@ class SapbertModelWrapper(ModelWrapper):
             toks_cuda[k] = v.cuda(0)
         output = self.model(**toks_cuda)
         cls_rep = output[0][:, 0, :]
-        dist = cdist(cls_rep.cpu().detach().numpy(), self.all_reps_emb)
-        if count == 1:
-            nn_index = np.argmin(dist)
-            return [{
-                "label": self.all_reps_names[nn_index],
-                "curie": self.all_reps_ids[nn_index],
-                "distance_score": round(dist[0, nn_index], 3)
-            }]
-        count_dist = np.argpartition(dist, count, axis=None)
-        result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
-        indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten()) for d in result_dist]
-        indices = sum(indices, [])
-        return [
-            {
-                "label": self.all_reps_names[idx],
-                "curie": self.all_reps_ids[idx],
-                "distance_score": round(dist[0, idx], 3)
-            }
-            for idx in indices[:count]
-        ]
+        vector = cls_rep.cpu().detach().numpy().tolist()
+        if similarity == "cosine":
+            return self.elastic_client.search_cosine(
+                query_vector=vector,
+                top_n=count,
+                bl_type=bl_type
+            )
+        elif similarity == "knn":
+            return self.elastic_client.search_knn(
+                query_vector=vector,
+                top_n=count,
+                bl_type=bl_type
+            )
+
 
 
 class ModelFactory:
@@ -229,7 +229,7 @@ class ModelFactory:
         pass
 
     @staticmethod
-    def load_model(name, path, model_class, ground_truth_data_path=None, ground_truth_data_ids_path=None):
+    def load_model(name, path, model_class, extra_params=None):
         if name in ModelFactory.models.keys():
             logger.info(f"Model {name} already in class skipping initialization")
             return
@@ -237,17 +237,17 @@ class ModelFactory:
             logger.info(f"Initializing model {name}")
             assert issubclass(model_class, ModelWrapper), "Error please provide a subclass type of ModelWrapper"
             # initializes model and makes its prediction a callable
-            if ground_truth_data_path:
-                ModelFactory.models[name] = model_class(path, ground_truth_data_path, ground_truth_data_ids_path)
+            if extra_params:
+                ModelFactory.models[name] = model_class(path, **extra_params)
             else:
                 ModelFactory.models[name] = model_class(path)
 
     @staticmethod
-    def query_model(model_name, query_text, query_count=1):
+    def query_model(model_name, query_text, query_count=1, **kwargs):
         if model_name not in ModelFactory.models:
             raise ModelNotFoundError(f"Model {model_name} not found")
         # since we have model as a callable class we can just treat it like a function
-        return ModelFactory.models[model_name](query_text, query_count)
+        return ModelFactory.models[model_name](query_text, query_count, **kwargs)
 
     @staticmethod
     def get_model_names():
@@ -264,36 +264,28 @@ def init_models(config_file_path):
         config = yaml.load(config_stream, Loader=yaml.SafeLoader)
     logger.info(config)
     for model_name in config:
-        cls = None
-        gt_path = None
         logger.info(model_name)
-        if model_name == 'token_classification':
-            cls = ModelFactory.model_classes.get(config[model_name]['class'])
-            path = config[model_name]['path']
-
-        elif model_name == 'sapbert':
-            path = config[model_name]['path']
-            cls = ModelFactory.model_classes.get(config[model_name]['class'])
-            gt_path = config[model_name]['ground_truth_data_path']
-            gt_id_path = config[model_name]['ground_truth_data_ids_path']
-            logger.info(f'path: {path}, cls: {cls}, gt_path: {gt_path}, gt_id_path: {gt_id_path}')
+        cls = ModelFactory.model_classes.get(config[model_name]['class'], None)
         if cls is None:
             raise ValueError(
                 f"model class {config[model_name]['class']} not found please use one of {ModelFactory.model_classes.keys()}, "
                 f"Or add your wrapper to ModelFactory.model_classes dictionary")
-        if gt_path:
-            ModelFactory.load_model(name=model_name, path=path, model_class=cls, ground_truth_data_path=gt_path,
-                                    ground_truth_data_ids_path=gt_id_path)
-            logger.info('after loading sapbert model')
-        else:
-            ModelFactory.load_model(name=model_name, path=path, model_class=cls)
+
+        path = config[model_name]['path']
+        extra_params = None
+
+        if model_name == 'sapbert':
+            extra_params = {"elasticsearch": config[model_name].get('elasticsearch', None)}
+
+        ModelFactory.load_model(name=model_name, path=path, model_class=cls, extra_params=extra_params)
+
         logger.info(f"Loaded {cls} model from {path} as {model_name}")
 
 
 # test this factory by setting the model path
 if __name__ == '__main__':
-    model_path = "/models/medmentions-v0.1.nemo"
-    ModelFactory.load_model('medmentions', path=model_path, model_class=TokenClassificationModelWrapper)
-    text = """Scientific fraud: the McBride case--judgment. Dr W G McBride, who was a specialist obstetrician and gynaecologist and the first to publish on the teratogenicity of thalidomide, has been removed from the medical register after a four-year inquiry by the Medical Tribunal of New South Wales. Of the 44 medical practice allegations made against him by the Department of Health only one minor one was found proved but 24 of the medical research allegations were found proved. Of these latter, the most serious was that in 1982 he published a scientific journal, spurious results relating to laboratory experiments on pregnant rabbits dosed with scopolamine. Had Dr McBride used any of the many opportunities available to him to make an honest disclosure of his misdemeanour, his conduct would have been excused by the Tribunal. However, he persisted in denying his fraudulent conduct for several years, including the four years of the Inquiry. The Tribunal unanimously found Dr McBride not of good character in the context of fitness to practice medicine. The decision to deregister was taken by a majority of 3 to 1. Since research science is not organized as a profession, there are no formal sanctions which can be taken against his still engaging in such research. Scientific fraud: the McBride case--judgment. Aflatoxin exposure in Singapore: blood aflatoxin levels in normal subjects, hepatitis B virus carriers and primary hepatocellular carcinoma patients. Blood screening conducted on Singaporeans over 1991-1992 showed exposure to predominantly aflatoxin B1 and to a lesser extent G1. The extent of exposure to B1 among three groups of residents in Singapore, namely normal subjects (n = 423), hepatitis B virus carriers (n = 302) and primary hepatocellular carcinoma (PHC) patients (n = 58) were extensive as reflected by the positive rates of 15.1, 0.7 and 1.7 per cent respectively. However, the degree of individual exposure to this toxin among the three groups was considered low as shown by the low respective mean blood levels of 5.4 +/- 3.2 (range 3.0-17), 7.7 (range 7.5-7.9) and 7.5 picogrammes per ml of blood. It is not immediately clear whether or not such low levels would precipitate an undesirable health effect. The higher positive rate seen in normal subjects as compared with the other groups could be due to differences in dietary intake of aflatoxin B1, differences in metabolic patterns or both. About 70 per cent of PHC patients studied were carriers. The degree of aflatoxin B1 exposure among normal subjects in Singapore was a factor of 22.1 times less than that in Japan, 40.9 times less than that in Indonesia and 51.3 times less than that in the Philippines. Similarly, the extent of exposure among hepatitis B carriers in Singapore was a factor of 8.2 times, 39.6 times and 24.2 times less than those in the other three Asiatic countries respectively. The results reflected stringent Government control over the quality of food stuff imported into this country. As Singapore imports almost all of its dietary needs from elsewhere, it can afford to be selective at a cost. Aflatoxin M1, a metabolite of B1, was most commonly encountered in the liver tissues of deceased (n = 154) who died of causes other than sickness or disease in 1992-93, consistent with our blood findings of prevalence of aflatoxin B1. High performance liquid chromatography (HPLC) with fluorescence detection using one of the aflatoxins G2 or B2 as an internal standard was used for the detection and quantification of aflatoxins. The use of an internal standard structurally and chemically similar to those required to be quantified minimizes errors in quantifications. This is because differences in the quenching of fluorescence between specimen extracts and spiked-standard extracts were internally standardized and compensated for. The presence of an internal standard also helped to locate aflatoxins of interest more accurately.(ABSTRACT TRUNCATED AT 400 WORDS)"""
-    result = ModelFactory.query_model('medmentions', text)
+    model_path = "/models/SapBERT-fine-tuned-babel"
+    ModelFactory.load_model('sap', path=model_path, model_class=TokenClassificationModelWrapper)
+    text = "asthma"
+    result = ModelFactory.query_model('sap', text)
     print(result)
