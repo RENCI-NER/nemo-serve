@@ -275,7 +275,7 @@ def init_models(config_file_path):
         extra_params = None
 
         if model_name == 'sapbert':
-            extra_params = {"elasticsearch": config[model_name].get('elasticsearch', None)}
+            extra_params = {"elastic_search_config": config[model_name].get('elasticsearch', None)}
 
         ModelFactory.load_model(name=model_name, path=path, model_class=cls, extra_params=extra_params)
 
@@ -289,7 +289,7 @@ if __name__ == '__main__':
         x = yaml.load(stream, yaml.FullLoader)
 
     ModelFactory.load_model('sap', path=model_path, model_class=SapbertModelWrapper,extra_params={
-        "elasticsearch": x["sapbert"]["elasticsearch"]
+        "elastic_search_config": x["sapbert"]["elasticsearch"]
     })
     text = "asthma"
     result = ModelFactory.query_model('sap', text)
