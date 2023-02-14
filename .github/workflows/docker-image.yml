@@ -21,4 +21,4 @@ jobs:
                   password: ${{ secrets.CR_PAT }}
                   registry: ghcr.io
                   tags: latest,${{ steps.get_version.outputs.VERSION }}
-                  build-args: VERSION=${{ steps.get_version.outputs.VERSION }}
+                  build_args: VERSION=${{ steps.get_version.outputs.VERSION }}
