@@ -6,7 +6,6 @@ from src.ModelSingleton import ModelFactory, init_models
 from src.index import index_docs
 
 
-
 from logging import getLogger
 
 log = getLogger("")
@@ -75,24 +74,17 @@ def main(args):
         # making this static for now, we only have sapbert that we want to index to elastic.
         # so we will read its previous config here.
         model_name = "sapbert"
-        elastic_search_params = {
-            "host": args.service_address,
-            "password": args.password,
-            "username": args.username,
-            "index": args.elastic_index
-        }
+
         with open(config) as stream:
             config_yaml = yaml.load(stream, Loader=yaml.FullLoader)
         gt_predictions_path = config_yaml[model_name]['ground_truth_predictions_path']
         gt_id_name_path = config_yaml[model_name]['ground_truth_id_name_pairs_path']
         gt_id_type_path = config_yaml[model_name]['ground_truth_data_id_type_pairs_path']
-
+        elastic_search_params = config_yaml[model_name]['elasticsearch']
         index_docs(elastic_connection=elastic_search_params,
                    np_file=gt_predictions_path,
                    name_id_file=gt_id_name_path,
                    id_type_file=gt_id_type_path)
-
-
 
 if __name__ == "__main__":
 
@@ -111,13 +103,8 @@ if __name__ == "__main__":
     parser_annotate.add_argument("-m", "--model", help="Model to run", default=None)
 
     # index command and options
-    parser_index = sub_parsers.add_parser("index", help="Index SAPBert ground truth to elasticsearch. Note ")
-    parser_index.add_argument("-s", "--service-address", help="Full host address of elasticsearch service "
-                                                   "(eg: http://localhost:9200)")
-    parser_index.add_argument("-u", "--username", help="Elasticsearch user name", default="elastic")
-    parser_index.add_argument("-p", "--password", help="Elasticsearch password", default="")
-    parser_index.add_argument("-e", "--elastic-index", help="Name of elasticsearch index to create and populate to",
-                              default="sap_index")
+    parser_index = sub_parsers.add_parser("index", help="Index SAPBert ground truth to elasticsearch. Note this uses `sapbert` config section in config file passed as paramter."
+                                                        "Please refer to ../config.yaml `sapbert` section for details.")
 
     args = parser.parse_args()
 
