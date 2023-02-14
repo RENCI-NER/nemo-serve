@@ -182,7 +182,7 @@ class SapbertModelWrapper(ModelWrapper):
         self.all_reps_names = all_reps_name_ids['Name']
         self.all_reps_ids = all_reps_name_ids['ID']
 
-    def __call__(self, query_text):
+    def __call__(self, query_text, count):
         """ Runs prediction on text"""
         toks = self.tokenizer.batch_encode_plus([query_text], padding="max_length", max_length=25, truncation=True,
                                                 return_tensors="pt")
@@ -192,8 +192,25 @@ class SapbertModelWrapper(ModelWrapper):
         output = self.model(**toks_cuda)
         cls_rep = output[0][:, 0, :]
         dist = cdist(cls_rep.cpu().detach().numpy(), self.all_reps_emb)
-        nn_index = np.argmin(dist)
-        return [self.all_reps_names[nn_index], self.all_reps_ids[nn_index]]
+        if count == 1:
+            nn_index = np.argmin(dist)
+            return [{
+                "label": self.all_reps_names[nn_index],
+                "curie": self.all_reps_ids[nn_index],
+                "distance_score": round(dist[0, nn_index], 3)
+            }]
+        count_dist = np.argpartition(dist, count, axis=None)
+        result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
+        indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten()) for d in result_dist]
+        indices = sum(indices, [])
+        return [
+            {
+                "label": self.all_reps_names[idx],
+                "curie": self.all_reps_ids[idx],
+                "distance_score": round(dist[0, idx], 3)
+            }
+            for idx in indices[:count]
+        ]
 
 
 class ModelFactory:
@@ -226,11 +243,11 @@ class ModelFactory:
                 ModelFactory.models[name] = model_class(path)
 
     @staticmethod
-    def query_model(model_name, query_text):
+    def query_model(model_name, query_text, query_count=1):
         if model_name not in ModelFactory.models:
             raise ModelNotFoundError(f"Model {model_name} not found")
         # since we have model as a callable class we can just treat it like a function
-        return ModelFactory.models[model_name](query_text)
+        return ModelFactory.models[model_name](query_text, query_count)
 
     @staticmethod
     def get_model_names():

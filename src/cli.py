@@ -22,14 +22,14 @@ def json_line_iterator(file_path):
         for line in stream:
             yield json.loads(line)
 
-def annotate_text(text, model_name):
+def annotate_text(text, model_name, count=1):
     """
     run Model on text
     :param text: input text to run predictions on
     :param model_name: name of the model to use
     :return: prediction result
     """
-    return ModelFactory.query_model(model_name=model_name,query_text=text)
+    return ModelFactory.query_model(model_name=model_name,query_text=text, query_count=count)
 
 def append_json_to_file(data, output_path):
     """
