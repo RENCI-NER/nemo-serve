@@ -13,7 +13,7 @@ class SAPElastic:
             basic_auth=(username, password if password else ""),
             timeout=default_timeout,
             max_retries=max_retries,
-            request_timeout=retry_on_timeout
+            retry_on_timeout=retry_on_timeout
         )
         resp = self.es_client.ping()
         if resp:
