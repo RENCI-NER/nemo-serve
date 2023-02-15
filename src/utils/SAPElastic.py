@@ -34,6 +34,10 @@ class SAPElastic:
         logging.info(f"Creating index {index_name} with the following schema: {json.dumps(mapping, indent=2)}")
 
         self.es_client.options().indices.create(index=index_name, mappings=mapping)
+        self.es_client.indices.put_settings(index=index_name,
+                                            settings={
+                                                "index.refresh_interval": "300s"
+                                            })
 
 
     def _get_mapping(self):
@@ -72,7 +76,7 @@ class SAPElastic:
             }
 
     def populate_index(self, generator):
-        helpers.bulk(self.es_client, generator())
+        helpers.bulk(self.es_client, generator(), chunk_size=100_000)
 
     def delete_index(self):
         self.es_client.options(ignore_status=[400,404]).indices.delete(index=self.index)
