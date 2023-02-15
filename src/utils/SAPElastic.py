@@ -7,11 +7,13 @@ from functools import partial
 
 class SAPElastic:
 
-    def __init__(self, host, username, password, index):
+    def __init__(self, host, username, password, index, default_timeout=1000, max_retries=10, retry_on_timeout=True):
         self.es_client = Elasticsearch(
             [host],
             basic_auth=(username, password if password else ""),
-            # verify_certs=False
+            timeout=default_timeout,
+            max_retries=max_retries,
+            request_timeout=retry_on_timeout
         )
         resp = self.es_client.ping()
         if resp:
