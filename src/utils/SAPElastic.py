@@ -76,7 +76,7 @@ class SAPElastic:
             }
 
     def populate_index(self, generator):
-        helpers.bulk(self.es_client, generator(), chunk_size=100_000)
+        helpers.bulk(self.es_client, generator(), chunk_size=100_000, max_retries=3, initial_backoff=2)
 
     def delete_index(self):
         self.es_client.options(ignore_status=[400,404]).indices.delete(index=self.index)
