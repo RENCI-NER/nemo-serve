@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd
 from functools import partial
 import ast
+import asyncio
 from src.utils.SAPElastic import SAPElastic
+import logging
 
+logger = logging.getLogger()
 
 
 def open_numpy_pickle(file_path):
@@ -24,30 +27,42 @@ def get_id_type_dict(file_path):
     return result
 
 
-def iter_files(np_file, name_id_file, id_type_file, index_name):
+def iter_files(np_file, name_id_file, id_type_file, index_name, normalize):
+    logger.info("opening np array file")
     np_arr = open_numpy_pickle(np_file)
+    logger.info(f"found {np_arr.size} vector rows.")
+    logger.info("opening name id csv file")
     n_id_arr = open_csv(name_id_file)
+    logger.info("found {len(n_id_arr)} names id pairs.")
     type_id_dict = get_id_type_dict(id_type_file)
+    logger.info("generating rows...")
+    total_rows = len(n_id_arr)
     counter = 0
-    for vector, curie in zip(np_arr, n_id_arr['ID']):
+    for vector, curies in zip(np_arr, n_id_arr['ID']):
         # convert list string to actual list
-        curie = ast.literal_eval(curie)
-        for c in curie:
-            es_object = {
-              "id" : c,
-              "embedding": vector.tolist(),
-              "name" : n_id_arr['Name'][counter],
-              "category": type_id_dict[c]
-            }
-            counter += 1
-            yield {
-                "_index": index_name,
-                "_source": es_object
-            }
+        curies = ast.literal_eval(curies)
+        if normalize:
+            vector = SAPElastic.normalize_vector(vector)
+        es_object = {
+          "curies": curies,
+          "embedding": vector,
+          "name" : n_id_arr['Name'][counter],
+          "categories": [ type_id_dict[c] for c in curies]
+        }
+        counter += 1
+        if counter / 100_000 == 0:
+            logger.info(f"generated {round(counter/total_rows, 2)* 100} %")
+        yield {
+            "_index": index_name,
+            "_source": es_object
+        }
+
 
 
 def index_docs(elastic_connection, np_file, name_id_file, id_type_file):
     client = SAPElastic(**elastic_connection)
-    client.delete_index()
-    client.create_index()
-    client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, elastic_connection['index']))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(client.delete_index())
+    loop.run_until_complete(client.create_index())
+    loop.run_until_complete(client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, elastic_connection['index'])))
+    loop.run_until_complete(client.close())
