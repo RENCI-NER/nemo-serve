@@ -37,7 +37,7 @@ class SAPElastic:
         )
         self.index = index
 
-    def create_index(self):
+    async def create_index(self):
         """
         Create an ES index.
         :param index_name: Name of the index.
@@ -47,8 +47,8 @@ class SAPElastic:
         index_name = self.index
         logging.info(f"Creating index {index_name} with the following schema: {json.dumps(mapping, indent=2)}")
 
-        self.es_client.options().indices.create(index=index_name, mappings=mapping)
-        self.es_client.indices.put_settings(index=index_name,
+        await self.es_client.options().indices.create(index=index_name, mappings=mapping)
+        await self.es_client.indices.put_settings(index=index_name,
                                             settings={
                                                 "index.refresh_interval": "300s"
                                             })
