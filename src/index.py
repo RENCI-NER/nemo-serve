@@ -50,7 +50,7 @@ def iter_files(np_file, name_id_file, id_type_file, index_name, normalize):
           "categories": [ type_id_dict[c] for c in curies]
         }
         counter += 1
-        if counter / 100_000 == 0:
+        if counter % 100_000 == 0:
             logger.info(f"generated {round(counter/total_rows, 2)* 100} %")
         yield {
             "_index": index_name,
