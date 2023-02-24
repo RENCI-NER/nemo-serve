@@ -5,3 +5,4 @@ class Query(BaseModel):
     model_name: str
     # count is not required and will default to 1 if nothing is passed
     count: int = 1
+    args: dict = {}
