@@ -200,18 +200,13 @@ class SapbertModelWrapper(ModelWrapper):
         vector = cls_rep.cpu().detach().numpy().tolist()[0]
         logger.info(f"Calculated Vector of {len(vector)} dims,")
         logger.info("sending vector to elasticsearch")
-        if similarity == "cosine":
-            return await self.elastic_client.search_cosine(
+        return await self.elastic_client.search(
                 query_vector=vector,
                 top_n=count,
-                bl_type=bl_type
+                bl_type=bl_type,
+                algorithm=similarity
             )
-        elif similarity == "knn":
-            return await self.elastic_client.search_knn(
-                query_vector=vector,
-                top_n=count,
-                bl_type=bl_type
-            )
+
 
 
 
