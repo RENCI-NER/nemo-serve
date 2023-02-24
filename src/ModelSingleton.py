@@ -149,7 +149,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
             result['denotations'] += new_denotations
         return result
 
-    def __call__(self, query_text):
+    async def __call__(self, query_text):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text, 100)]
@@ -188,7 +188,7 @@ class SapbertModelWrapper(ModelWrapper):
             **elastic_search_config
         )
 
-    def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
+    async def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
         """ Runs prediction on text"""
         toks = self.tokenizer.batch_encode_plus([query_text], padding="max_length", max_length=25, truncation=True,
                                                 return_tensors="pt")
@@ -201,13 +201,13 @@ class SapbertModelWrapper(ModelWrapper):
         logger.info(f"Calculated Vector of {len(vector)} dims,")
         logger.info("sending vector to elasticsearch")
         if similarity == "cosine":
-            return self.elastic_client.search_cosine(
+            return await self.elastic_client.search_cosine(
                 query_vector=vector,
                 top_n=count,
                 bl_type=bl_type
             )
         elif similarity == "knn":
-            return self.elastic_client.search_knn(
+            return await self.elastic_client.search_knn(
                 query_vector=vector,
                 top_n=count,
                 bl_type=bl_type
@@ -245,11 +245,11 @@ class ModelFactory:
                 ModelFactory.models[name] = model_class(path)
 
     @staticmethod
-    def query_model(model_name, query_text, query_count=1, **kwargs):
+    async def query_model(model_name, query_text, query_count=1, **kwargs):
         if model_name not in ModelFactory.models:
             raise ModelNotFoundError(f"Model {model_name} not found")
         # since we have model as a callable class we can just treat it like a function
-        return ModelFactory.models[model_name](query_text, query_count, **kwargs)
+        return await ModelFactory.models[model_name](query_text, query_count, **kwargs)
 
     @staticmethod
     def get_model_names():
