@@ -3,9 +3,9 @@ import logging
 
 
 from elasticsearch import AsyncElasticsearch, helpers
-# from elasticsearc
 from enum import Enum, EnumMeta
 import numpy as np
+
 
 class MetaEnum(EnumMeta):
     def __contains__(cls, item):
@@ -14,12 +14,17 @@ class MetaEnum(EnumMeta):
         except ValueError:
             return False
         return True
+
+
 class BaseEnum(Enum, metaclass=MetaEnum):
     pass
+
+
 class DENSE_VECTOR_SIMILARITY(BaseEnum):
     DOT_PRODUCT = "dot_product"
     L2_SIMILARITY = "l2_norm"
     COSINE = "cosine"
+
 
 class SAPElastic:
 
@@ -193,50 +198,3 @@ class SAPElastic:
             return v
         return v / norm
 
-
-if __name__ == "__main__":
-    # not using password huh
-    index_name = "test_index"
-    import asyncio
-    es_client = SAPElastic("http://localhost:9200", "elastic", password=None, index=index_name, vector_similarity=DENSE_VECTOR_SIMILARITY.DOT_PRODUCT)
-    with open('../sample.json') as stream:
-        items = json.load(stream)
-
-    def generate_items(normalize=False):
-        if normalize:
-            formatted_items = [
-                {
-                    'curies': [i['id'], i['id']],
-                    'embedding': SAPElastic.normalize_vector(i['embedding']),
-                    'categories': [i['category'], i['category']],
-                    'name': i['name']
-                } for i in items
-            ]
-        else:
-            formatted_items = [
-                {
-                    'curies': [i['id'], i['id']],
-                    'embedding': SAPElastic.normalize_vector(i['embedding']),
-                    'categories': [i['category'], i['category']],
-                    'name': i['name']
-                } for i in items
-            ]
-        return [
-            {'_index': index_name,
-             '_source': x} for x in formatted_items
-        ]
-    loop = asyncio.get_event_loop()
-    result = loop.run_until_complete(es_client.search(query_vector=items[1]['embedding'], top_n=10, algorithm="knn", bl_type=""))
-    loop.run_until_complete(es_client.close())
-    for h in result['results']:
-        print(h['curie'], h['label'], h['category'], h['score'])
-    # #
-    # # print('------------------')
-    # result = es_client.search(query_vector=items[1]['embedding'], top_n=10, algorithm="cosine")
-    # for h in result.body['hits']['hits']:
-    #     score = h['_score']
-    #     h = h['_source']
-    #     print(h['curies'], h['name'], h['categories'], score)
-    # es_client.delete_index()
-    # es_client.create_index()
-    # es_client.populate_index(generate_items)
