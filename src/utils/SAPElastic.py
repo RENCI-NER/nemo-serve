@@ -6,33 +6,16 @@ from elasticsearch import AsyncElasticsearch, helpers
 from enum import Enum, EnumMeta
 import numpy as np
 
-
-class MetaEnum(EnumMeta):
-    def __contains__(cls, item):
-        try:
-            cls(item)
-        except ValueError:
-            return False
-        return True
-
-
-class BaseEnum(Enum, metaclass=MetaEnum):
-    pass
-
-
-class DENSE_VECTOR_SIMILARITY(BaseEnum):
-    DOT_PRODUCT = "dot_product"
-    L2_SIMILARITY = "l2_norm"
-    COSINE = "cosine"
+SIMILARITY_VALUES = ["dot_product", "l2_norm", "cosine"]
 
 
 class SAPElastic:
 
     def __init__(self, host, username, password, index, default_timeout=1000, max_retries=10, retry_on_timeout=True
-                 , vector_similarity=DENSE_VECTOR_SIMILARITY.DOT_PRODUCT):
-        assert vector_similarity in DENSE_VECTOR_SIMILARITY, f"Vector similarity needs to be one of dot_product, cosine or l2_norm." \
+                 , vector_similarity="dot_product"):
+        assert vector_similarity in SIMILARITY_VALUES, f"Vector similarity needs to be one of dot_product, cosine or l2_norm." \
                                                              f"https://www.elastic.co/guide/en/elasticsearch/reference/current/dense-vector.html#dense-vector-params"
-        self.dense_vector_similarity = vector_similarity.value
+        self.dense_vector_similarity = vector_similarity
         self.es_client = AsyncElasticsearch(
             [host],
             basic_auth=(username, password if password else ""),
@@ -91,7 +74,7 @@ class SAPElastic:
 
     async def populate_index(self, generator):
         normalize = False
-        if self.dense_vector_similarity == DENSE_VECTOR_SIMILARITY.DOT_PRODUCT.value:
+        if self.dense_vector_similarity == "dot_product":
             normalize = True
         await helpers.async_bulk(self.es_client, generator(normalize=normalize), chunk_size=1_000_000, max_retries=3, initial_backoff=2)
         self.es_client.indices.refresh(index=self.index)
@@ -155,7 +138,7 @@ class SAPElastic:
 
     async def search(self, query_vector, top_n=10, bl_type="", algorithm="cosine"):
 
-        if self.dense_vector_similarity == DENSE_VECTOR_SIMILARITY.DOT_PRODUCT.value:
+        if self.dense_vector_similarity == "dot_product":
             query_vector = self.normalize_vector(query_vector)
 
         if algorithm == "cosine":
