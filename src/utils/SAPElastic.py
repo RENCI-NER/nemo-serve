@@ -49,16 +49,25 @@ class SAPElastic:
         Returns elastic index definition
         :return:
         """
-
-        return {
-            "properties": {
-                "embedding": {
+        embedding = {
                     "type": "dense_vector",
                     "dims": 768,
                     "index": True,
                     # https://www.elastic.co/guide/en/elasticsearch/reference/current/dense-vector.html#dense-vector-similarity
                     "similarity": self.dense_vector_similarity
-                },
+                }
+        if self.dense_vector_similarity == "l2_norm":
+            embedding.update({
+                "index_options" : {
+                    "type": "hnsw",
+                    "m": 16,
+                    "ef_construction": 100
+                }
+            })
+
+        return {
+            "properties": {
+                "embedding": embedding,
                 "name": {
                     "type": "text"
                 },
@@ -77,10 +86,13 @@ class SAPElastic:
         if self.dense_vector_similarity == "dot_product":
             normalize = True
         await helpers.async_bulk(self.es_client, generator(normalize=normalize), chunk_size=1_000_000, max_retries=3, initial_backoff=2)
-        self.es_client.indices.refresh(index=self.index)
+        await self.refresh_index()
 
     async def delete_index(self):
         await self.es_client.options(ignore_status=[400,404]).indices.delete(index=self.index)
+
+    async def refresh_index(self):
+        self.es_client.indices.refresh(index=self.index)
 
     async def get_docs_count(self):
         return await self.es_client.count(index=self.index)

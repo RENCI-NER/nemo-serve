@@ -65,4 +65,5 @@ def index_docs(elastic_connection, np_file, name_id_file, id_type_file):
     loop.run_until_complete(client.delete_index())
     loop.run_until_complete(client.create_index())
     loop.run_until_complete(client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, elastic_connection['index'])))
+    loop.run_until_complete(client.refresh_index())
     loop.run_until_complete(client.close())
