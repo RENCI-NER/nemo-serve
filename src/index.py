@@ -68,7 +68,7 @@ def index_docs(storage, connection_params, np_file, name_id_file, id_type_file):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(client.delete_index())
     loop.run_until_complete(client.create_index())
-    loop.run_until_complete(client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, elastic_connection['index'])))
+    loop.run_until_complete(client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, connection_params['index'])))
     loop.run_until_complete(client.refresh_index())
     loop.run_until_complete(client.close())
 
