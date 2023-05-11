@@ -44,7 +44,7 @@ def iter_files(np_file, name_id_file, id_type_file, index_name, normalize=False)
         curies = ast.literal_eval(curies)
         if normalize:
             vector = SAPElastic.normalize_vector(vector)
-        es_object = {
+        doc = {
           "curies": curies,
           "embedding": vector,
           "name" : n_id_arr['Name'][counter],
@@ -53,10 +53,7 @@ def iter_files(np_file, name_id_file, id_type_file, index_name, normalize=False)
         counter += 1
         if counter % 100_000 == 0:
             logger.info(f"generated {round(counter/total_rows, 2)* 100} %")
-        yield {
-            "_index": index_name,
-            "_source": es_object
-        }
+        yield doc
 
 
 

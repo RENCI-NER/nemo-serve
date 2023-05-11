@@ -85,14 +85,17 @@ class SAPElastic:
         normalize = False
         if self.dense_vector_similarity == "dot_product":
             normalize = True
-        await helpers.async_bulk(self.es_client, generator(normalize=normalize), chunk_size=1_000_000, max_retries=3, initial_backoff=2)
-        await self.refresh_index()
+        def gen_wrapper(normalize):
+            for doc in generator(normalize):
+                yield {
+                    "_index": self.index,
+                    "_source": doc
+                }
+        await helpers.async_bulk(self.es_client, gen_wrapper(normalize=normalize), chunk_size=1_000_000, max_retries=3, initial_backoff=2)
+        self.es_client.indices.refresh(index=self.index)
 
     async def delete_index(self):
         await self.es_client.options(ignore_status=[400,404]).indices.delete(index=self.index)
-
-    async def refresh_index(self):
-        self.es_client.indices.refresh(index=self.index)
 
     async def get_docs_count(self):
         return await self.es_client.count(index=self.index)
