@@ -28,7 +28,7 @@ def get_id_type_dict(file_path):
     return result
 
 
-def iter_files(np_file, name_id_file, id_type_file, index_name, normalize):
+def iter_files(np_file, name_id_file, id_type_file, index_name, normalize=False):
     logger.info("opening np array file")
     np_arr = open_numpy_pickle(np_file)
     logger.info(f"found {np_arr.size} vector rows.")
