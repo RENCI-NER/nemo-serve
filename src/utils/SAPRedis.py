@@ -22,11 +22,11 @@ class RedisMemory:
             {"TYPE": "FLOAT32", "DIM": 768, "DISTANCE_METRIC": "COSINE"},
         ),
     )
-    def __init__(self, host, port, password, index_name="sap_index"):
+    def __init__(self, host, port, password, index="sap_index"):
         self.host = host
         self.port = port
         self.password = password
-        self.index_name = index_name
+        self.index_name = index
         self.sync_connection  = redis.Redis(
             host=self.host,
             port=self.port,
