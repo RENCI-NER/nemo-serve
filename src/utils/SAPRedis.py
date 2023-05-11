@@ -105,10 +105,10 @@ class RedisMemory:
             vector = np.array(vector).astype(np.float32).tobytes()
             # create value for hash
             mapping = {
-                "curie": data['id'][0],
+                "curie": data['curies'][0],
                 "embedding": vector,
                 "name": data['name'],
-                "categories": data['category'][0]
+                "categories": data['categories'][0]
             }
             # redis hash key
             hash_key = f"{self.DOC_PREFIX}{data['id'].replace(':', '_')}"
