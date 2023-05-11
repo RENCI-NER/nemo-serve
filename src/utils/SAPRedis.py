@@ -111,7 +111,7 @@ class RedisMemory:
                 "categories": data['categories'][0]
             }
             # redis hash key
-            hash_key = f"{self.DOC_PREFIX}{data['id'].replace(':', '_')}"
+            hash_key = f"{self.DOC_PREFIX}{mapping['curie'].replace(':', '_')}"
             await pipe.hset(hash_key, mapping=mapping)
             if counter % chunk_size == 0:
                 # every 10K rounds execute pipeline
