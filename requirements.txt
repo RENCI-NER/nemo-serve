@@ -31,4 +31,4 @@ cython
 youtokentome
 pytest
 gunicorn
-redis=4.5.4
+redis==4.5.4
