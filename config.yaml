@@ -14,6 +14,11 @@ sapbert:
     username: "elastic"
     password: ""
     index: "sap_index"
+  redissearch:
+    host: "localhost"
+    port: 6378
+    password: ""
+    index: "sap_index"
   ground_truth_predictions_path: "/data/pubmed_mesh_prediction_output.npy"
   ground_truth_id_name_pairs_path: "/data/pubmed_mesh_name_ids.csv"
   ground_truth_data_id_type_pairs_path: "/data/pubmed_mesh_name_types.csv"

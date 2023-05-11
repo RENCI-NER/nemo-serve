@@ -74,14 +74,20 @@ def main(args):
         # making this static for now, we only have sapbert that we want to index to elastic.
         # so we will read its previous config here.
         model_name = "sapbert"
-
+        storage_backend = args.store
         with open(config) as stream:
             config_yaml = yaml.load(stream, Loader=yaml.FullLoader)
         gt_predictions_path = config_yaml[model_name]['ground_truth_predictions_path']
         gt_id_name_path = config_yaml[model_name]['ground_truth_id_name_pairs_path']
         gt_id_type_path = config_yaml[model_name]['ground_truth_data_id_type_pairs_path']
-        elastic_search_params = config_yaml[model_name]['elasticsearch']
-        index_docs(elastic_connection=elastic_search_params,
+        connection_params = {}
+        if storage_backend == "elastic":
+            connection_params = config_yaml[model_name]['elasticsearch']
+        elif storage_backend == "redis":
+            connection_params = config_yaml[model_name]['redissearch']
+
+        index_docs(storage = storage_backend,
+                   connection_params=connection_params,
                    np_file=gt_predictions_path,
                    name_id_file=gt_id_name_path,
                    id_type_file=gt_id_type_path)
@@ -106,6 +112,7 @@ if __name__ == "__main__":
     parser_index = sub_parsers.add_parser("index", help="Index SAPBert ground truth to elasticsearch. Note this uses `sapbert` config section in config file passed as paramter."
                                                         "Please refer to ../config.yaml `sapbert` section for details.")
 
+    parser_index.add_argument("-s", "--store", help="Storage backend", default="redis", choices=["redis", "elastic"])
     args = parser.parse_args()
 
     main(args)

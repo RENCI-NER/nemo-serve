@@ -30,3 +30,5 @@ mecab-python3
 cython
 youtokentome
 pytest
+gunicorn
+redis=4.5.4
