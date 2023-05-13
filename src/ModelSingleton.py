@@ -5,6 +5,8 @@ from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
+
+from src.utils.SAPRedis import RedisMemory
 from src.utils.tokenizer import tokenizer
 from src.utils.SAPElastic import SAPElastic
 import yaml
@@ -179,14 +181,15 @@ class SapbertModelWrapper(ModelWrapper):
     password: ""
     index: "sap_index"
     """
-    def __init__(self, model_path, elastic_search_config):
+    def __init__(self, model_path, elastic_search_config, backend='redis'):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModel.from_pretrained(model_path).cuda(0)
-        self.elastic_client = SAPElastic(
-            **elastic_search_config
-        )
+        if backend == 'redis':
+            self.elastic_client = RedisMemory(
+                **elastic_search_config
+            )
 
     async def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
         """ Runs prediction on text"""
@@ -201,11 +204,11 @@ class SapbertModelWrapper(ModelWrapper):
         logger.info(f"Calculated Vector of {len(vector)} dims,")
         logger.info("sending vector to elasticsearch")
         return await self.elastic_client.search(
-                query_vector=vector,
-                top_n=count,
-                bl_type=bl_type,
-                algorithm=similarity
-            )
+            query_vector=vector,
+            top_n=count,
+            bl_type=bl_type,
+            algorithm=similarity
+        )
 
 
 

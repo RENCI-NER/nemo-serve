@@ -65,9 +65,9 @@ class RedisMemory:
         await self.async_connection.close()
 
 
-    async def search(self, vector):
+    async def search(self, query_vector, top_n=10, bl_type="", algorithm=None):
         # search query
-        base_query = f"*=>[KNN {10} @embedding $vector AS vector_score]"
+        base_query = f"*=>[KNN {top_n} @embedding $vector AS vector_score]"
         query = (
             # query
             Query(base_query)
@@ -78,7 +78,7 @@ class RedisMemory:
                 .dialect(2)
         )
         # convert query vector to bytes
-        query_vector = np.array(vector).astype(np.float32).tobytes()
+        query_vector = np.array(query_vector).astype(np.float32).tobytes()
 
         try:
             # perform search query
