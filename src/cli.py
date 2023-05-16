@@ -80,12 +80,8 @@ def main(args):
         gt_predictions_path = config_yaml[model_name]['ground_truth_predictions_path']
         gt_id_name_path = config_yaml[model_name]['ground_truth_id_name_pairs_path']
         gt_id_type_path = config_yaml[model_name]['ground_truth_data_id_type_pairs_path']
-        connection_params = {}
-        if storage_backend == "elastic":
-            connection_params = config_yaml[model_name]['elasticsearch']
-        elif storage_backend == "redis":
-            connection_params = config_yaml[model_name]['redissearch']
-
+        storage_backend = config_yaml[model_name]['storage']
+        connection_params = config_yaml[model_name]['connectionParams']
         index_docs(storage = storage_backend,
                    connection_params=connection_params,
                    np_file=gt_predictions_path,
@@ -112,7 +108,6 @@ if __name__ == "__main__":
     parser_index = sub_parsers.add_parser("index", help="Index SAPBert ground truth to elasticsearch. Note this uses `sapbert` config section in config file passed as paramter."
                                                         "Please refer to ../config.yaml `sapbert` section for details.")
 
-    parser_index.add_argument("-s", "--store", help="Storage backend", default="redis", choices=["redis", "elastic"])
     args = parser.parse_args()
 
     main(args)

@@ -181,14 +181,14 @@ class SapbertModelWrapper(ModelWrapper):
     password: ""
     index: "sap_index"
     """
-    def __init__(self, model_path, elastic_search_config, backend='redis'):
+    def __init__(self, model_path, connection_config, backend='redis'):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModel.from_pretrained(model_path).cuda(0)
         if backend == 'redis':
             self.elastic_client = RedisMemory(
-                **elastic_search_config
+                **connection_config
             )
 
     async def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
@@ -275,22 +275,10 @@ def init_models(config_file_path):
         extra_params = None
 
         if model_name == 'sapbert':
-            extra_params = {"elastic_search_config": config[model_name].get('elasticsearch', None)}
+            extra_params = {"connection_config": config[model_name].get('connectionParams', None),
+                            "backend": config[model_name]["storage"]}
 
         ModelFactory.load_model(name=model_name, path=path, model_class=cls, extra_params=extra_params)
 
         logger.info(f"Loaded {cls} model from {path} as {model_name}")
 
-
-# test this factory by setting the model path
-if __name__ == '__main__':
-    model_path = "/models/SapBERT-fine-tuned-babel"
-    with open('../config.yaml') as stream:
-        x = yaml.load(stream, yaml.FullLoader)
-
-    ModelFactory.load_model('sap', path=model_path, model_class=SapbertModelWrapper,extra_params={
-        "elastic_search_config": x["sapbert"]["elasticsearch"]
-    })
-    text = "asthma"
-    result = ModelFactory.query_model('sap', text)
-    print(result)

@@ -9,12 +9,15 @@ token_classification:
 sapbert:
   path: "/data/SapBERT-from-PubMedBERT-fulltext"
   class: SapbertWrapper
-  elasticsearch:
-    host: "http://localhost:9200"
-    username: "elastic"
-    password: ""
-    index: "sap_index"
-  redissearch:
+  storage: "redis"
+#   If using elasticsearch use the following connection parameters
+#   storage: "elasticsearch"
+#   connectionParams:
+#     host: "http://localhost:9200"
+#     username: "elastic"
+#     password: ""
+#     index: "sap_index"
+  connectionParams:
     host: "localhost"
     port: 6378
     password: ""

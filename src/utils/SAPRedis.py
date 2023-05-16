@@ -64,7 +64,6 @@ class RedisMemory:
     async def close(self):
         await self.async_connection.close()
 
-
     async def search(self, query_vector, top_n=10, bl_type="", algorithm=None):
         # search query
         base_query = f"*=>[KNN {top_n} @embedding $vector AS vector_score]"
@@ -90,7 +89,7 @@ class RedisMemory:
             # if error return None
             return None
         # return array of results with distance scores
-        return [{"name": result.name,"curie": result.id, "category": result.categories, "score": result.vector_score} for result in results.docs]
+        return [{"name": result.name,"curie": result.curie, "category": result.categories, "score": result.vector_score} for result in results.docs]
 
     async def populate_index(self, generator):
         # loop through the generator
