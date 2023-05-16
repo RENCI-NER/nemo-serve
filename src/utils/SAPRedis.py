@@ -67,6 +67,8 @@ class RedisMemory:
     async def search(self, query_vector, top_n=10, bl_type="", algorithm=None):
         # search query
         base_query = f"*=>[KNN {top_n} @embedding $vector AS vector_score]"
+        if bl_type:
+            base_query = f"@categories: {bl_type}=>[KNN {top_n} @embedding $vector AS vector_score] "
         query = (
             # query
             Query(base_query)
