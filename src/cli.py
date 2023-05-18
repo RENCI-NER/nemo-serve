@@ -74,7 +74,6 @@ def main(args):
         # making this static for now, we only have sapbert that we want to index to elastic.
         # so we will read its previous config here.
         model_name = "sapbert"
-        storage_backend = args.store
         with open(config) as stream:
             config_yaml = yaml.load(stream, Loader=yaml.FullLoader)
         gt_predictions_path = config_yaml[model_name]['ground_truth_predictions_path']
