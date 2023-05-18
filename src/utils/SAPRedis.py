@@ -96,7 +96,7 @@ class RedisMemory:
             # if error return None
             return None
         # return array of results with distance scores
-        return [{"name": result.name,"curie": result.curie, "category": result.categories, "score": result.vector_score} for result in results.docs]
+        return [{"name": result.name,"curie": result.curie, "category": "biolink:" + result.categories, "score": result.vector_score} for result in results.docs]
 
     async def populate_index(self, generator):
         # loop through the generator
