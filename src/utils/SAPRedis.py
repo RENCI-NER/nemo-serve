@@ -8,6 +8,8 @@ from redis.commands.search.query import Query
 import numpy as np
 
 
+logger = logging.getLogger()
+
 
 class RedisMemory:
     DOC_PREFIX = "sap_docs:"
@@ -36,7 +38,7 @@ class RedisMemory:
             self.sync_connection.ping()
             self.sync_connection.close()
         except redis.ConnectionError as con_error:
-            logging.error(f"Error connection to redis {self.host}:{self.port} , {con_error}")
+            logger.error(f"Error connection to redis {self.host}:{self.port} , {con_error}")
         self.async_connection = AsyncRedis.Redis(
             host=self.host,
             port=self.port,
@@ -47,7 +49,7 @@ class RedisMemory:
         try:
             # check to see if index exists
             await self.async_connection.ft(self.index_name).info()
-            logging.warning("Index already exists!")
+            logger.warning("Index already exists!")
         except:
             # index Definition
             definition = IndexDefinition(prefix=[RedisMemory.DOC_PREFIX], index_type=IndexType.HASH)
@@ -59,7 +61,7 @@ class RedisMemory:
         try:
             await self.async_connection.ft(self.index_name).dropindex(delete_documents=True)
         except Exception as e:
-            logging.error(e)
+            logger.error(e)
 
     async def close(self):
         await self.async_connection.close()
@@ -68,7 +70,10 @@ class RedisMemory:
         # search query
         base_query = f"*=>[KNN {top_n} @embedding $vector AS vector_score]"
         if bl_type:
-            base_query = f"@categories: {bl_type}=>[KNN {top_n} @embedding $vector AS vector_score] "
+            # tag = bl_type.strip("biolink:")
+            base_query = f"@categories:*{bl_type}=>[KNN {top_n} @embedding $vector AS vector_score] "
+
+        logger.info(base_query)
         query = (
             # query
             Query(base_query)
@@ -87,7 +92,7 @@ class RedisMemory:
                 query, query_params={"vector": query_vector}
             )
         except Exception as e:
-            logging.warning("Error calling Redis search: ", e)
+            logger.warning("Error calling Redis search: ", e)
             # if error return None
             return None
         # return array of results with distance scores
@@ -109,15 +114,20 @@ class RedisMemory:
                 "curie": data['curies'][0],
                 "embedding": vector,
                 "name": data['name'],
-                "categories": data['categories'][0]
+                # redis search , infact whole redis is really lacking with the use of colons :`(
+                # when using tags colon is used as main syntax ingredient so doing something like
+                # @categories:biolink:Disease=>[KNN {top_n} @embedding $vector AS vector_score]
+                # causes error. So stripping out biolink: seems like a reasonable fix
+                "categories": data['categories'][0].lstrip('biolink:')
             }
             # redis hash key
+            # again here with the colons!
             hash_key = f"{self.DOC_PREFIX}{mapping['curie'].replace(':', '_')}"
             await pipe.hset(hash_key, mapping=mapping)
             if counter % chunk_size == 0:
                 # every 10K rounds execute pipeline
                 await pipe.execute()
-                logging.info(f"processed {counter} entries")
+                logger.info(f"processed {counter} entries")
             counter += 1
         # execute any remaining statements on the pipeline
         await pipe.execute()
