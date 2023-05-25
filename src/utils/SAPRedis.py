@@ -71,7 +71,7 @@ class RedisMemory:
         base_query = f"*=>[KNN {top_n} @embedding $vector AS vector_score]"
         if bl_type:
             # tag = bl_type.strip("biolink:")
-            base_query = f"@categories:{{ bl_type }}=>[KNN {top_n} @embedding $vector AS vector_score] "
+            base_query = f"@categories:{{ {bl_type} }}=>[KNN {top_n} @embedding $vector AS vector_score] "
 
         logger.info(base_query)
         query = (
