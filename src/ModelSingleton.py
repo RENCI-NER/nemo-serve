@@ -187,7 +187,7 @@ class SapbertModelWrapper(ModelWrapper):
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModel.from_pretrained(model_path).cuda(0)
         if backend == 'redis':
-            self.elastic_client = RedisMemory(
+            self.storage_client = RedisMemory(
                 **connection_config
             )
 
@@ -203,7 +203,7 @@ class SapbertModelWrapper(ModelWrapper):
         vector = cls_rep.cpu().detach().numpy().tolist()[0]
         logger.info(f"Calculated Vector of {len(vector)} dims,")
         logger.info("sending vector to elasticsearch")
-        return await self.elastic_client.search(
+        return await self.storage_client.search(
             query_vector=vector,
             top_n=count,
             bl_type=bl_type,
