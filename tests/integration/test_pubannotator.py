@@ -20,6 +20,8 @@ This is an integration test: it will use two API endpoints that can be configure
 by environmental variables:
 - The Nemo-Serve URL, which defaults to https://med-nemo.apps.renci.org/
 - The SAPBERT URL, which defaults to https://med-nemo-sapbert.apps.renci.org/
+
+You can run this individual test by running `pytest tests/integration/test_pubannotator.py`.
 """
 
 import json
