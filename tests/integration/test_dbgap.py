@@ -1,27 +1,22 @@
 """
-This test file tests annotations by using the PubAnnotator website's API.
-It does this by querying a list of PubMed IDs (in the PMID:... format) and
-PubMed Central IDs (in the PMC:... format) from the PubAnnotator website's
-API, running the text through BioMegatron, and then running each annotation
-through SAPBERT to carry out entity linking. This is then written out into
-the tests/integration/data/test_pubannotator folder for further comparison
-in the PubAnnotator format, allowing them to be viewed in a PubAnnotator editor
-like TextAE (https://textae.pubannotation.org/editor.html?mode=edit).
+This test file tests annotations by using multiple NER tools against a source
+of data that is of immediate use to [Dug](https://github.com/helxplatform/dug):
+data dictionaries from dbGaP. The code to do this is closely related to that
+used by [`bin/get_dbgap_data_dicts.py`](https://github.com/helxplatform/dug/blob/4741844d51e18cd59a64f7537aa515690239da49/bin/get_dbgap_data_dicts.py),
+except that this code is simpler: we only download dbGaP dictionaries of
+interest directly.
 
-In this version of this test, we only test that we get one or more annotations
-from Nemo-Serve -- nothing else is actually tested. In the future, we might
-want to:
-1. Whether Nemo-Serve can find the same annotations as the PubAnnotator website has.
-2. Build some sort of active-learning tool that encapsulates this functionality with
-   a human-annotation tool that generates annotated documents that can be used for
-   further BioMegatron testing.
+As part of this test, we write two files to tests/integration/data/test_dbgap:
+- The data dict filename (e.g. `phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml`).
+- A custom JSON format which consists of a list of PubAnnotation entries, one for each field in the data dictionary
+  and tracks for each methodology that we are using, with a separate track for normalized identifiers where possible.
 
 This is an integration test: it will use two API endpoints that can be configured
 by environmental variables:
 - The Nemo-Serve URL, which defaults to https://med-nemo.apps.renci.org/
 - The SAPBERT URL, which defaults to https://med-nemo-sapbert.apps.renci.org/
 
-You can run this individual test by running `pytest tests/integration/test_pubannotator.py`.
+You can run this individual test by running `pytest tests/integration/test_dbgap.py`.
 """
 
 import json
@@ -29,6 +24,7 @@ import logging
 import os
 import re
 import urllib.parse
+import xml.etree.ElementTree as ET
 
 import requests
 import pytest
@@ -47,43 +43,51 @@ SAPBERT_MODEL_NAME = "sapbert"
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/1.3/get_normalized_nodes')
 
 # Where should these output files be written out?
-OUTPUT_DIR = "tests/integration/data/test_pubannotator"
+OUTPUT_DIR = "tests/integration/data/test_dbgap"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Which PubMed IDs (starting with 'PMID:') or PubMed Central IDs (starting with
-# 'PMC...') should be downloaded from PubAnnotator?
-PUBMED_IDS_TO_TEST = [
-    'PMID:7837719'         # https://pubmed.ncbi.nlm.nih.gov/7837719/
-    # Korn et al (2021) COVID-KOP: integrating emerging COVID-19 data with the ROBOKOP database
-    #'PMID:33175089',        # https://pubmed.ncbi.nlm.nih.gov/33175089/
-    #'PMC7890668',           # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7890668/
-    # 'PMC3921439'
-    # 'PMID:18513871'
-    # 'PMID:23512406'
+# Which dbGaP data dictionaries should we test? This should be a URL that points directly to a data_dict.xml file.
+DBGAP_DATA_DICTS_TO_TEST = [
+    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml'
 ]
 
 logging.basicConfig(level=logging.INFO)
 
 # We parameterize our test using the list of PubMed IDs to test -- this method will be
 # run once for each identifier.
-@pytest.mark.parametrize('pubmed_id', PUBMED_IDS_TO_TEST)
-def test_with_pubannotator(pubmed_id):
-    # Figure out the PubAnnotator URL where the PubMed ID can be found.
-    if pubmed_id.startswith('PMID:'):
-        url = f'https://pubannotation.org/docs/sourcedb/PubMed/sourceid/{pubmed_id[5:]}/annotations.json'
-    elif pubmed_id.startswith('PMC'):
-        url = f'https://pubannotation.org/docs/sourcedb/PMC/sourceid/{pubmed_id[3:]}/annotations.json'
-    else:
-        pytest.fail(f"Could not get URL for identifier {pubmed_id}")
-        return
+@pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
+def test_with_pubannotator(dbgap_data_dict_url):
+    logging.info(f"Downloading {dbgap_data_dict_url}")
 
-    # Download the PubAnnotator
-    pubannotator_response = requests.get(url)
-    assert pubannotator_response.status_code == 200
-    pubannotator = pubannotator_response.json()
+    # Download the data dictionary.
+    data_dict_response = requests.get(dbgap_data_dict_url)
+    assert data_dict_response.status_code == 200
+    data_dict_xml = data_dict_response.text
+    tree = ET.fromstring(data_dict_xml)
+    data_table = tree
 
-    # Note that we ignore the annotations from PubAnnotator -- these could be compared to our
-    # output later!
+    dbgap_table_id = data_table.get('id')
+    dbgap_study_id = data_table.get('study_id')
+    dbgap_date_created = data_table.get('date_created')
+    dbgap_description = data_table.find('description').text
+
+    print(f"dbGaP data dictionary {dbgap_data_dict_url}")
+    print(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}")
+    print(f" - Description: {dbgap_description}")
+
+    for variable in data_table.findall('variable'):
+        var_id = variable.get('id')
+        var_name = variable.find('name').text
+        var_desc = variable.find('description').text
+        # var_type = variable.find('type').text
+        values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
+
+        print(f" - Variable {var_id} ({var_name}): {var_desc}")
+        for value in values:
+            print(f"   - Value: {value}")
+
+    assert False
+
 
     # Log what we're doing with this result.
     logging.info(f"Target: {pubannotator['target']} ({pubannotator['sourcedb']}:{pubannotator['sourceid']}) [{pubannotator.get('source_url', '(none)')}]")
