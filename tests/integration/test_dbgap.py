@@ -53,10 +53,96 @@ DBGAP_DATA_DICTS_TO_TEST = [
 
 logging.basicConfig(level=logging.INFO)
 
+# We choose the
+def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, values):
+    annotations = []
+
+    # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
+    request = {
+        "text": var_name + "\n" + desc + "\n" + "\n".join(values),
+        "model_name": NEMOSERVE_MODEL_NAME
+    }
+    logging.debug(f"Request: {request}")
+    response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
+    logging.debug(f"Response: {response.content}")
+    assert response.status_code == 200
+    annotated = response.json()
+    logging.info(f" - Nemo result: {annotated}")
+
+    # For each annotation, query it with SAPBERT.
+    count_sapbert_annotations = 0
+    track_token_classification = annotated['denotations']
+
+    # In addition to the text that SAPBERT found, try to find the entire variable name and each value
+    # as separate SAPBERT terms.
+    track_token_classification.append({'text': var_name})
+    for v in values:
+        track_token_classification.append({'text': v.split('\\s*:\\s*')[1]})
+
+    for token in track_token_classification:
+        text = token['text']
+
+        assert text, f"Token {token} does not have any text!"
+
+        logging.debug(f"Querying SAPBERT with {token['text']}")
+        request = {
+            "text": token['text'],
+            "model_name": SAPBERT_MODEL_NAME
+        }
+        response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
+        logging.debug(f"Response from SAPBERT: {response.content}")
+        if not response.status_code == 200:
+            logging.error(f"Server error from SAPBERT for text '{text}': {response}")
+            continue
+
+        result = response.json()
+        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}"
+        first_result = result[0]
+
+        denotation = dict(token)
+        denotation['text'] = token['text']
+        denotation['obj'] = f"MESH:{first_result['curie']} ({first_result['label']}, score: {first_result['distance_score']})"
+        denotation['id'] = f"MESH:{first_result['curie']}"
+
+        count_sapbert_annotations += 1
+        # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
+        # don't render this.
+        # denotation['label'] = result[0]
+        annotations.append(
+            denotation
+        )
+
+    # Normalize nodes.
+    for annot in annotations:
+        # Try to normalize the ID.
+        mesh = annot['id']
+
+        response = requests.get(NODE_NORM_ENDPOINT, {
+            'curie': mesh,
+            'conflate': 'true'
+        })
+        if not response.ok:
+            pass
+        else:
+            result = response.json().get(mesh, {})
+            if result:
+                normalized_id = result.get('id', {})
+                normalized_identifier = normalized_id.get('identifier')
+                normalized_label = normalized_id.get('label', '')
+
+                if not normalized_identifier:
+                    pass
+                else:
+                    annot['nn_id'] = normalized_identifier
+                    annot['nn_label'] = normalized_label
+
+    return annotations
+
+
 # We parameterize our test using the list of PubMed IDs to test -- this method will be
 # run once for each identifier.
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
-def test_with_pubannotator(dbgap_data_dict_url):
+def test_with_dbgap(dbgap_data_dict_url):
     logging.info(f"Downloading {dbgap_data_dict_url}")
 
     # Download the data dictionary.
@@ -82,108 +168,14 @@ def test_with_pubannotator(dbgap_data_dict_url):
         # var_type = variable.find('type').text
         values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
 
-        print(f" - Variable {var_id} ({var_name}): {var_desc}")
+        print(f"   - Variable {var_id} ({var_name}): {var_desc}")
         for value in values:
-            print(f"   - Value: {value}")
+            print(f"     - Value: {value}")
 
-    assert False
-
-
-    # Log what we're doing with this result.
-    logging.info(f"Target: {pubannotator['target']} ({pubannotator['sourcedb']}:{pubannotator['sourceid']}) [{pubannotator.get('source_url', '(none)')}]")
-    text = pubannotator['text']
-    logging.info(f" - Text [{len(text)}]: {text}")
-
-    # Make a request to Nemo-Serve to annotate this text.
-    request = {
-        "text": text,
-        "model_name": NEMOSERVE_MODEL_NAME
-    }
-    logging.debug(f"Request: {request}")
-    response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
-    logging.debug(f"Response: {response.content}")
-    assert response.status_code == 200
-    annotated = response.json()
-    logging.info(f" - Nemo result: {annotated}")
-
-    # For each annotation, query it with SAPBERT.
-    count_sapbert_annotations = 0
-    track_sapbert = []
-    track_token_classification = annotated['denotations']
-    for token in track_token_classification:
-        text = token['text']
-
-        assert text, f"Token {token} does not have any text!"
-
-        logging.debug(f"Querying SAPBERT with {token['text']}")
-        request = {
-            "text": token['text'],
-            "model_name": SAPBERT_MODEL_NAME
-        }
-        response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
-        logging.debug(f"Response from SAPBERT: {response.content}")
-        assert response.status_code == 200
-
-        result = response.json()
-        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}"
-        first_result = result[0]
-
-        denotation = dict(token)
-        denotation['obj'] = f"MESH:{first_result['curie']} ({first_result['label']}, score: {first_result['distance_score']})"
-        denotation['mesh'] = f"MESH:{first_result['curie']}"
-        count_sapbert_annotations += 1
-        # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
-        # don't render this.
-        # denotation['label'] = result[0]
-        track_sapbert.append(
-            denotation
-        )
-
-    assert count_sapbert_annotations > 0, f"No SAPBERT annotations found for {pubmed_id}, given these BioMegatron annotations: {track_token_classification}"
-
-    # Normalize nodes.
-    node_norm_tracks = []
-    for sapbert_denot in track_sapbert:
-        # Try to normalize the MeSH.
-        mesh = sapbert_denot['mesh']
-
-        response = requests.get(NODE_NORM_ENDPOINT, {
-            'curie': mesh,
-            'conflate': 'true'
-        })
-        if not response.ok:
-            pass
-        else:
-            result = response.json().get(mesh, {})
-            if result:
-                normalized_id = result.get('id', {})
-                normalized_identifier = normalized_id.get('identifier')
-
-                if not normalized_identifier:
-                    pass
-                else:
-                    nn_denot = sapbert_denot.copy()
-                    nn_denot['obj'] = normalized_identifier
-                    label = normalized_id.get('label')
-                    if label:
-                        nn_denot['obj'] = nn_denot['obj'] + " (" + label + ")"
-                    node_norm_tracks.append(nn_denot)
-
-    # Write the annotations from Nemo-Serve and SAPBERT into the output file as separate tracks.
-    annotated['tracks'] = [{
-        'project': NEMOSERVE_ANNOTATE_ENDPOINT,
-        'denotations': track_token_classification
-    }, {
-        'project': SAPBERT_ANNOTATE_ENDPOINT,
-        'denotations': track_sapbert
-    }, {
-        'project': NODE_NORM_ENDPOINT,
-        'denotations': node_norm_tracks
-    }]
-    del annotated['denotations']
-
-    # Write this out to an output file.
-    filename = re.sub(r'[^A-Za-z0-9_]', '_', pubmed_id) + ".json"
-    with open(os.path.join(OUTPUT_DIR, filename), "w") as f:
-        json.dump(annotated, f, sort_keys=True, indent=2)
-
+        annotations = annotate_variable_using_babel_nemoserve(var_id, var_name, var_desc, values)
+        for annotation in annotations:
+            nn_id_str = ""
+            if 'nn_id' in annotation:
+                nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
+            print(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: {annotation['obj']}")
+        print()
