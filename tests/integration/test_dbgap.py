@@ -35,7 +35,7 @@ NEMOSERVE_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 NEMOSERVE_MODEL_NAME = "token_classification"
 
 # Configuration: get the SAPBERT URL and figure out the annotate path.
-SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://med-nemo-sapbert.apps.renci.org/')
+SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 
@@ -81,14 +81,21 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, values):
 
     for token in track_token_classification:
         text = token['text']
+        bl_type = ''
+        if 'obj' in token and token['obj'].startswith('biolink:'):
+            bl_type = token['obj'][8:]
 
         assert text, f"Token {token} does not have any text!"
 
         logging.debug(f"Querying SAPBERT with {token['text']}")
         request = {
             "text": token['text'],
-            "model_name": SAPBERT_MODEL_NAME
+            "model_name": SAPBERT_MODEL_NAME,
+            "args": {
+                "bl_type": bl_type
+            }
         }
+        logging.debug(f"Request to SAPBERT: {request}")
         response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
         logging.debug(f"Response from SAPBERT: {response.content}")
         if not response.status_code == 200:
@@ -96,13 +103,13 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, values):
             continue
 
         result = response.json()
-        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}"
+        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}, {response.content}"
         first_result = result[0]
 
         denotation = dict(token)
         denotation['text'] = token['text']
-        denotation['obj'] = f"MESH:{first_result['curie']} ({first_result['label']}, score: {first_result['distance_score']})"
-        denotation['id'] = f"MESH:{first_result['curie']}"
+        denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
+        denotation['id'] = f"{first_result['curie']}"
 
         count_sapbert_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
@@ -175,7 +182,8 @@ def test_with_dbgap(dbgap_data_dict_url):
         annotations = annotate_variable_using_babel_nemoserve(var_id, var_name, var_desc, values)
         for annotation in annotations:
             nn_id_str = ""
-            if 'nn_id' in annotation:
-                nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
+            # Not needed on Babel-SAPBERT, since entries are pre-normalized.
+            #if 'nn_id' in annotation:
+            #    nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
             print(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: {annotation['obj']}")
         print()
