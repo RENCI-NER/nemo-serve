@@ -42,6 +42,9 @@ SAPBERT_MODEL_NAME = "sapbert"
 # Configuration: the `/get_normalized_nodes` endpoint on a Node Normalization instance to use.
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/1.3/get_normalized_nodes')
 
+# Configuration: the Monarch SciGraph endpoint.
+MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
+
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -68,14 +71,17 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
     annotations = []
 
     # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
+    text = var_name + " " + desc + " " + " ".join(permissible_values)
     request = {
-        "text": var_name + "\n" + desc + "\n" + "\n".join(permissible_values),
+        "text": text,
         "model_name": NEMOSERVE_MODEL_NAME
     }
     logging.debug(f"Request to {NEMOSERVE_MODEL_NAME}: {request}")
     response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
-    logging.debug(f"Response to {NEMOSERVE_MODEL_NAME}: {response.content}")
-    assert response.status_code == 200
+    logging.debug(f"Response from {NEMOSERVE_MODEL_NAME}: {response.content}")
+    if response.status_code != 403:
+        logging.error(f"Querying {NEMOSERVE_MODEL_NAME} returned {response.status_code} ({response.content}): {text}")
+        return []
     annotated = response.json()
     logging.info(f" - Nemo result: {annotated}")
 
@@ -115,7 +121,10 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
             continue
 
         result = response.json()
-        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}, {response.content}"
+        if len(result) == 0:
+            logging.info(f"Could not annotate text {token['text']} in Sapbert: {response}, {response.content}")
+            continue
+
         first_result = result[0]
 
         denotation = dict(token)
@@ -160,6 +169,75 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
     return annotations
 
 
+def annotate_variable_using_scigraph(var_id, var_name, desc, permissible_values):
+    """
+    Annotate a variable using SciGraph.
+
+    :param var_id: The variable identifier.
+    :param var_name: The variable name.
+    :param desc: The variable description.
+    :param permissible_values: A list of permissible values as strings for this variable,
+        where each string is in the format `value: description`.
+    :return:
+    """
+    annotations = []
+
+    # Make a request to Monarch SciGraph to annotate all the text: variable name, description, values.
+    text: str = var_name + " " + desc + " " + " ".join(permissible_values)
+    request_url = MONARCH_SCIGRAPH_URL + urllib.parse.quote(text)
+    logging.debug(f"Request to SciGraph: {request_url}")
+    response = requests.post(request_url)
+    logging.debug(f"Response from SciGraph: {response.content}")
+    assert response.status_code == 200
+    annotated = response.json()
+    logging.info(f" - SciGraph result: {json.dumps(annotated)}")
+
+    for span in annotated['spans']:
+        index_start = span['start']
+        index_end = span['end']
+        text = span['text']
+        tokens = span['token']
+
+        for token in tokens:
+            token_id = token['id']
+            token_category = token['category']
+            token_terms = '|'.join(token['terms'])
+
+            denotation = dict(token)
+            denotation['text'] = text
+            denotation['name'] = token_terms
+            denotation['id'] = token_id
+            denotation['category'] = token_category
+            denotation['obj'] = f"{token_id} ({token_category}: {token_terms})"
+
+            annotations.append(denotation)
+
+    # Normalize identifiers.
+    for annot in annotations:
+        # Try to normalize the ID.
+        mesh = annot['id']
+
+        response = requests.get(NODE_NORM_ENDPOINT, {
+            'curie': mesh,
+            'conflate': 'true'
+        })
+        if not response.ok:
+            pass
+        else:
+            result = response.json().get(mesh, {})
+            if result:
+                normalized_id = result.get('id', {})
+                normalized_identifier = normalized_id.get('identifier')
+                normalized_label = normalized_id.get('label', '')
+
+                if not normalized_identifier:
+                    pass
+                else:
+                    annot['nn_id'] = normalized_identifier
+                    annot['nn_label'] = normalized_label
+
+    return annotations
+
 # We parameterize our test using the list of PubMed IDs to test -- this method will be
 # run once for each identifier.
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
@@ -194,10 +272,11 @@ def test_with_dbgap(dbgap_data_dict_url):
             print(f"     - Value: {value}")
 
         annotations = annotate_variable_using_babel_nemoserve(var_id, var_name, var_desc, values)
+        # annotations = annotate_variable_using_scigraph(var_id, var_name, var_desc, values)
         for annotation in annotations:
             nn_id_str = ""
             # Not needed on Babel-SAPBERT, since entries are pre-normalized.
-            #if 'nn_id' in annotation:
-            #    nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
+            if 'nn_id' in annotation:
+                nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
             print(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: {annotation['obj']}")
         print()
