@@ -45,6 +45,9 @@ NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-
 # Configuration: the Monarch SciGraph endpoint.
 MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
 
+# Configuration: NameRes
+NAMERES_URL = 'http://name-resolution-sri-dev.apps.renci.org/lookup?offset=0&limit=10&string='
+
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -79,7 +82,7 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
     logging.debug(f"Request to {NEMOSERVE_MODEL_NAME}: {request}")
     response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
     logging.debug(f"Response from {NEMOSERVE_MODEL_NAME}: {response.content}")
-    if response.status_code != 403:
+    if response.status_code != 200:
         logging.error(f"Querying {NEMOSERVE_MODEL_NAME} returned {response.status_code} ({response.content}): {text}")
         return []
     annotated = response.json()
@@ -142,29 +145,89 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
             denotation
         )
 
-    # Normalize nodes.
-    for annot in annotations:
-        # Try to normalize the ID.
-        mesh = annot['id']
+    return annotations
 
-        response = requests.get(NODE_NORM_ENDPOINT, {
-            'curie': mesh,
-            'conflate': 'true'
-        })
-        if not response.ok:
-            pass
-        else:
-            result = response.json().get(mesh, {})
-            if result:
-                normalized_id = result.get('id', {})
-                normalized_identifier = normalized_id.get('identifier')
-                normalized_label = normalized_id.get('label', '')
 
-                if not normalized_identifier:
-                    pass
-                else:
-                    annot['nn_id'] = normalized_identifier
-                    annot['nn_label'] = normalized_label
+def annotate_variable_using_babel_nemoserve_nameres(var_id, var_name, desc, permissible_values):
+    """
+    Annotate a variable using the Babel/NemoServe system we're developing, but with NameRes instead
+    of SAPBERT.
+
+    :param var_id: The variable identifier.
+    :param var_name: The variable name.
+    :param desc: The variable description.
+    :param permissible_values: A list of permissible values as strings for this variable,
+        where each string is in the format `value: description`.
+    :return:
+    """
+    annotations = []
+
+    # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
+    text = var_name + " " + desc + " " + " ".join(permissible_values)
+    request = {
+        "text": text,
+        "model_name": NEMOSERVE_MODEL_NAME
+    }
+    logging.debug(f"Request to {NEMOSERVE_MODEL_NAME}: {request}")
+    response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
+    logging.debug(f"Response from {NEMOSERVE_MODEL_NAME}: {response.content}")
+    if response.status_code != 200:
+        logging.error(f"Querying {NEMOSERVE_MODEL_NAME} returned {response.status_code} ({response.content}): {text}")
+        return []
+    annotated = response.json()
+    logging.info(f" - Nemo result: {annotated}")
+
+    # For each annotation, query it with SAPBERT.
+    count_sapbert_annotations = 0
+    track_token_classification = annotated['denotations']
+
+    # In addition to the text that SAPBERT found, try to find the entire variable name and each value
+    # as separate SAPBERT terms.
+    track_token_classification.append({'text': var_name})
+    for v in permissible_values:
+        track_token_classification.append({'text': v.split('\\s*:\\s*')[1]})
+
+    for token in track_token_classification:
+        text = token['text']
+
+        # Determine if there is a Biolink type for this token.
+        bl_type = ''
+        if 'obj' in token and token['obj'].startswith('biolink:'):
+            bl_type = token['obj'][8:]
+
+        assert text, f"Token {token} does not have any text!"
+
+        logging.debug(f"Querying NameRes with {text}")
+        nameres_query = NAMERES_URL + urllib.parse.quote(text)
+        if bl_type:
+            nameres_query = nameres_query + '&biolink_type=' + bl_type
+        logging.debug(f"Request to NameRes: {nameres_query}")
+        response = requests.post(nameres_query)
+        logging.debug(f"Response from {SAPBERT_MODEL_NAME}: {response.content}")
+        if not response.status_code == 200:
+            logging.error(f"Server error from NameRes for text '{text}': {response}")
+            continue
+
+        result = response.json()
+        if len(result) == 0:
+            logging.info(f"Could not annotate text {token['text']} in NameRes: {response}, {response.content}")
+            continue
+
+        first_result = result[0]
+
+        denotation = dict(token)
+        denotation['text'] = text
+        denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
+        denotation['name'] = first_result['label']
+        denotation['id'] = f"{first_result['curie']}"
+
+        count_sapbert_annotations += 1
+        # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
+        # don't render this.
+        # denotation['label'] = result[0]
+        annotations.append(
+            denotation
+        )
 
     return annotations
 
@@ -271,8 +334,9 @@ def test_with_dbgap(dbgap_data_dict_url):
         for value in values:
             print(f"     - Value: {value}")
 
-        annotations = annotate_variable_using_babel_nemoserve(var_id, var_name, var_desc, values)
+        # annotations = annotate_variable_using_babel_nemoserve(var_id, var_name, var_desc, values)
         # annotations = annotate_variable_using_scigraph(var_id, var_name, var_desc, values)
+        annotations = annotate_variable_using_babel_nemoserve_nameres(var_id, var_name, var_desc, values)
         for annotation in annotations:
             nn_id_str = ""
             # Not needed on Babel-SAPBERT, since entries are pre-normalized.
@@ -280,3 +344,6 @@ def test_with_dbgap(dbgap_data_dict_url):
                 nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
             print(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: {annotation['obj']}")
         print()
+
+    # Fake assert to fail the test
+    assert False
