@@ -53,18 +53,28 @@ DBGAP_DATA_DICTS_TO_TEST = [
 
 logging.basicConfig(level=logging.INFO)
 
-# We choose the
-def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, values):
+
+def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_values):
+    """
+    Annotate a variable using the Babel/NemoServe system we're developing.
+
+    :param var_id: The variable identifier.
+    :param var_name: The variable name.
+    :param desc: The variable description.
+    :param permissible_values: A list of permissible values as strings for this variable,
+        where each string is in the format `value: description`.
+    :return:
+    """
     annotations = []
 
     # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
     request = {
-        "text": var_name + "\n" + desc + "\n" + "\n".join(values),
+        "text": var_name + "\n" + desc + "\n" + "\n".join(permissible_values),
         "model_name": NEMOSERVE_MODEL_NAME
     }
-    logging.debug(f"Request: {request}")
+    logging.debug(f"Request to {NEMOSERVE_MODEL_NAME}: {request}")
     response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
-    logging.debug(f"Response: {response.content}")
+    logging.debug(f"Response to {NEMOSERVE_MODEL_NAME}: {response.content}")
     assert response.status_code == 200
     annotated = response.json()
     logging.info(f" - Nemo result: {annotated}")
@@ -76,28 +86,30 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, values):
     # In addition to the text that SAPBERT found, try to find the entire variable name and each value
     # as separate SAPBERT terms.
     track_token_classification.append({'text': var_name})
-    for v in values:
+    for v in permissible_values:
         track_token_classification.append({'text': v.split('\\s*:\\s*')[1]})
 
     for token in track_token_classification:
         text = token['text']
+
+        # Determine if there is a Biolink type for this token.
         bl_type = ''
         if 'obj' in token and token['obj'].startswith('biolink:'):
             bl_type = token['obj'][8:]
 
         assert text, f"Token {token} does not have any text!"
 
-        logging.debug(f"Querying SAPBERT with {token['text']}")
+        logging.debug(f"Querying SAPBERT with {text}")
         request = {
-            "text": token['text'],
+            "text": text,
             "model_name": SAPBERT_MODEL_NAME,
             "args": {
                 "bl_type": bl_type
             }
         }
-        logging.debug(f"Request to SAPBERT: {request}")
+        logging.debug(f"Request to {SAPBERT_MODEL_NAME}: {request}")
         response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
-        logging.debug(f"Response from SAPBERT: {response.content}")
+        logging.debug(f"Response from {SAPBERT_MODEL_NAME}: {response.content}")
         if not response.status_code == 200:
             logging.error(f"Server error from SAPBERT for text '{text}': {response}")
             continue
@@ -109,6 +121,8 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, values):
         denotation = dict(token)
         denotation['text'] = token['text']
         denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
+        denotation['name'] = first_result['name']
+        denotation['score'] = first_result['score']
         denotation['id'] = f"{first_result['curie']}"
 
         count_sapbert_annotations += 1
