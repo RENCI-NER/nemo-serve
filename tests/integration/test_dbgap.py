@@ -16,16 +16,16 @@ by environmental variables:
 - The Nemo-Serve URL, which defaults to https://med-nemo.apps.renci.org/
 - The SAPBERT URL, which defaults to https://med-nemo-sapbert.apps.renci.org/
 
-You can run this individual test by running `pytest tests/integration/test_dbgap.py`.
+You can run all tests in this file by running `pytest tests/integration/test_dbgap.py` or running individual
+test in this file by using -k input,
+for example, `pytest tests/integration/test_dbgap.py -k 'test_download_dbgap_data_dict'`.
 """
 
 import json
 import logging
 import os
-import re
 import urllib.parse
 import xml.etree.ElementTree as ET
-
 import requests
 import pytest
 
@@ -51,7 +51,10 @@ NAMERES_URL = 'http://name-resolution-sri-dev.apps.renci.org/lookup?offset=0&lim
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-
+OUTPUT_DBGAP_DATA_DICT_FILE = os.path.join(OUTPUT_DIR, "dbgap_data_dict.xml")
+OUTPUT_SAPBERT_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "sapbert_annot_output.txt")
+OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "scigraph_annot_output.txt")
+OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "nameres_annot_output.txt")
 # Which dbGaP data dictionaries should we test? This should be a URL that points directly to a data_dict.xml file.
 DBGAP_DATA_DICTS_TO_TEST = [
     'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml'
@@ -60,17 +63,19 @@ DBGAP_DATA_DICTS_TO_TEST = [
 logging.basicConfig(level=logging.INFO)
 
 
-def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_values):
+def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, method='sapbert'):
     """
-    Annotate a variable using the Babel/NemoServe system we're developing.
-
-    :param var_id: The variable identifier.
+    Annotate a variable using the Babel/NemoServe system we're developing with a default method sapbert,
+    or with scigraph or NameRes method that can be specified in the method input parameter.
     :param var_name: The variable name.
     :param desc: The variable description.
     :param permissible_values: A list of permissible values as strings for this variable,
         where each string is in the format `value: description`.
+    :param method: sapbert or nameres
     :return:
     """
+    assert method == 'sapbert' or method == 'nameres'
+
     annotations = []
 
     # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
@@ -82,14 +87,13 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
     logging.debug(f"Request to {NEMOSERVE_MODEL_NAME}: {request}")
     response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
     logging.debug(f"Response from {NEMOSERVE_MODEL_NAME}: {response.content}")
-    if response.status_code != 200:
-        logging.error(f"Querying {NEMOSERVE_MODEL_NAME} returned {response.status_code} ({response.content}): {text}")
-        return []
+    assert response.status_code == 200, f'{response.status_code} ({response.content}): {text}'
+
     annotated = response.json()
     logging.info(f" - Nemo result: {annotated}")
 
-    # For each annotation, query it with SAPBERT.
-    count_sapbert_annotations = 0
+    # For each annotation, query it with specified method service.
+    count_annotations = 0
     track_token_classification = annotated['denotations']
 
     # In addition to the text that SAPBERT found, try to find the entire variable name and each value
@@ -103,25 +107,38 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
 
         # Determine if there is a Biolink type for this token.
         bl_type = ''
-        if 'obj' in token and token['obj'].startswith('biolink:'):
-            bl_type = token['obj'][8:]
+        bl_prefix = 'biolink:'
+        if 'obj' in token and token['obj'].startswith(bl_prefix):
+            bl_type = token['obj'][len(bl_prefix):]
 
         assert text, f"Token {token} does not have any text!"
 
-        logging.debug(f"Querying SAPBERT with {text}")
-        request = {
-            "text": text,
-            "model_name": SAPBERT_MODEL_NAME,
-            "args": {
-                "bl_type": bl_type
+        logging.debug(f"Querying {method} with {text}")
+        if method == 'sapbert':
+            request = {
+                "text": text,
+                "model_name": SAPBERT_MODEL_NAME,
+                "args": {
+                    "bl_type": bl_type
+                }
             }
-        }
-        logging.debug(f"Request to {SAPBERT_MODEL_NAME}: {request}")
-        response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
-        logging.debug(f"Response from {SAPBERT_MODEL_NAME}: {response.content}")
-        if not response.status_code == 200:
-            logging.error(f"Server error from SAPBERT for text '{text}': {response}")
-            continue
+
+            logging.debug(f"Request to {SAPBERT_MODEL_NAME}: {request}")
+            response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
+            logging.debug(f"Response from {SAPBERT_MODEL_NAME}: {response.content}")
+            if not response.status_code == 200:
+                logging.error(f"Server error from SAPBERT for text '{text}': {response}")
+                continue
+        elif method == "nameres":
+            nameres_query = NAMERES_URL + urllib.parse.quote(text)
+            if bl_type:
+                nameres_query = nameres_query + '&biolink_type=' + bl_type
+            logging.debug(f"Request to NameRes: {nameres_query}")
+            response = requests.post(nameres_query)
+            logging.debug(f"Response from nameres: {response.content}")
+            if not response.status_code == 200:
+                logging.error(f"Server error from NameRes for text '{text}': {response}")
+                continue
 
         result = response.json()
         if len(result) == 0:
@@ -131,97 +148,17 @@ def annotate_variable_using_babel_nemoserve(var_id, var_name, desc, permissible_
         first_result = result[0]
 
         denotation = dict(token)
-        denotation['text'] = token['text']
-        denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
-        denotation['name'] = first_result['name']
-        denotation['score'] = first_result['score']
-        denotation['id'] = f"{first_result['curie']}"
-
-        count_sapbert_annotations += 1
-        # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
-        # don't render this.
-        # denotation['label'] = result[0]
-        annotations.append(
-            denotation
-        )
-
-    return annotations
-
-
-def annotate_variable_using_babel_nemoserve_nameres(var_id, var_name, desc, permissible_values):
-    """
-    Annotate a variable using the Babel/NemoServe system we're developing, but with NameRes instead
-    of SAPBERT.
-
-    :param var_id: The variable identifier.
-    :param var_name: The variable name.
-    :param desc: The variable description.
-    :param permissible_values: A list of permissible values as strings for this variable,
-        where each string is in the format `value: description`.
-    :return:
-    """
-    annotations = []
-
-    # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
-    text = var_name + " " + desc + " " + " ".join(permissible_values)
-    request = {
-        "text": text,
-        "model_name": NEMOSERVE_MODEL_NAME
-    }
-    logging.debug(f"Request to {NEMOSERVE_MODEL_NAME}: {request}")
-    response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
-    logging.debug(f"Response from {NEMOSERVE_MODEL_NAME}: {response.content}")
-    if response.status_code != 200:
-        logging.error(f"Querying {NEMOSERVE_MODEL_NAME} returned {response.status_code} ({response.content}): {text}")
-        return []
-    annotated = response.json()
-    logging.info(f" - Nemo result: {annotated}")
-
-    # For each annotation, query it with SAPBERT.
-    count_sapbert_annotations = 0
-    track_token_classification = annotated['denotations']
-
-    # In addition to the text that SAPBERT found, try to find the entire variable name and each value
-    # as separate SAPBERT terms.
-    track_token_classification.append({'text': var_name})
-    for v in permissible_values:
-        track_token_classification.append({'text': v.split('\\s*:\\s*')[1]})
-
-    for token in track_token_classification:
-        text = token['text']
-
-        # Determine if there is a Biolink type for this token.
-        bl_type = ''
-        if 'obj' in token and token['obj'].startswith('biolink:'):
-            bl_type = token['obj'][8:]
-
-        assert text, f"Token {token} does not have any text!"
-
-        logging.debug(f"Querying NameRes with {text}")
-        nameres_query = NAMERES_URL + urllib.parse.quote(text)
-        if bl_type:
-            nameres_query = nameres_query + '&biolink_type=' + bl_type
-        logging.debug(f"Request to NameRes: {nameres_query}")
-        response = requests.post(nameres_query)
-        logging.debug(f"Response from {SAPBERT_MODEL_NAME}: {response.content}")
-        if not response.status_code == 200:
-            logging.error(f"Server error from NameRes for text '{text}': {response}")
-            continue
-
-        result = response.json()
-        if len(result) == 0:
-            logging.info(f"Could not annotate text {token['text']} in NameRes: {response}, {response.content}")
-            continue
-
-        first_result = result[0]
-
-        denotation = dict(token)
         denotation['text'] = text
-        denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
-        denotation['name'] = first_result['label']
+        if method == 'sapbert':
+            denotation['score'] = first_result['score']
+            denotation['name'] = first_result['name']
+            denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
+        else:  # nameres
+            denotation['name'] = first_result['label']
+            denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
         denotation['id'] = f"{first_result['curie']}"
 
-        count_sapbert_annotations += 1
+        count_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.
         # denotation['label'] = result[0]
@@ -232,11 +169,10 @@ def annotate_variable_using_babel_nemoserve_nameres(var_id, var_name, desc, perm
     return annotations
 
 
-def annotate_variable_using_scigraph(var_id, var_name, desc, permissible_values):
+def annotate_variable_using_scigraph(var_name, desc, permissible_values):
     """
     Annotate a variable using SciGraph.
 
-    :param var_id: The variable identifier.
     :param var_name: The variable name.
     :param desc: The variable description.
     :param permissible_values: A list of permissible values as strings for this variable,
@@ -256,8 +192,6 @@ def annotate_variable_using_scigraph(var_id, var_name, desc, permissible_values)
     logging.info(f" - SciGraph result: {json.dumps(annotated)}")
 
     for span in annotated['spans']:
-        index_start = span['start']
-        index_end = span['end']
         text = span['text']
         tokens = span['token']
 
@@ -301,49 +235,81 @@ def annotate_variable_using_scigraph(var_id, var_name, desc, permissible_values)
 
     return annotations
 
-# We parameterize our test using the list of PubMed IDs to test -- this method will be
-# run once for each identifier.
-@pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
-def test_with_dbgap(dbgap_data_dict_url):
-    logging.info(f"Downloading {dbgap_data_dict_url}")
 
-    # Download the data dictionary.
-    data_dict_response = requests.get(dbgap_data_dict_url)
-    assert data_dict_response.status_code == 200
-    data_dict_xml = data_dict_response.text
-    tree = ET.fromstring(data_dict_xml)
-    data_table = tree
+def annotate_dbgap_data_dict(method):
+    output_file = ''
+    if method == 'sapbert':
+        output_file = OUTPUT_SAPBERT_ANNOTATION_FILE
+    elif method == 'scigraph':
+        output_file = OUTPUT_SCIGRAPH_ANNOTATION_FILE
+    elif method == 'nameres':
+        output_file = OUTPUT_NAMERES_ANNOTATION_FILE
+    else:
+        assert Exception("input method must be sapbert, scigraph, or nameres.")
+
+    tree = ET.parse(OUTPUT_DBGAP_DATA_DICT_FILE)
+    data_table = tree.getroot()
 
     dbgap_table_id = data_table.get('id')
     dbgap_study_id = data_table.get('study_id')
     dbgap_date_created = data_table.get('date_created')
     dbgap_description = data_table.find('description').text
+    assert dbgap_table_id is not None
+    assert dbgap_study_id is not None
+    assert dbgap_date_created is not None
+    assert dbgap_description is not None
+    with open(output_file, 'w') as f:
+        f.write(f"dbGaP data dictionary {OUTPUT_DBGAP_DATA_DICT_FILE}\n")
+        f.write(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}\n")
+        f.write(f" - Description: {dbgap_description}\n")
 
-    print(f"dbGaP data dictionary {dbgap_data_dict_url}")
-    print(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}")
-    print(f" - Description: {dbgap_description}")
+        for variable in data_table.findall('variable'):
+            var_id = variable.get('id')
+            var_name = variable.find('name').text
+            var_desc = variable.find('description').text
+            # var_type = variable.find('type').text
+            values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
 
-    for variable in data_table.findall('variable'):
-        var_id = variable.get('id')
-        var_name = variable.find('name').text
-        var_desc = variable.find('description').text
-        # var_type = variable.find('type').text
-        values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
+            f.write(f"   - Variable {var_id} ({var_name}): {var_desc}\n")
+            for value in values:
+                f.write(f"     - Value: {value}\n")
 
-        print(f"   - Variable {var_id} ({var_name}): {var_desc}")
-        for value in values:
-            print(f"     - Value: {value}")
+            if method == 'sapbert' or method == 'nameres':
+                annotations = annotate_variable_using_babel_nemoserve(var_name, var_desc, values,
+                                                                      method=method)
+            elif method == 'scigraph':
+                annotations = annotate_variable_using_scigraph(var_name, var_desc, values)
+            else:
+                assert Exception("input method must be sapbert, scigraph, or nameres.")
 
-        # annotations = annotate_variable_using_babel_nemoserve(var_id, var_name, var_desc, values)
-        # annotations = annotate_variable_using_scigraph(var_id, var_name, var_desc, values)
-        annotations = annotate_variable_using_babel_nemoserve_nameres(var_id, var_name, var_desc, values)
-        for annotation in annotations:
-            nn_id_str = ""
-            # Not needed on Babel-SAPBERT, since entries are pre-normalized.
-            if 'nn_id' in annotation:
-                nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
-            print(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: {annotation['obj']}")
-        print()
+            for annotation in annotations:
+                nn_id_str = ""
+                # Not needed on Babel-SAPBERT, since entries are pre-normalized.
+                if 'nn_id' in annotation:
+                    nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
+                f.write(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: "
+                        f"{annotation['obj']}\n")
 
-    # Fake assert to fail the test
-    assert False
+
+@pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
+def test_download_dbgap_data_dict(dbgap_data_dict_url):
+    logging.info(f"Downloading {dbgap_data_dict_url}")
+
+    # Download the data dictionary.
+    data_dict_response = requests.get(dbgap_data_dict_url)
+    assert data_dict_response.status_code == 200
+    with open(OUTPUT_DBGAP_DATA_DICT_FILE, 'w') as f:
+        f.write(data_dict_response.text)
+    assert os.path.exists(OUTPUT_DBGAP_DATA_DICT_FILE)
+
+
+def test_sapbert_annotation_with_dbgap():
+    annotate_dbgap_data_dict('sapbert')
+
+
+def test_scigraph_annotation_with_dbgap():
+    annotate_dbgap_data_dict('scigraph')
+
+
+def test_nameres_annotation_with_dbgap():
+    annotate_dbgap_data_dict('nameres')
