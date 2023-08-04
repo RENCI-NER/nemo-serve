@@ -17,7 +17,7 @@ by environmental variables:
 - The SAPBERT URL, which defaults to https://med-nemo-sapbert.apps.renci.org/
 
 You can run all tests in this file by running `pytest tests/integration/test_dbgap.py` or running individual
-test in this file by using -k input,
+test in this file by using -k command line option to select tests to run based on their name,
 for example, `pytest tests/integration/test_dbgap.py -k 'test_download_dbgap_data_dict'`.
 """
 
