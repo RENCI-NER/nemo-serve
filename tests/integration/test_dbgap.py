@@ -66,7 +66,7 @@ logging.basicConfig(level=logging.INFO)
 def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, method='sapbert'):
     """
     Annotate a variable using the Babel/NemoServe system we're developing with a default method sapbert,
-    or with scigraph or NameRes method that can be specified in the method input parameter.
+    or with NameRes method that can be specified in the method input parameter.
     :param var_name: The variable name.
     :param desc: The variable description.
     :param permissible_values: A list of permissible values as strings for this variable,
