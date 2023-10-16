@@ -160,15 +160,20 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
         first_result = result[0]
 
         denotation = dict(token)
+        denotation['id'] = f"{first_result['curie']}"
         denotation['text'] = text
         if method == 'sapbert':
             denotation['score'] = first_result['score']
-            denotation['name'] = first_result['name']
+            denotation['label'] = first_result['name']
             denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
+            denotation['score'] = first_result['score']
+            denotation['query_bl_type'] = bl_type
+            denotation['category'] = first_result['category']
         else:  # nameres
-            denotation['name'] = first_result['label']
+            denotation['label'] = first_result['label']
             denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
-        denotation['id'] = f"{first_result['curie']}"
+            denotation['query_bl_type'] = bl_type
+            denotation['category'] = first_result['types'][0]
 
         # These should already be normalized. So let's set nn_id and nn_label.
         denotation['nn_id'] = denotation['id']
@@ -283,15 +288,16 @@ def annotate_dbgap_data_dict(method):
             var_id = variable.get('id')
             var_name = variable.find('name').text
             var_desc = variable.find('description').text
-            # var_type = variable.find('type').text
+            var_type = variable.find('type').text
             values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
 
             result_dict = {
                 'var_id': var_id,
                 'var_name': var_name,
+                'var_type': var_type,
                 'var_desc': var_desc,
                 'method': method,
-                'values': list(values),
+                'values': list(variable.findall('value')),
                 'annotations': []
             }
 
@@ -407,7 +413,7 @@ def run_summary_report():
                 writer.writerow(output)
             result_dict['annotations'] = list(annotations)
 
-            f.write(json.dumps(result_dict))
+            f.write(json.dumps(result_dict) + "\n")
 
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
 def test_download_dbgap_data_dict(dbgap_data_dict_url):
