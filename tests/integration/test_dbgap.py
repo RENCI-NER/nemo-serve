@@ -275,9 +275,9 @@ def annotate_dbgap_data_dict(method):
     assert dbgap_date_created is not None
     assert dbgap_description is not None
     with open(output_file, 'w') as f:
-        f.write(f"dbGaP data dictionary {OUTPUT_DBGAP_DATA_DICT_FILE}\n")
-        f.write(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}\n")
-        f.write(f" - Description: {dbgap_description}\n")
+        logging.info(f"dbGaP data dictionary {OUTPUT_DBGAP_DATA_DICT_FILE}\n")
+        logging.info(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}\n")
+        logging.info(f" - Description: {dbgap_description}\n")
 
         for variable in data_table.findall('variable'):
             var_id = variable.get('id')
@@ -286,9 +286,14 @@ def annotate_dbgap_data_dict(method):
             # var_type = variable.find('type').text
             values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
 
-            f.write(f"   - Variable {var_id} ({var_name}): {var_desc}\n")
-            for value in values:
-                f.write(f"     - Value: {value}\n")
+            result_dict = {
+                'var_id': var_id,
+                'var_name': var_name,
+                'var_desc': var_desc,
+                'method': method,
+                'values': list(values),
+                'annotations': []
+            }
 
             if method == 'sapbert' or method == 'nameres':
                 annotations = annotate_variable_using_babel_nemoserve(var_name, var_desc, values,
@@ -299,12 +304,12 @@ def annotate_dbgap_data_dict(method):
                 assert Exception("input method must be sapbert, scigraph, or nameres.")
 
             for annotation in annotations:
-                nn_id_str = ""
-                # Not needed on Babel-SAPBERT, since entries are pre-normalized.
-                if 'nn_id' in annotation:
-                    nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
-                f.write(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: "
-                        f"{annotation['obj']}\n")
+                if 'nn_id' not in annotation:
+                    annotation['normalized_id'] = annotation['obj']
+                    annotation['normalized_label'] = annotation['name']
+                elif 'nn_id' in annotation:
+                    annotation['normalized_id'] = annotation['nn_id']
+                    annotation['normalized_label'] = annotation['nn_label']
 
 def annotation_string(annotation):
     """
@@ -400,6 +405,9 @@ def run_summary_report():
                 }
 
                 writer.writerow(output)
+            result_dict['annotations'] = list(annotations)
+
+            f.write(json.dumps(result_dict))
 
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
 def test_download_dbgap_data_dict(dbgap_data_dict_url):
