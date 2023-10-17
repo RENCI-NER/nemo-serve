@@ -312,7 +312,7 @@ def annotate_dbgap_data_dict(method):
             for annotation in annotations:
                 if 'nn_id' not in annotation:
                     annotation['normalized_id'] = annotation['obj']
-                    annotation['normalized_label'] = annotation['name']
+                    annotation['normalized_label'] = annotation.get('label', '')
                 elif 'nn_id' in annotation:
                     annotation['normalized_id'] = annotation['nn_id']
                     annotation['normalized_label'] = annotation['nn_label']
