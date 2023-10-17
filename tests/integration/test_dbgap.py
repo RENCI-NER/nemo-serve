@@ -61,6 +61,9 @@ OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
 OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
                                               "nameres_annot_output.txt")
 OUTPUT_SUMMARY_FILE = os.path.join(OUTPUT_DIR, "annotation_summary_output.csv")
+OUTPUT_SAPBERT_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "sapbert_annot_output.jsonl")
+OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "scigraph_annot_output.jsonl")
+OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "nameres_annot_output.jsonl")
 # Which dbGaP data dictionaries should we test? This should be a URL that points directly to a data_dict.xml file.
 DBGAP_DATA_DICTS_TO_TEST = [
     'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml',
