@@ -236,16 +236,16 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
     # Normalize identifiers.
     for annot in annotations:
         # Try to normalize the ID.
-        mesh = annot['id']
+        curie = annot['id']
 
         response = requests.get(NODE_NORM_ENDPOINT, {
-            'curie': mesh,
+            'curie': curie,
             'conflate': 'true'
         })
         if not response.ok:
             pass
         else:
-            result = response.json().get(mesh, {})
+            result = response.json().get(curie, {})
             if result:
                 normalized_id = result.get('id', {})
                 normalized_identifier = normalized_id.get('identifier')
@@ -255,6 +255,7 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
                     pass
                 else:
                     annot['nn_id'] = normalized_identifier
+                    annot['nn_category'] = result.get('type')[0]
                     annot['nn_label'] = normalized_label
 
     return annotations
@@ -313,12 +314,10 @@ def annotate_dbgap_data_dict(method):
                 assert Exception("input method must be sapbert, scigraph, or nameres.")
 
             for annotation in annotations:
-                if 'nn_id' not in annotation:
-                    annotation['normalized_id'] = annotation['curie']
-                    annotation['normalized_label'] = annotation.get('label', '')
-                elif 'nn_id' in annotation:
+                if 'nn_id' in annotation:
                     annotation['normalized_id'] = annotation['nn_id']
                     annotation['normalized_label'] = annotation['nn_label']
+                    annotation['normalized_category'] = annotation.get('nn_category', '')
 
 def annotation_string(annotation):
     """
