@@ -300,7 +300,7 @@ def annotate_dbgap_data_dict(method):
                 'var_type': var_type,
                 'var_desc': var_desc,
                 'method': method,
-                'values': list(variable.findall('value')),
+                'values': list(values),
                 'annotations': []
             }
 
