@@ -163,7 +163,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
         first_result = result[0]
 
         denotation = dict(token)
-        denotation['id'] = f"{first_result['curie']}"
+        denotation['id'] = first_result['curie']
         denotation['text'] = text
         if method == 'sapbert':
             denotation['score'] = first_result['score']
