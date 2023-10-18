@@ -165,16 +165,15 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
         denotation = dict(token)
         denotation['id'] = first_result['curie']
         denotation['text'] = text
+        denotation['query_bl_type'] = bl_type
         if method == 'sapbert':
             denotation['score'] = first_result['score']
             denotation['label'] = first_result['name']
             denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
-            denotation['query_bl_type'] = bl_type
             denotation['category'] = first_result['category']
         else:  # nameres
             denotation['label'] = first_result['label']
             denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
-            denotation['query_bl_type'] = bl_type
             denotation['category'] = first_result['types'][0]
 
         # These should already be normalized. So let's set nn_id and nn_label.
