@@ -169,7 +169,6 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             denotation['score'] = first_result['score']
             denotation['label'] = first_result['name']
             denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
-            denotation['score'] = first_result['score']
             denotation['query_bl_type'] = bl_type
             denotation['category'] = first_result['category']
         else:  # nameres
