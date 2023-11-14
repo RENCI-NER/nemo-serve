@@ -40,7 +40,7 @@ SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 
 # Configuration: the `/get_normalized_nodes` endpoint on a Node Normalization instance to use.
-NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/1.3/get_normalized_nodes')
+NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/get_normalized_nodes')
 
 # Configuration: the Monarch SciGraph endpoint.
 MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
