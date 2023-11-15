@@ -35,11 +35,11 @@ OUTPUT_DIR = "tests/integration/data/test_pubannotator"
 PUBMED_IDS_TO_TEST = [
     #'PMID:7837719',         # https://pubmed.ncbi.nlm.nih.gov/7837719/
     # Korn et al (2021) COVID-KOP: integrating emerging COVID-19 data with the ROBOKOP database
-    #'PMID:33175089',        # https://pubmed.ncbi.nlm.nih.gov/33175089/
+    'PMID:33175089',        # https://pubmed.ncbi.nlm.nih.gov/33175089/
     #'PMC7890668'            # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7890668/
 
     # Articles from NIH HEAL publication website (https://heal.nih.gov/research/publications)
-    'PMID:33460838'
+    #'PMID:33460838'
 ]
 
 logging.basicConfig(level=logging.INFO)

@@ -1,8 +1,17 @@
 {
-  "text": "COVID-KOP: Integrating Emerging COVID-19 Data with the ROBOKOP Database.\nSUMMARY: In response to the COVID-19 pandemic, we established COVID-KOP, a new knowledgebase integrating the existing ROBOKOP biomedical knowledge graph with information from recent biomedical literature on COVID-19 annotated in the CORD-19 collection. COVID-KOP can be used effectively to generate new hypotheses concerning repurposing of known drugs and clinical drug candidates against COVID-19 by establishing respective confirmatory pathways of drug action.\nAVAILABILITY: COVID-KOP is freely accessible at https://covidkop.renci.org/. For code and instructions for the original ROBOKOP, see: https://github.com/NCATS-Gamma/robokop.",
+  "text": "COVID-KOP: integrating emerging COVID-19 data with the ROBOKOP database\n\nAbstract\n\nSummary\n\nIn response to the COVID-19 pandemic, we established COVID-KOP, a new knowledgebase integrating the existing Reasoning Over Biomedical Objects linked in Knowledge Oriented Pathways (ROBOKOP) biomedical knowledge graph with information from recent biomedical literature on COVID-19 annotated in the CORD-19 collection. COVID-KOP can be used effectively to generate new hypotheses concerning repurposing of known drugs and clinical drug candidates against COVID-19 by establishing respective confirmatory pathways of drug action.\n\nAvailability and implementation\n\nCOVID-KOP is freely accessible at https://covidkop.renci.org/. For code and instructions for the original ROBOKOP, see: https://github.com/NCATS-Gamma/robokop.\n\n1 Introduction\n\nIn the absence of effective medications for COVID-19, there is an urgent need to identify drugs that can combat this ongoing pandemic. This task can be accomplished most rapidly by repurposing the existing medications. Biomedical knowledge graphs such as Reasoning Over Biomedical Objects linked in Knowledge Oriented Pathways (ROBOKOP) provide an efficient way to identify potential candidate drugs by making inferences on the relationships between knowledge graph nodes. We have merged the ROBOKOP knowledge graph with the new supply of COVID-19-related information from recent publications and other knowledge sources to form COVID-KOP.\n\n2 Materials and methods\n\nWe used COVID-19 Open Research Dataset (CORD-19, https://allenai.org/data/cord-19) containing over 60\u00a0000 full-text research papers with ontological tagging provided by the SciBiteAI group (https://github.com/SciBiteLabs/CORD19). We parsed CORD-19 data into a format compatible with the ROBOKOP\u2019s knowledge graph by extracting, sentence by sentence, the counts of ontological terms and tag co-occurrences. This resulted in 800\u00a0000 new edges in the COVID-KOP knowledge graph. In addition, we used the SciGraph tool (https://github.com/SciGraph/SciGraph), which also allows biomedical ontological term tagging and tag co-occurrence counts at the paper rather than sentence level, leading to 4.5 million new edges.\n\nGene Ontology Annotation data for all viral proteins, including those of SARS-CoV-2, were downloaded from the EBI FTP site (see https://github.com/TranslatorIIPrototypes/ViralProteome for details). The knowledge graph integration tool KGX (https://github.com/NCATS-Tangerine/kgx) was used to merge the GOA data and create a ROBOKOP-formatted graph. In total, the COVID-KOP database and knowledge graph comprise nodes for 40\u00a0000 proteins, 4000 NCBITaxon terms, 1300 GO annotations and 232\u00a0000 new edges (labeled as \u2018related_to\u2019) on top of those in ROBOKOP. We use bidirectional edges for these linkages because the connection directionality is not provided in primary sources.\n\nA set of 26 SARS-CoV-2 symptoms was identified from various resources (https://www.cebm.net/covid-19/covid-19-signs-and-symptoms-tracker/; https://covid.cd2h.org/N3C; https://www.hematology.org/covid-19/covid-19-and-coagulopathy) and a recent commentary. This information was manually entered into the COVID-KOP database as edges between the COVID-19 and its phenotypes.\n\nDue to multiple identifier systems used by different databases for the same entities, we utilized the Data Translator Node Normalization API (https://github.com/TranslatorIIPrototypes/NodeNormalization) for data integration. COVID-KOP is powered by the knowledge graph database Neo4J (https://neo4j.com/), which uses Cypher to enable complex graph database queries. The fully integrated COVID-KOP KG can be mined in the same way as ROBOKOP KG.\n\n3 Case study\n\nWe illustrate the utility of COVID-KOP by examining the linagliptin\u2014COVID-19 connection (Fig.\u00a01). Linagliptin is a type 2 diabetes (T2D) drug that is undergoing clinical trials for COVID-19 (https://clinicaltrials.gov/ct2/show/NCT04341935). Linagliptin inhibits dipeptidyl peptidase-4 (DPP-4), which degrades hormones stimulating insulin production. It is known to be overexpressed in patients with T2D. COVID-19 patients with T2D have a higher risk of developing more severe symptoms, possibly due to an increased expression of the host receptor ACE2. \n\nExecution of a COVID-KOP query for linagliptin-COVID-19 pair. (A) Query graph; (B) answer graph for linagliptin-DPP4-T2D-COVID-19 pathway; (C) answer graph for linagliptin-ACE2-T2D-COVID-19 pathway\n\nWe applied COVID-KOP to identify possible mechanistic connections between linagliptin and COVID-19 that would support its expected therapeutic effect or identify possible side effects. Using the COVID-KOP user interface, a query is constructed as follows. Individual nodes are placed and linked to specific biomedical objects (such as node n2 being a gene in Fig.\u00a01A). The user can then link these nodes together in any order. In this case study, node n0 is matched to COVID-19; n1 is marked as any phenotypic feature linked to COVID-19; and n2 is any gene related to a phenotypic feature connected to COVID-19. Finally, n2 must also have a connection to the linagliptin.\n\nExecuting this query generated 47 subgraphs ranked by an algorithm implemented in ROBOKOP, with the pathway serving as a rationale for the linagliptin clinical trial against COVID-19 (Linagliptin-T2D-DPP4-COVID-19; Fig.\u00a01B) ranked the highest. Three conditions\u2014pneumonia, T2D and hypertensive disorder\u2014were identified as associated with COVID-19. Genes associated with these conditions and also linked to linagliptin are annotated in Figure\u00a01B. Pneumonia was not directly related to any of these genes except for transforming growth factor beta (TGF\u03b2-1), the inhibition of which results in increased susceptibility to pneumonia in mice with a pneumonia-resistant phenotype. Relatedly, linagliptin has been reported to \u2018significantly decrease\u2019 TGF\u03b2-1 transcript levels. Our answer graph suggests that linagliptin may inhibit TGF\u03b2-1 transcription and thus possibly increase patients\u2019 risk of developing more severe pneumonia, even though it may alleviate some of the more severe pathologies of COVID-19 seen in T2D patients via DPP-4 inhibition.\n\nWe also uncovered an additional inference associating linagliptin and Angiotensin-Converting Enzyme II (ACE2), the host receptor for SARS-CoV-2 entry: Linagliptin-ACE2-T2D-COVID-19 (Fig.\u00a01C). Downregulation of ACE2 expression in lung tissue has been associated with severe COVID-19 clinical outcomes. Expression of ACE2 is increased in patients with T2D; thus, ACE inhibitors and angiotensin-receptor blockers are commonly used to treat individuals with this condition. A recent study demonstrated that administration of linagliptin significantly upregulated ACE2 expression and was useful in preventing angiotensin II-induced cardiac fibrosis in animal models. It is yet unclear if upregulating ACE2 would be beneficial or detrimental to patients, especially those with T2D; nevertheless, this inference reveals an additional pathway linking linagliptin and COVID-19. Thus, COVID-KOP could help recovering known biochemical pathways associating a drug with COVID-19 (linagliptin-DPP4-T2D -COVID-19) as well as offer potentially novel inferences (linagliptin-TGFB1-Pneumonia-COVID-19).\n\n4 Conclusions\n\nCOVID-KOP is a knowledgebase and web portal that integrates the existing ROBOKOP biomedical knowledge graph with information gathered from recently published biomedical information regarding COVID-19. The presented case study illustrates the utility of COVID-KOP for generating and supporting hypotheses concerning drug repurposing against COVID-19.\n\nFunding\n\nThis work was supported by the National Center for Advancing Translational Sciences, National Institutes of Health [OT2R002514] and National Institutes of Health [1U01CA207160].\n\n Conflict of Interest: none declared.\n\nReferences\n\nGene ontology: tool for the unification of biology\n\nCOVID-19 and diabetes: is this association driven by the DPP4 receptor? Potential clinical and therapeutic implications\n\nROBOKOP KG and KGB: integrated knowledge graphs from federated sources\n\nAre patients with hypertension and diabetes mellitus at increased risk for COVID-19 infection?\n\nThe NCBI Taxonomy database\n\nROBOKOP: an abstraction layer and user interface for knowledge graphs to support question answering\n\nInteractions between antihyperglycemic drugs and the renin-angiotensin system: putative roles in COVID-19. A mini-review\n\nT regulatory cells control susceptibility to invasive pneumococcal pneumonia in mice\n\nCOVID-19, diabetes mellitus and ACE2: the conundrum\n\nCOVID-19: risk for cytokine targeting in chronic inflammatory diseases?\n\nLinagliptin\n\nP1206\u202f: anti-inflammatory and direct antifibrotic effect of oral hepatotropic DPP4 inhibitors in models of NASH and biliary fibrosis\n\nPreservation of glucagon-like peptide-1 level attenuates angiotensin II-induced tissue fibrosis by altering AT1/AT2 receptor expression and angiotensin-converting enzyme 2 activity in rat heart",
   "tracks": [
     {
       "denotations": [
+        {
+          "id": "I1-",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 11,
+            "end": 22
+          },
+          "text": "integrating"
+        },
         {
           "id": "I4-",
           "obj": "biolink:InformationContentEntity",
@@ -10,7 +19,7 @@
             "begin": 41,
             "end": 45
           },
-          "text": "Data"
+          "text": "data"
         },
         {
           "id": "I7-",
@@ -22,175 +31,2875 @@
           "text": "ROBOKOP"
         },
         {
-          "id": "I21-",
+          "id": "I9-",
           "obj": "biolink:Publication",
           "span": {
-            "begin": 152,
-            "end": 165
+            "begin": 72,
+            "end": 80
+          },
+          "text": "Abstract"
+        },
+        {
+          "id": "I10-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 81,
+            "end": 88
+          },
+          "text": "Summary"
+        },
+        {
+          "id": "I16-",
+          "obj": "biolink:Phenomenon",
+          "span": {
+            "begin": 117,
+            "end": 125
+          },
+          "text": "pandemic"
+        },
+        {
+          "id": "I22-",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 159,
+            "end": 172
           },
           "text": "knowledgebase"
         },
         {
-          "id": "I22-",
-          "obj": "biolink:Activity",
-          "span": {
-            "begin": 166,
-            "end": 177
-          },
-          "text": "integrating"
-        },
-        {
-          "id": "I25-",
-          "obj": "biolink:Publication",
-          "span": {
-            "begin": 191,
-            "end": 198
-          },
-          "text": "ROBOKOP"
-        },
-        {
-          "id": "I26-",
+          "id": "I28-",
           "obj": "biolink:InformationContentEntity",
           "span": {
-            "begin": 199,
-            "end": 209
+            "begin": 213,
+            "end": 223
+          },
+          "text": "Biomedical"
+        },
+        {
+          "id": "I34-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 261,
+            "end": 269
+          },
+          "text": "Pathways"
+        },
+        {
+          "id": "I36-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 280,
+            "end": 290
           },
           "text": "biomedical"
         },
         {
-          "id": "I27-",
+          "id": "I37-",
           "obj": "biolink:Publication",
           "span": {
-            "begin": 210,
-            "end": 225
+            "begin": 291,
+            "end": 306
           },
           "text": "knowledge graph"
         },
         {
-          "id": "I30-",
+          "id": "I40-",
           "obj": "biolink:InformationContentEntity",
           "span": {
-            "begin": 231,
-            "end": 242
+            "begin": 312,
+            "end": 323
           },
           "text": "information"
         },
         {
-          "id": "I33-",
+          "id": "I43-",
           "obj": "biolink:InformationContentEntity",
           "span": {
-            "begin": 255,
-            "end": 265
+            "begin": 336,
+            "end": 346
           },
           "text": "biomedical"
         },
         {
-          "id": "I34-",
+          "id": "I44-",
           "obj": "biolink:Publication",
           "span": {
-            "begin": 266,
-            "end": 276
+            "begin": 347,
+            "end": 357
           },
           "text": "literature"
         },
         {
-          "id": "I50-",
+          "id": "I60-",
           "obj": "biolink:InformationContentEntity",
           "span": {
-            "begin": 376,
-            "end": 386
+            "begin": 457,
+            "end": 467
           },
           "text": "hypotheses"
         },
         {
-          "id": "I52-",
-          "obj": "biolink:Phenomenon",
-          "span": {
-            "begin": 398,
-            "end": 409
-          },
-          "text": "repurposing"
-        },
-        {
-          "id": "I55-",
+          "id": "I65-",
           "obj": "biolink:Drug",
           "span": {
-            "begin": 419,
-            "end": 424
+            "begin": 500,
+            "end": 505
           },
           "text": "drugs"
         },
         {
-          "id": "I57-",
+          "id": "I67-",
           "obj": "biolink:InformationContentEntity",
           "span": {
-            "begin": 429,
-            "end": 437
+            "begin": 510,
+            "end": 518
           },
           "text": "clinical"
-        },
-        {
-          "id": "I58-",
-          "obj": "biolink:Drug",
-          "span": {
-            "begin": 438,
-            "end": 453
-          },
-          "text": "drug candidates"
-        },
-        {
-          "id": "I65-",
-          "obj": "biolink:InformationContentEntity",
-          "span": {
-            "begin": 498,
-            "end": 510
-          },
-          "text": "confirmatory"
-        },
-        {
-          "id": "I66-",
-          "obj": "biolink:InformationContentEntity",
-          "span": {
-            "begin": 511,
-            "end": 519
-          },
-          "text": "pathways"
         },
         {
           "id": "I68-",
           "obj": "biolink:Drug",
           "span": {
-            "begin": 523,
-            "end": 527
+            "begin": 519,
+            "end": 534
+          },
+          "text": "drug candidates"
+        },
+        {
+          "id": "I75-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 579,
+            "end": 591
+          },
+          "text": "confirmatory"
+        },
+        {
+          "id": "I76-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 592,
+            "end": 600
+          },
+          "text": "pathways"
+        },
+        {
+          "id": "I78-",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 604,
+            "end": 608
           },
           "text": "drug"
         },
         {
-          "id": "I69-",
+          "id": "I79-",
           "obj": "biolink:Activity",
           "span": {
-            "begin": 528,
-            "end": 534
+            "begin": 609,
+            "end": 615
           },
           "text": "action"
         },
         {
-          "id": "I80-",
+          "id": "I82-",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 634,
+            "end": 648
+          },
+          "text": "implementation"
+        },
+        {
+          "id": "I92-",
           "obj": "biolink:Publication",
           "span": {
-            "begin": 626,
-            "end": 638
+            "begin": 725,
+            "end": 737
           },
           "text": "instructions"
         },
         {
-          "id": "I84-",
+          "id": "I96-",
           "obj": "biolink:Publication",
           "span": {
-            "begin": 656,
-            "end": 663
+            "begin": 755,
+            "end": 809
+          },
+          "text": "ROBOKOP https://github.com/NCATS-Gamma/robokop "
+        },
+        {
+          "id": "I105-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 842,
+            "end": 851
+          },
+          "text": "effective"
+        },
+        {
+          "id": "I106-",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 852,
+            "end": 863
+          },
+          "text": "medications"
+        },
+        {
+          "id": "I116-",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 914,
+            "end": 919
+          },
+          "text": "drugs"
+        },
+        {
+          "id": "I122-",
+          "obj": "biolink:Phenomenon",
+          "span": {
+            "begin": 949,
+            "end": 957
+          },
+          "text": "pandemic"
+        },
+        {
+          "id": "I11-1",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 1037,
+            "end": 1048
+          },
+          "text": "medications"
+        },
+        {
+          "id": "I12-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1050,
+            "end": 1060
+          },
+          "text": "Biomedical"
+        },
+        {
+          "id": "I13-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1061,
+            "end": 1077
+          },
+          "text": "knowledge graphs"
+        },
+        {
+          "id": "I19-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1101,
+            "end": 1111
+          },
+          "text": "Biomedical"
+        },
+        {
+          "id": "I20-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1112,
+            "end": 1119
+          },
+          "text": "Objects"
+        },
+        {
+          "id": "I33-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1205,
+            "end": 1214
+          },
+          "text": "potential"
+        },
+        {
+          "id": "I34-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1215,
+            "end": 1224
+          },
+          "text": "candidate"
+        },
+        {
+          "id": "I35-1",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 1225,
+            "end": 1230
+          },
+          "text": "drugs"
+        },
+        {
+          "id": "I41-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1259,
+            "end": 1272
+          },
+          "text": "relationships"
+        },
+        {
+          "id": "I43-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1281,
+            "end": 1302
+          },
+          "text": "knowledge graph nodes"
+        },
+        {
+          "id": "I50-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1323,
+            "end": 1330
           },
           "text": "ROBOKOP"
+        },
+        {
+          "id": "I51-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1331,
+            "end": 1346
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I59-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1387,
+            "end": 1398
+          },
+          "text": "information"
+        },
+        {
+          "id": "I62-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1411,
+            "end": 1423
+          },
+          "text": "publications"
+        },
+        {
+          "id": "I65-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1434,
+            "end": 1451
+          },
+          "text": "knowledge sources"
+        },
+        {
+          "id": "I86-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1601,
+            "end": 1610
+          },
+          "text": "full-text"
+        },
+        {
+          "id": "I87-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1611,
+            "end": 1626
+          },
+          "text": "research papers"
+        },
+        {
+          "id": "I90-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1632,
+            "end": 1643
+          },
+          "text": "ontological"
+        },
+        {
+          "id": "I91-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1644,
+            "end": 1651
+          },
+          "text": "tagging"
+        },
+        {
+          "id": "I101-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1743,
+            "end": 1747
+          },
+          "text": "data"
+        },
+        {
+          "id": "I108-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1782,
+            "end": 1791
+          },
+          "text": "ROBOKOP\u2019s"
+        },
+        {
+          "id": "I109-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1792,
+            "end": 1807
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I113-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1823,
+            "end": 1831
+          },
+          "text": "sentence"
+        },
+        {
+          "id": "I115-1",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1835,
+            "end": 1843
+          },
+          "text": "sentence"
+        },
+        {
+          "id": "I117-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1849,
+            "end": 1855
+          },
+          "text": "counts"
+        },
+        {
+          "id": "I119-1",
+          "obj": "biolink:NamedThing",
+          "span": {
+            "begin": 1859,
+            "end": 1876
+          },
+          "text": "ontological terms"
+        },
+        {
+          "id": "I123-1",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1885,
+            "end": 1899
+          },
+          "text": "co-occurrences"
+        },
+        {
+          "id": "I6-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1932,
+            "end": 1937
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I10-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 1955,
+            "end": 1970
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I23-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2069,
+            "end": 2079
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I24-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2080,
+            "end": 2096
+          },
+          "text": "ontological term"
+        },
+        {
+          "id": "I26-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2097,
+            "end": 2104
+          },
+          "text": "tagging"
+        },
+        {
+          "id": "I29-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2113,
+            "end": 2133
+          },
+          "text": "co-occurrence counts"
+        },
+        {
+          "id": "I33-2",
+          "obj": "biolink:PhysicalEntity",
+          "span": {
+            "begin": 2141,
+            "end": 2146
+          },
+          "text": "paper"
+        },
+        {
+          "id": "I36-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2159,
+            "end": 2167
+          },
+          "text": "sentence"
+        },
+        {
+          "id": "I43-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2202,
+            "end": 2207
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I46-2",
+          "obj": "biolink:NamedThing",
+          "span": {
+            "begin": 2223,
+            "end": 2233
+          },
+          "text": "Annotation"
+        },
+        {
+          "id": "I47-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2234,
+            "end": 2238
+          },
+          "text": "data"
+        },
+        {
+          "id": "I50-2",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 2247,
+            "end": 2252
+          },
+          "text": "viral"
+        },
+        {
+          "id": "I51-2",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 2253,
+            "end": 2261
+          },
+          "text": "proteins"
+        },
+        {
+          "id": "I55-2",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 2282,
+            "end": 2292
+          },
+          "text": "SARS-CoV-2"
+        },
+        {
+          "id": "I68-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2411,
+            "end": 2426
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I72-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2444,
+            "end": 2447
+          },
+          "text": "KGX"
+        },
+        {
+          "id": "I79-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2511,
+            "end": 2514
+          },
+          "text": "GOA"
+        },
+        {
+          "id": "I80-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2515,
+            "end": 2519
+          },
+          "text": "data"
+        },
+        {
+          "id": "I90-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2582,
+            "end": 2590
+          },
+          "text": "database"
+        },
+        {
+          "id": "I92-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2595,
+            "end": 2610
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I95-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2620,
+            "end": 2625
+          },
+          "text": "nodes"
+        },
+        {
+          "id": "I99-2",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 2637,
+            "end": 2645
+          },
+          "text": "proteins"
+        },
+        {
+          "id": "I101-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2652,
+            "end": 2661
+          },
+          "text": "NCBITaxon"
+        },
+        {
+          "id": "I104-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2674,
+            "end": 2676
+          },
+          "text": "GO"
+        },
+        {
+          "id": "I105-2",
+          "obj": "biolink:NamedThing",
+          "span": {
+            "begin": 2677,
+            "end": 2688
+          },
+          "text": "annotations"
+        },
+        {
+          "id": "I110-2",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2705,
+            "end": 2710
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I119-2",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 2756,
+            "end": 2763
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I2-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2773,
+            "end": 2786
+          },
+          "text": "bidirectional"
+        },
+        {
+          "id": "I3-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2787,
+            "end": 2792
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I6-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2803,
+            "end": 2811
+          },
+          "text": "linkages"
+        },
+        {
+          "id": "I10-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 2835,
+            "end": 2849
+          },
+          "text": "directionality"
+        },
+        {
+          "id": "I16-3",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 2877,
+            "end": 2884
+          },
+          "text": "sources"
+        },
+        {
+          "id": "I21-3",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 2898,
+            "end": 2907
+          },
+          "text": "SARS-CoV-"
+        },
+        {
+          "id": "I22-3",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 2909,
+            "end": 2917
+          },
+          "text": "symptoms"
+        },
+        {
+          "id": "I33-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3122,
+            "end": 3139
+          },
+          "text": "recent commentary"
+        },
+        {
+          "id": "I36-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 3146,
+            "end": 3157
+          },
+          "text": "information"
+        },
+        {
+          "id": "I39-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 3171,
+            "end": 3178
+          },
+          "text": "entered"
+        },
+        {
+          "id": "I43-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3198,
+            "end": 3206
+          },
+          "text": "database"
+        },
+        {
+          "id": "I45-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 3210,
+            "end": 3215
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I51-3",
+          "obj": "biolink:OrganismAttribute",
+          "span": {
+            "begin": 3245,
+            "end": 3255
+          },
+          "text": "phenotypes"
+        },
+        {
+          "id": "I55-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3273,
+            "end": 3291
+          },
+          "text": "identifier systems"
+        },
+        {
+          "id": "I60-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3310,
+            "end": 3319
+          },
+          "text": "databases"
+        },
+        {
+          "id": "I68-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 3359,
+            "end": 3363
+          },
+          "text": "Data"
+        },
+        {
+          "id": "I75-3",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 3464,
+            "end": 3468
+          },
+          "text": "data"
+        },
+        {
+          "id": "I76-3",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 3469,
+            "end": 3480
+          },
+          "text": "integration"
+        },
+        {
+          "id": "I82-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3510,
+            "end": 3534
+          },
+          "text": "knowledge graph database"
+        },
+        {
+          "id": "I85-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3535,
+            "end": 3540
+          },
+          "text": "Neo4J"
+        },
+        {
+          "id": "I89-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3574,
+            "end": 3580
+          },
+          "text": "Cypher"
+        },
+        {
+          "id": "I93-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3599,
+            "end": 3604
+          },
+          "text": "graph"
+        },
+        {
+          "id": "I94-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3605,
+            "end": 3613
+          },
+          "text": "database"
+        },
+        {
+          "id": "I95-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3614,
+            "end": 3621
+          },
+          "text": "queries"
+        },
+        {
+          "id": "I100-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3654,
+            "end": 3656
+          },
+          "text": "KG"
+        },
+        {
+          "id": "I110-3",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 3697,
+            "end": 3699
+          },
+          "text": "KG"
+        },
+        {
+          "id": "I12-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 3773,
+            "end": 3792
+          },
+          "text": "linagliptin\u2014COVID-1"
+        },
+        {
+          "id": "I13-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 3794,
+            "end": 3804
+          },
+          "text": "connection"
+        },
+        {
+          "id": "I16-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 3815,
+            "end": 3826
+          },
+          "text": "Linagliptin"
+        },
+        {
+          "id": "I19-4",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 3832,
+            "end": 3847
+          },
+          "text": "type  diabetes"
+        },
+        {
+          "id": "I23-4",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 3854,
+            "end": 3858
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I27-4",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 3878,
+            "end": 3893
+          },
+          "text": "clinical trials"
+        },
+        {
+          "id": "I32-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 3958,
+            "end": 3969
+          },
+          "text": "Linagliptin"
+        },
+        {
+          "id": "I34-4",
+          "obj": "biolink:ChemicalEntity",
+          "span": {
+            "begin": 3979,
+            "end": 4000
+          },
+          "text": "dipeptidyl peptidase-"
+        },
+        {
+          "id": "I39-4",
+          "obj": "biolink:ChemicalEntity",
+          "span": {
+            "begin": 4026,
+            "end": 4034
+          },
+          "text": "hormones"
+        },
+        {
+          "id": "I41-4",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 4047,
+            "end": 4065
+          },
+          "text": "insulin production"
+        },
+        {
+          "id": "I48-4",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 4085,
+            "end": 4098
+          },
+          "text": "overexpressed"
+        },
+        {
+          "id": "I50-4",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 4102,
+            "end": 4110
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I52-4",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 4116,
+            "end": 4119
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I54-4",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 4130,
+            "end": 4138
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I56-4",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 4144,
+            "end": 4147
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I60-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4162,
+            "end": 4166
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I64-4",
+          "obj": "biolink:DiseaseOrPhenotypicFeature",
+          "span": {
+            "begin": 4186,
+            "end": 4192
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I65-4",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 4193,
+            "end": 4201
+          },
+          "text": "symptoms"
+        },
+        {
+          "id": "I70-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4222,
+            "end": 4231
+          },
+          "text": "increased"
+        },
+        {
+          "id": "I71-4",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 4232,
+            "end": 4242
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I74-4",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 4250,
+            "end": 4263
+          },
+          "text": "host receptor"
+        },
+        {
+          "id": "I76-4",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 4264,
+            "end": 4268
+          },
+          "text": "ACE2"
+        },
+        {
+          "id": "I81-4",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 4295,
+            "end": 4300
+          },
+          "text": "query"
+        },
+        {
+          "id": "I83-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 4305,
+            "end": 4324
+          },
+          "text": "linagliptin-COVID-1"
+        },
+        {
+          "id": "I84-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4326,
+            "end": 4330
+          },
+          "text": "pair"
+        },
+        {
+          "id": "I86-4",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 4336,
+            "end": 4341
+          },
+          "text": "Query"
+        },
+        {
+          "id": "I87-4",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 4342,
+            "end": 4347
+          },
+          "text": "graph"
+        },
+        {
+          "id": "I89-4",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 4353,
+            "end": 4365
+          },
+          "text": "answer graph"
+        },
+        {
+          "id": "I92-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 4370,
+            "end": 4398
+          },
+          "text": "linagliptin-DPP4-T2D-COVID-1"
+        },
+        {
+          "id": "I93-4",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 4400,
+            "end": 4407
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I95-4",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 4413,
+            "end": 4425
+          },
+          "text": "answer graph"
+        },
+        {
+          "id": "I98-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 4430,
+            "end": 4458
+          },
+          "text": "linagliptin-ACE2-T2D-COVID-1"
+        },
+        {
+          "id": "I99-4",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 4460,
+            "end": 4467
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I101-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4471,
+            "end": 4478
+          },
+          "text": "applied"
+        },
+        {
+          "id": "I106-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4510,
+            "end": 4521
+          },
+          "text": "mechanistic"
+        },
+        {
+          "id": "I107-4",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4522,
+            "end": 4533
+          },
+          "text": "connections"
+        },
+        {
+          "id": "I109-4",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 4542,
+            "end": 4553
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I117-4",
+          "obj": "biolink:ClinicalAttribute",
+          "span": {
+            "begin": 4599,
+            "end": 4617
+          },
+          "text": "therapeutic effect"
+        },
+        {
+          "id": "I122-4",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 4639,
+            "end": 4651
+          },
+          "text": "side effects"
+        },
+        {
+          "id": "I6-5",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 4695,
+            "end": 4700
+          },
+          "text": "query"
+        },
+        {
+          "id": "I12-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4739,
+            "end": 4744
+          },
+          "text": "nodes"
+        },
+        {
+          "id": "I19-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4779,
+            "end": 4789
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I23-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4807,
+            "end": 4811
+          },
+          "text": "node"
+        },
+        {
+          "id": "I27-5",
+          "obj": "biolink:Gene",
+          "span": {
+            "begin": 4823,
+            "end": 4827
+          },
+          "text": "gene"
+        },
+        {
+          "id": "I37-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4870,
+            "end": 4875
+          },
+          "text": "nodes"
+        },
+        {
+          "id": "I46-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4919,
+            "end": 4923
+          },
+          "text": "node"
+        },
+        {
+          "id": "I57-5",
+          "obj": "biolink:OrganismAttribute",
+          "span": {
+            "begin": 4971,
+            "end": 4981
+          },
+          "text": "phenotypic"
+        },
+        {
+          "id": "I58-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 4982,
+            "end": 4989
+          },
+          "text": "feature"
+        },
+        {
+          "id": "I66-5",
+          "obj": "biolink:Gene",
+          "span": {
+            "begin": 5024,
+            "end": 5028
+          },
+          "text": "gene"
+        },
+        {
+          "id": "I70-5",
+          "obj": "biolink:OrganismAttribute",
+          "span": {
+            "begin": 5042,
+            "end": 5052
+          },
+          "text": "phenotypic"
+        },
+        {
+          "id": "I71-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5053,
+            "end": 5060
+          },
+          "text": "feature"
+        },
+        {
+          "id": "I84-5",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 5131,
+            "end": 5142
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I87-5",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 5159,
+            "end": 5164
+          },
+          "text": "query"
+        },
+        {
+          "id": "I90-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5178,
+            "end": 5187
+          },
+          "text": "subgraphs"
+        },
+        {
+          "id": "I94-5",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 5201,
+            "end": 5210
+          },
+          "text": "algorithm"
+        },
+        {
+          "id": "I97-5",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 5226,
+            "end": 5233
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I100-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5244,
+            "end": 5251
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I104-5",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5265,
+            "end": 5274
+          },
+          "text": "rationale"
+        },
+        {
+          "id": "I107-5",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 5283,
+            "end": 5294
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I108-5",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 5295,
+            "end": 5309
+          },
+          "text": "clinical trial"
+        },
+        {
+          "id": "I1-6",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 5369,
+            "end": 5375
+          },
+          "text": "ranked"
+        },
+        {
+          "id": "I5-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5395,
+            "end": 5415
+          },
+          "text": "conditions\u2014pneumonia"
+        },
+        {
+          "id": "I6-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5417,
+            "end": 5420
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I8-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5425,
+            "end": 5451
+          },
+          "text": "hypertensive disorder\u2014were"
+        },
+        {
+          "id": "I12-6",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5466,
+            "end": 5481
+          },
+          "text": "associated with"
+        },
+        {
+          "id": "I15-6",
+          "obj": "biolink:Gene",
+          "span": {
+            "begin": 5492,
+            "end": 5497
+          },
+          "text": "Genes"
+        },
+        {
+          "id": "I16-6",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5498,
+            "end": 5513
+          },
+          "text": "associated with"
+        },
+        {
+          "id": "I19-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5520,
+            "end": 5530
+          },
+          "text": "conditions"
+        },
+        {
+          "id": "I24-6",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 5550,
+            "end": 5561
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I30-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5590,
+            "end": 5599
+          },
+          "text": "Pneumonia"
+        },
+        {
+          "id": "I39-6",
+          "obj": "biolink:Gene",
+          "span": {
+            "begin": 5641,
+            "end": 5646
+          },
+          "text": "genes"
+        },
+        {
+          "id": "I42-6",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 5658,
+            "end": 5689
+          },
+          "text": "transforming growth factor beta"
+        },
+        {
+          "id": "I48-6",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 5704,
+            "end": 5714
+          },
+          "text": "inhibition"
+        },
+        {
+          "id": "I54-6",
+          "obj": "biolink:ClinicalAttribute",
+          "span": {
+            "begin": 5745,
+            "end": 5759
+          },
+          "text": "susceptibility"
+        },
+        {
+          "id": "I56-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5763,
+            "end": 5772
+          },
+          "text": "pneumonia"
+        },
+        {
+          "id": "I58-6",
+          "obj": "biolink:OrganismTaxon",
+          "span": {
+            "begin": 5776,
+            "end": 5780
+          },
+          "text": "mice"
+        },
+        {
+          "id": "I61-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 5788,
+            "end": 5807
+          },
+          "text": "pneumonia-resistant"
+        },
+        {
+          "id": "I62-6",
+          "obj": "biolink:OrganismAttribute",
+          "span": {
+            "begin": 5808,
+            "end": 5817
+          },
+          "text": "phenotype"
+        },
+        {
+          "id": "I64-6",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 5830,
+            "end": 5886
+          },
+          "text": "linagliptin \u2018significantly decrease"
+        },
+        {
+          "id": "I72-6",
+          "obj": "biolink:ChemicalEntity",
+          "span": {
+            "begin": 5895,
+            "end": 5905
+          },
+          "text": "transcript"
+        },
+        {
+          "id": "I73-6",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 5906,
+            "end": 5912
+          },
+          "text": "levels"
+        },
+        {
+          "id": "I79-6",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 5945,
+            "end": 5956
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I81-6",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 5961,
+            "end": 5968
+          },
+          "text": "inhibit"
+        },
+        {
+          "id": "I83-6",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 5976,
+            "end": 5989
+          },
+          "text": "transcription"
+        },
+        {
+          "id": "I87-6",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6008,
+            "end": 6016
+          },
+          "text": "increase"
+        },
+        {
+          "id": "I88-6",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 6017,
+            "end": 6025
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I89-6",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6027,
+            "end": 6031
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I93-6",
+          "obj": "biolink:DiseaseOrPhenotypicFeature",
+          "span": {
+            "begin": 6051,
+            "end": 6057
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I94-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 6058,
+            "end": 6067
+          },
+          "text": "pneumonia"
+        },
+        {
+          "id": "I104-6",
+          "obj": "biolink:DiseaseOrPhenotypicFeature",
+          "span": {
+            "begin": 6115,
+            "end": 6121
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I105-6",
+          "obj": "biolink:NamedThing",
+          "span": {
+            "begin": 6122,
+            "end": 6133
+          },
+          "text": "pathologies"
+        },
+        {
+          "id": "I110-6",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 6154,
+            "end": 6157
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I111-6",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 6158,
+            "end": 6166
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I114-6",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 6177,
+            "end": 6187
+          },
+          "text": "inhibition"
+        },
+        {
+          "id": "I5-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6222,
+            "end": 6231
+          },
+          "text": "inference"
+        },
+        {
+          "id": "I7-7",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 6244,
+            "end": 6255
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I14-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6305,
+            "end": 6318
+          },
+          "text": "host receptor"
+        },
+        {
+          "id": "I17-7",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 6323,
+            "end": 6332
+          },
+          "text": "SARS-CoV-"
+        },
+        {
+          "id": "I19-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6341,
+            "end": 6369
+          },
+          "text": "Linagliptin-ACE2-T2D-COVID-1"
+        },
+        {
+          "id": "I22-7",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 6382,
+            "end": 6396
+          },
+          "text": "Downregulation"
+        },
+        {
+          "id": "I24-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6400,
+            "end": 6403
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I25-7",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 6405,
+            "end": 6415
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I27-7",
+          "obj": "biolink:GrossAnatomicalStructure",
+          "span": {
+            "begin": 6419,
+            "end": 6423
+          },
+          "text": "lung"
+        },
+        {
+          "id": "I28-7",
+          "obj": "biolink:GrossAnatomicalStructure",
+          "span": {
+            "begin": 6424,
+            "end": 6430
+          },
+          "text": "tissue"
+        },
+        {
+          "id": "I31-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6440,
+            "end": 6455
+          },
+          "text": "associated with"
+        },
+        {
+          "id": "I33-7",
+          "obj": "biolink:DiseaseOrPhenotypicFeature",
+          "span": {
+            "begin": 6456,
+            "end": 6462
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I35-7",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 6472,
+            "end": 6489
+          },
+          "text": "clinical outcomes"
+        },
+        {
+          "id": "I37-7",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 6491,
+            "end": 6501
+          },
+          "text": "Expression"
+        },
+        {
+          "id": "I39-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6505,
+            "end": 6508
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I41-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6513,
+            "end": 6522
+          },
+          "text": "increased"
+        },
+        {
+          "id": "I43-7",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 6526,
+            "end": 6534
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I45-7",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 6540,
+            "end": 6543
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I47-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6551,
+            "end": 6554
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I50-7",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 6570,
+            "end": 6599
+          },
+          "text": "angiotensin-receptor blockers"
+        },
+        {
+          "id": "I56-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6621,
+            "end": 6626
+          },
+          "text": "treat"
+        },
+        {
+          "id": "I57-7",
+          "obj": "biolink:PopulationOfIndividualOrganisms",
+          "span": {
+            "begin": 6627,
+            "end": 6638
+          },
+          "text": "individuals"
+        },
+        {
+          "id": "I63-7",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 6669,
+            "end": 6674
+          },
+          "text": "study"
+        },
+        {
+          "id": "I66-7",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 6693,
+            "end": 6707
+          },
+          "text": "administration"
+        },
+        {
+          "id": "I68-7",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 6711,
+            "end": 6722
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I70-7",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 6737,
+            "end": 6748
+          },
+          "text": "upregulated"
+        },
+        {
+          "id": "I71-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6749,
+            "end": 6752
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I72-7",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 6754,
+            "end": 6764
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I77-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6783,
+            "end": 6793
+          },
+          "text": "preventing"
+        },
+        {
+          "id": "I80-7",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 6817,
+            "end": 6833
+          },
+          "text": "cardiac fibrosis"
+        },
+        {
+          "id": "I83-7",
+          "obj": "biolink:OrganismTaxon",
+          "span": {
+            "begin": 6837,
+            "end": 6850
+          },
+          "text": "animal models"
+        },
+        {
+          "id": "I90-7",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 6873,
+            "end": 6885
+          },
+          "text": "upregulating"
+        },
+        {
+          "id": "I91-7",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 6886,
+            "end": 6889
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I94-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6900,
+            "end": 6910
+          },
+          "text": "beneficial"
+        },
+        {
+          "id": "I96-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6914,
+            "end": 6925
+          },
+          "text": "detrimental"
+        },
+        {
+          "id": "I98-7",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 6929,
+            "end": 6937
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I102-7",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 6961,
+            "end": 6964
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I105-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6985,
+            "end": 6994
+          },
+          "text": "inference"
+        },
+        {
+          "id": "I106-7",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 6995,
+            "end": 7002
+          },
+          "text": "reveals"
+        },
+        {
+          "id": "I109-7",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 7017,
+            "end": 7024
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I111-7",
+          "obj": "biolink:SmallMolecule",
+          "span": {
+            "begin": 7033,
+            "end": 7044
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I6-8",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 7103,
+            "end": 7123
+          },
+          "text": "biochemical pathways"
+        },
+        {
+          "id": "I8-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7124,
+            "end": 7135
+          },
+          "text": "associating"
+        },
+        {
+          "id": "I10-8",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 7138,
+            "end": 7142
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I20-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7219,
+            "end": 7224
+          },
+          "text": "novel"
+        },
+        {
+          "id": "I21-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7225,
+            "end": 7235
+          },
+          "text": "inferences"
+        },
+        {
+          "id": "I28-8",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 7305,
+            "end": 7318
+          },
+          "text": "knowledgebase"
+        },
+        {
+          "id": "I30-8",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 7323,
+            "end": 7326
+          },
+          "text": "web"
+        },
+        {
+          "id": "I31-8",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 7327,
+            "end": 7333
+          },
+          "text": "portal"
+        },
+        {
+          "id": "I33-8",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 7339,
+            "end": 7349
+          },
+          "text": "integrates"
+        },
+        {
+          "id": "I36-8",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 7363,
+            "end": 7370
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I37-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7371,
+            "end": 7381
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I38-8",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 7382,
+            "end": 7397
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I41-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7403,
+            "end": 7414
+          },
+          "text": "information"
+        },
+        {
+          "id": "I45-8",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 7438,
+            "end": 7447
+          },
+          "text": "published"
+        },
+        {
+          "id": "I46-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7448,
+            "end": 7470
+          },
+          "text": "biomedical information"
+        },
+        {
+          "id": "I63-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7583,
+            "end": 7593
+          },
+          "text": "hypotheses"
+        },
+        {
+          "id": "I65-8",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 7605,
+            "end": 7609
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I66-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7610,
+            "end": 7621
+          },
+          "text": "repurposing"
+        },
+        {
+          "id": "I100-8",
+          "obj": "biolink:NamedThing",
+          "span": {
+            "begin": 7879,
+            "end": 7887
+          },
+          "text": "ontology"
+        },
+        {
+          "id": "I104-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7902,
+            "end": 7913
+          },
+          "text": "unification"
+        },
+        {
+          "id": "I106-8",
+          "obj": "biolink:NamedThing",
+          "span": {
+            "begin": 7917,
+            "end": 7924
+          },
+          "text": "biology"
+        },
+        {
+          "id": "I109-8",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 7938,
+            "end": 7946
+          },
+          "text": "diabetes"
+        },
+        {
+          "id": "I112-8",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 7956,
+            "end": 7967
+          },
+          "text": "association"
+        },
+        {
+          "id": "I116-8",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 7982,
+            "end": 7985
+          },
+          "text": "DPP"
+        },
+        {
+          "id": "I0-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8006,
+            "end": 8015
+          },
+          "text": "Potential"
+        },
+        {
+          "id": "I1-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8016,
+            "end": 8024
+          },
+          "text": "clinical"
+        },
+        {
+          "id": "I3-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8029,
+            "end": 8040
+          },
+          "text": "therapeutic"
+        },
+        {
+          "id": "I5-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8054,
+            "end": 8061
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I8-9",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 8069,
+            "end": 8072
+          },
+          "text": "KGB"
+        },
+        {
+          "id": "I9-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8074,
+            "end": 8084
+          },
+          "text": "integrated"
+        },
+        {
+          "id": "I10-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8085,
+            "end": 8101
+          },
+          "text": "knowledge graphs"
+        },
+        {
+          "id": "I13-9",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 8107,
+            "end": 8116
+          },
+          "text": "federated"
+        },
+        {
+          "id": "I14-9",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 8117,
+            "end": 8124
+          },
+          "text": "sources"
+        },
+        {
+          "id": "I16-9",
+          "obj": "biolink:Cohort",
+          "span": {
+            "begin": 8129,
+            "end": 8137
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I18-9",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 8143,
+            "end": 8155
+          },
+          "text": "hypertension"
+        },
+        {
+          "id": "I20-9",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 8160,
+            "end": 8177
+          },
+          "text": "diabetes mellitus"
+        },
+        {
+          "id": "I24-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8191,
+            "end": 8195
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I30-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8229,
+            "end": 8237
+          },
+          "text": "Taxonomy"
+        },
+        {
+          "id": "I31-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8238,
+            "end": 8246
+          },
+          "text": "database"
+        },
+        {
+          "id": "I32-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8247,
+            "end": 8254
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I34-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8259,
+            "end": 8276
+          },
+          "text": "abstraction layer"
+        },
+        {
+          "id": "I37-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8281,
+            "end": 8285
+          },
+          "text": "user"
+        },
+        {
+          "id": "I38-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8286,
+            "end": 8299
+          },
+          "text": "interface for"
+        },
+        {
+          "id": "I40-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8300,
+            "end": 8316
+          },
+          "text": "knowledge graphs"
+        },
+        {
+          "id": "I44-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8328,
+            "end": 8346
+          },
+          "text": "question answering"
+        },
+        {
+          "id": "I46-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8347,
+            "end": 8359
+          },
+          "text": "Interactions"
+        },
+        {
+          "id": "I48-9",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 8368,
+            "end": 8391
+          },
+          "text": "antihyperglycemic drugs"
+        },
+        {
+          "id": "I52-9",
+          "obj": "biolink:GrossAnatomicalStructure",
+          "span": {
+            "begin": 8400,
+            "end": 8424
+          },
+          "text": "renin-angiotensin system"
+        },
+        {
+          "id": "I54-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8426,
+            "end": 8434
+          },
+          "text": "putative"
+        },
+        {
+          "id": "I55-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8435,
+            "end": 8440
+          },
+          "text": "roles"
+        },
+        {
+          "id": "I59-9",
+          "obj": "biolink:Publication",
+          "span": {
+            "begin": 8456,
+            "end": 8467
+          },
+          "text": "mini-review"
+        },
+        {
+          "id": "I64-9",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 8495,
+            "end": 8509
+          },
+          "text": "susceptibility"
+        },
+        {
+          "id": "I66-9",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 8513,
+            "end": 8544
+          },
+          "text": "invasive pneumococcal pneumonia"
+        },
+        {
+          "id": "I70-9",
+          "obj": "biolink:OrganismTaxon",
+          "span": {
+            "begin": 8548,
+            "end": 8552
+          },
+          "text": "mice"
+        },
+        {
+          "id": "I72-9",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 8563,
+            "end": 8580
+          },
+          "text": "diabetes mellitus"
+        },
+        {
+          "id": "I75-9",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 8585,
+            "end": 8589
+          },
+          "text": "ACE2"
+        },
+        {
+          "id": "I79-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8615,
+            "end": 8619
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I81-9",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 8624,
+            "end": 8632
+          },
+          "text": "cytokine"
+        },
+        {
+          "id": "I82-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8633,
+            "end": 8642
+          },
+          "text": "targeting"
+        },
+        {
+          "id": "I84-9",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 8646,
+            "end": 8675
+          },
+          "text": "chronic inflammatory diseases"
+        },
+        {
+          "id": "I90-9",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 8697,
+            "end": 8714
+          },
+          "text": "anti-inflammatory"
+        },
+        {
+          "id": "I93-9",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 8726,
+            "end": 8745
+          },
+          "text": "antifibrotic effect"
+        },
+        {
+          "id": "I96-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8749,
+            "end": 8753
+          },
+          "text": "oral"
+        },
+        {
+          "id": "I97-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8754,
+            "end": 8766
+          },
+          "text": "hepatotropic"
+        },
+        {
+          "id": "I98-9",
+          "obj": "biolink:Drug",
+          "span": {
+            "begin": 8767,
+            "end": 8770
+          },
+          "text": "DPP"
+        },
+        {
+          "id": "I101-9",
+          "obj": "biolink:BiologicalEntity",
+          "span": {
+            "begin": 8786,
+            "end": 8792
+          },
+          "text": "models"
+        },
+        {
+          "id": "I103-9",
+          "obj": "biolink:Disease",
+          "span": {
+            "begin": 8796,
+            "end": 8800
+          },
+          "text": "NASH"
+        },
+        {
+          "id": "I105-9",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 8805,
+            "end": 8821
+          },
+          "text": "biliary fibrosis"
+        },
+        {
+          "id": "I107-9",
+          "obj": "biolink:Procedure",
+          "span": {
+            "begin": 8822,
+            "end": 8834
+          },
+          "text": "Preservation"
+        },
+        {
+          "id": "I109-9",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 8838,
+            "end": 8860
+          },
+          "text": "glucagon-like peptide-"
+        },
+        {
+          "id": "I111-9",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 8862,
+            "end": 8867
+          },
+          "text": "level"
+        },
+        {
+          "id": "I112-9",
+          "obj": "biolink:Activity",
+          "span": {
+            "begin": 8868,
+            "end": 8878
+          },
+          "text": "attenuates"
+        },
+        {
+          "id": "I115-9",
+          "obj": "biolink:PhenotypicFeature",
+          "span": {
+            "begin": 8902,
+            "end": 8917
+          },
+          "text": "tissue fibrosis"
+        },
+        {
+          "id": "I119-9",
+          "obj": "biolink:Protein",
+          "span": {
+            "begin": 8930,
+            "end": 8936
+          },
+          "text": "AT1/AT"
+        },
+        {
+          "id": "I121-9",
+          "obj": "biolink:PhysiologicalProcess",
+          "span": {
+            "begin": 8947,
+            "end": 8957
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I123-9",
+          "obj": "biolink:MolecularActivity",
+          "span": {
+            "begin": 8962,
+            "end": 9002
+          },
+          "text": "angiotensin-converting enzyme  activity"
+        },
+        {
+          "id": "I128-9",
+          "obj": "biolink:OrganismTaxon",
+          "span": {
+            "begin": 9006,
+            "end": 9009
+          },
+          "text": "rat"
+        },
+        {
+          "id": "I129-9",
+          "obj": "biolink:AnatomicalEntity",
+          "span": {
+            "begin": 9010,
+            "end": 9015
+          },
+          "text": "heart"
         }
       ],
       "project": "https://med-nemo.apps.renci.org/annotate/"
@@ -198,13 +2907,22 @@
     {
       "denotations": [
         {
+          "id": "I1-",
+          "obj": "MESH:D018511 (Systems Integration, score: 9.887)",
+          "span": {
+            "begin": 11,
+            "end": 22
+          },
+          "text": "integrating"
+        },
+        {
           "id": "I4-",
           "obj": "MESH:D000077488 (Data Science, score: 10.085)",
           "span": {
             "begin": 41,
             "end": 45
           },
-          "text": "Data"
+          "text": "data"
         },
         {
           "id": "I7-",
@@ -216,175 +2934,2875 @@
           "text": "ROBOKOP"
         },
         {
-          "id": "I21-",
+          "id": "I9-",
+          "obj": "MESH:D020504 (Abstracts, score: 8.193)",
+          "span": {
+            "begin": 72,
+            "end": 80
+          },
+          "text": "Abstract"
+        },
+        {
+          "id": "I10-",
+          "obj": "MESH:D017418 (Meta-Analysis, score: 12.871)",
+          "span": {
+            "begin": 81,
+            "end": 88
+          },
+          "text": "Summary"
+        },
+        {
+          "id": "I16-",
+          "obj": "MESH:D058873 (Pandemics, score: 2.454)",
+          "span": {
+            "begin": 117,
+            "end": 125
+          },
+          "text": "pandemic"
+        },
+        {
+          "id": "I22-",
           "obj": "MESH:D051188 (Knowledge Bases, score: 6.041)",
           "span": {
-            "begin": 152,
-            "end": 165
+            "begin": 159,
+            "end": 172
           },
           "text": "knowledgebase"
         },
         {
-          "id": "I22-",
-          "obj": "MESH:D018511 (Systems Integration, score: 9.887)",
-          "span": {
-            "begin": 166,
-            "end": 177
-          },
-          "text": "integrating"
-        },
-        {
-          "id": "I25-",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
-          "span": {
-            "begin": 191,
-            "end": 198
-          },
-          "text": "ROBOKOP"
-        },
-        {
-          "id": "I26-",
+          "id": "I28-",
           "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
           "span": {
-            "begin": 199,
-            "end": 209
+            "begin": 213,
+            "end": 223
+          },
+          "text": "Biomedical"
+        },
+        {
+          "id": "I34-",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
+          "span": {
+            "begin": 261,
+            "end": 269
+          },
+          "text": "Pathways"
+        },
+        {
+          "id": "I36-",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "span": {
+            "begin": 280,
+            "end": 290
           },
           "text": "biomedical"
         },
         {
-          "id": "I27-",
+          "id": "I37-",
           "obj": "MESH:D019359 (Knowledge, score: 11.266)",
           "span": {
-            "begin": 210,
-            "end": 225
+            "begin": 291,
+            "end": 306
           },
           "text": "knowledge graph"
         },
         {
-          "id": "I30-",
+          "id": "I40-",
           "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
           "span": {
-            "begin": 231,
-            "end": 242
+            "begin": 312,
+            "end": 323
           },
           "text": "information"
         },
         {
-          "id": "I33-",
+          "id": "I43-",
           "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
           "span": {
-            "begin": 255,
-            "end": 265
+            "begin": 336,
+            "end": 346
           },
           "text": "biomedical"
         },
         {
-          "id": "I34-",
+          "id": "I44-",
           "obj": "MESH:D008091 (Literature, score: 0.008)",
           "span": {
-            "begin": 266,
-            "end": 276
+            "begin": 347,
+            "end": 357
           },
           "text": "literature"
         },
         {
-          "id": "I50-",
+          "id": "I60-",
           "obj": "MESH:D013404 (Suggestion, score: 12.691)",
           "span": {
-            "begin": 376,
-            "end": 386
+            "begin": 457,
+            "end": 467
           },
           "text": "hypotheses"
         },
         {
-          "id": "I52-",
-          "obj": "MESH:D058492 (Drug Repositioning, score: 9.751)",
-          "span": {
-            "begin": 398,
-            "end": 409
-          },
-          "text": "repurposing"
-        },
-        {
-          "id": "I55-",
+          "id": "I65-",
           "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
           "span": {
-            "begin": 419,
-            "end": 424
+            "begin": 500,
+            "end": 505
           },
           "text": "drugs"
         },
         {
-          "id": "I57-",
+          "id": "I67-",
           "obj": "MESH:D015510 (Clinical Medicine, score: 8.953)",
           "span": {
-            "begin": 429,
-            "end": 437
+            "begin": 510,
+            "end": 518
           },
           "text": "clinical"
         },
         {
-          "id": "I58-",
+          "id": "I68-",
           "obj": "MESH:D015198 (Designer Drugs, score: 11.594)",
           "span": {
-            "begin": 438,
-            "end": 453
+            "begin": 519,
+            "end": 534
           },
           "text": "drug candidates"
         },
         {
-          "id": "I65-",
+          "id": "I75-",
           "obj": "MESH:D023361 (Validation Study, score: 12.407)",
           "span": {
-            "begin": 498,
-            "end": 510
+            "begin": 579,
+            "end": 591
           },
           "text": "confirmatory"
         },
         {
-          "id": "I66-",
+          "id": "I76-",
           "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
           "span": {
-            "begin": 511,
-            "end": 519
+            "begin": 592,
+            "end": 600
           },
           "text": "pathways"
         },
         {
-          "id": "I68-",
+          "id": "I78-",
           "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
           "span": {
-            "begin": 523,
-            "end": 527
+            "begin": 604,
+            "end": 608
           },
           "text": "drug"
         },
         {
-          "id": "I69-",
+          "id": "I79-",
           "obj": "MESH:D020228 (Pharmacologic Actions, score: 10.981)",
           "span": {
-            "begin": 528,
-            "end": 534
+            "begin": 609,
+            "end": 615
           },
           "text": "action"
         },
         {
-          "id": "I80-",
+          "id": "I82-",
+          "obj": "MESH:D000077626 (Implementation Science, score: 7.85)",
+          "span": {
+            "begin": 634,
+            "end": 648
+          },
+          "text": "implementation"
+        },
+        {
+          "id": "I92-",
           "obj": "MESH:D013664 (Teaching Materials, score: 11.968)",
           "span": {
-            "begin": 626,
-            "end": 638
+            "begin": 725,
+            "end": 737
           },
           "text": "instructions"
         },
         {
-          "id": "I84-",
+          "id": "I96-",
+          "obj": "MESH:D031301 (Robinia, score: 14.686)",
+          "span": {
+            "begin": 755,
+            "end": 809
+          },
+          "text": "ROBOKOP https://github.com/NCATS-Gamma/robokop "
+        },
+        {
+          "id": "I105-",
+          "obj": "MESH:D004526 (Efficiency, score: 11.346)",
+          "span": {
+            "begin": 842,
+            "end": 851
+          },
+          "text": "effective"
+        },
+        {
+          "id": "I106-",
+          "obj": "MESH:D004364 (Pharmaceutical Preparations, score: 11.081)",
+          "span": {
+            "begin": 852,
+            "end": 863
+          },
+          "text": "medications"
+        },
+        {
+          "id": "I116-",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
+          "span": {
+            "begin": 914,
+            "end": 919
+          },
+          "text": "drugs"
+        },
+        {
+          "id": "I122-",
+          "obj": "MESH:D058873 (Pandemics, score: 2.454)",
+          "span": {
+            "begin": 949,
+            "end": 957
+          },
+          "text": "pandemic"
+        },
+        {
+          "id": "I11-1",
+          "obj": "MESH:D004364 (Pharmaceutical Preparations, score: 11.081)",
+          "span": {
+            "begin": 1037,
+            "end": 1048
+          },
+          "text": "medications"
+        },
+        {
+          "id": "I12-1",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "span": {
+            "begin": 1050,
+            "end": 1060
+          },
+          "text": "Biomedical"
+        },
+        {
+          "id": "I13-1",
+          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
+          "span": {
+            "begin": 1061,
+            "end": 1077
+          },
+          "text": "knowledge graphs"
+        },
+        {
+          "id": "I19-1",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "span": {
+            "begin": 1101,
+            "end": 1111
+          },
+          "text": "Biomedical"
+        },
+        {
+          "id": "I20-1",
+          "obj": "MESH:D009769 (Object Attachment, score: 11.79)",
+          "span": {
+            "begin": 1112,
+            "end": 1119
+          },
+          "text": "Objects"
+        },
+        {
+          "id": "I33-1",
+          "obj": "MESH:D008564 (Membrane Potentials, score: 11.26)",
+          "span": {
+            "begin": 1205,
+            "end": 1214
+          },
+          "text": "potential"
+        },
+        {
+          "id": "I34-1",
+          "obj": "MESH:D019727 (Proxy, score: 13.084)",
+          "span": {
+            "begin": 1215,
+            "end": 1224
+          },
+          "text": "candidate"
+        },
+        {
+          "id": "I35-1",
+          "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
+          "span": {
+            "begin": 1225,
+            "end": 1230
+          },
+          "text": "drugs"
+        },
+        {
+          "id": "I41-1",
+          "obj": "MESH:D007398 (Interpersonal Relations, score: 11.18)",
+          "span": {
+            "begin": 1259,
+            "end": 1272
+          },
+          "text": "relationships"
+        },
+        {
+          "id": "I43-1",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 13.561)",
+          "span": {
+            "begin": 1281,
+            "end": 1302
+          },
+          "text": "knowledge graph nodes"
+        },
+        {
+          "id": "I50-1",
           "obj": "MESH:D031301 (Robinia, score: 11.61)",
           "span": {
-            "begin": 656,
-            "end": 663
+            "begin": 1323,
+            "end": 1330
           },
           "text": "ROBOKOP"
+        },
+        {
+          "id": "I51-1",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "span": {
+            "begin": 1331,
+            "end": 1346
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I59-1",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "span": {
+            "begin": 1387,
+            "end": 1398
+          },
+          "text": "information"
+        },
+        {
+          "id": "I62-1",
+          "obj": "MESH:D011642 (Publications, score: 0.007)",
+          "span": {
+            "begin": 1411,
+            "end": 1423
+          },
+          "text": "publications"
+        },
+        {
+          "id": "I65-1",
+          "obj": "MESH:D019359 (Knowledge, score: 10.99)",
+          "span": {
+            "begin": 1434,
+            "end": 1451
+          },
+          "text": "knowledge sources"
+        },
+        {
+          "id": "I86-1",
+          "obj": "MESH:D008091 (Literature, score: 12.101)",
+          "span": {
+            "begin": 1601,
+            "end": 1610
+          },
+          "text": "full-text"
+        },
+        {
+          "id": "I87-1",
+          "obj": "MESH:D008373 (Manuscripts as Topic, score: 10.487)",
+          "span": {
+            "begin": 1611,
+            "end": 1626
+          },
+          "text": "research papers"
+        },
+        {
+          "id": "I90-1",
+          "obj": "MESH:D038081 (Organogenesis, score: 11.236)",
+          "span": {
+            "begin": 1632,
+            "end": 1643
+          },
+          "text": "ontological"
+        },
+        {
+          "id": "I91-1",
+          "obj": "MESH:D011356 (Product Labeling, score: 11.847)",
+          "span": {
+            "begin": 1644,
+            "end": 1651
+          },
+          "text": "tagging"
+        },
+        {
+          "id": "I101-1",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "span": {
+            "begin": 1743,
+            "end": 1747
+          },
+          "text": "data"
+        },
+        {
+          "id": "I108-1",
+          "obj": "MESH:D031301 (Robinia, score: 11.847)",
+          "span": {
+            "begin": 1782,
+            "end": 1791
+          },
+          "text": "ROBOKOP\u2019s"
+        },
+        {
+          "id": "I109-1",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "span": {
+            "begin": 1792,
+            "end": 1807
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I113-1",
+          "obj": "MESH:D020494 (Phrases, score: 10.335)",
+          "span": {
+            "begin": 1823,
+            "end": 1831
+          },
+          "text": "sentence"
+        },
+        {
+          "id": "I115-1",
+          "obj": "MESH:D020494 (Phrases, score: 10.335)",
+          "span": {
+            "begin": 1835,
+            "end": 1843
+          },
+          "text": "sentence"
+        },
+        {
+          "id": "I117-1",
+          "obj": "MESH:D002452 (Cell Count, score: 9.576)",
+          "span": {
+            "begin": 1849,
+            "end": 1855
+          },
+          "text": "counts"
+        },
+        {
+          "id": "I119-1",
+          "obj": "MESH:D020502 (Terminology, score: 11.612)",
+          "span": {
+            "begin": 1859,
+            "end": 1876
+          },
+          "text": "ontological terms"
+        },
+        {
+          "id": "I123-1",
+          "obj": "MESH:D060085 (Coinfection, score: 12.709)",
+          "span": {
+            "begin": 1885,
+            "end": 1899
+          },
+          "text": "co-occurrences"
+        },
+        {
+          "id": "I6-2",
+          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "span": {
+            "begin": 1932,
+            "end": 1937
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I10-2",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "span": {
+            "begin": 1955,
+            "end": 1970
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I23-2",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "span": {
+            "begin": 2069,
+            "end": 2079
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I24-2",
+          "obj": "MESH:D020502 (Terminology, score: 12.439)",
+          "span": {
+            "begin": 2080,
+            "end": 2096
+          },
+          "text": "ontological term"
+        },
+        {
+          "id": "I26-2",
+          "obj": "MESH:D011356 (Product Labeling, score: 11.847)",
+          "span": {
+            "begin": 2097,
+            "end": 2104
+          },
+          "text": "tagging"
+        },
+        {
+          "id": "I29-2",
+          "obj": "MESH:D015994 (Incidence, score: 13.465)",
+          "span": {
+            "begin": 2113,
+            "end": 2133
+          },
+          "text": "co-occurrence counts"
+        },
+        {
+          "id": "I33-2",
+          "obj": "MESH:D010209 (Paper, score: 0.007)",
+          "span": {
+            "begin": 2141,
+            "end": 2146
+          },
+          "text": "paper"
+        },
+        {
+          "id": "I36-2",
+          "obj": "MESH:D020494 (Phrases, score: 10.335)",
+          "span": {
+            "begin": 2159,
+            "end": 2167
+          },
+          "text": "sentence"
+        },
+        {
+          "id": "I43-2",
+          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "span": {
+            "begin": 2202,
+            "end": 2207
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I46-2",
+          "obj": "MESH:D058977 (Molecular Sequence Annotation, score: 11.413)",
+          "span": {
+            "begin": 2223,
+            "end": 2233
+          },
+          "text": "Annotation"
+        },
+        {
+          "id": "I47-2",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "span": {
+            "begin": 2234,
+            "end": 2238
+          },
+          "text": "data"
+        },
+        {
+          "id": "I50-2",
+          "obj": "MESH:D014780 (Viruses, score: 5.129)",
+          "span": {
+            "begin": 2247,
+            "end": 2252
+          },
+          "text": "viral"
+        },
+        {
+          "id": "I51-2",
+          "obj": "MESH:D011506 (Proteins, score: 0.009)",
+          "span": {
+            "begin": 2253,
+            "end": 2261
+          },
+          "text": "proteins"
+        },
+        {
+          "id": "I55-2",
+          "obj": "MESH:D000086402 (SARS-CoV-2, score: 0.008)",
+          "span": {
+            "begin": 2282,
+            "end": 2292
+          },
+          "text": "SARS-CoV-2"
+        },
+        {
+          "id": "I68-2",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "span": {
+            "begin": 2411,
+            "end": 2426
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I72-2",
+          "obj": "MESH:D044423 (Kelp, score: 13.815)",
+          "span": {
+            "begin": 2444,
+            "end": 2447
+          },
+          "text": "KGX"
+        },
+        {
+          "id": "I79-2",
+          "obj": "MESH:D046348 (Gophers, score: 13.017)",
+          "span": {
+            "begin": 2511,
+            "end": 2514
+          },
+          "text": "GOA"
+        },
+        {
+          "id": "I80-2",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "span": {
+            "begin": 2515,
+            "end": 2519
+          },
+          "text": "data"
+        },
+        {
+          "id": "I90-2",
+          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "span": {
+            "begin": 2582,
+            "end": 2590
+          },
+          "text": "database"
+        },
+        {
+          "id": "I92-2",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "span": {
+            "begin": 2595,
+            "end": 2610
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I95-2",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 8.486)",
+          "span": {
+            "begin": 2620,
+            "end": 2625
+          },
+          "text": "nodes"
+        },
+        {
+          "id": "I99-2",
+          "obj": "MESH:D011506 (Proteins, score: 0.009)",
+          "span": {
+            "begin": 2637,
+            "end": 2645
+          },
+          "text": "proteins"
+        },
+        {
+          "id": "I101-2",
+          "obj": "MESH:D020224 (Expressed Sequence Tags, score: 14.029)",
+          "span": {
+            "begin": 2652,
+            "end": 2661
+          },
+          "text": "NCBITaxon"
+        },
+        {
+          "id": "I104-2",
+          "obj": "MESH:D063990 (Gene Ontology, score: 11.133)",
+          "span": {
+            "begin": 2674,
+            "end": 2676
+          },
+          "text": "GO"
+        },
+        {
+          "id": "I105-2",
+          "obj": "MESH:D000071253 (Metadata, score: 11.567)",
+          "span": {
+            "begin": 2677,
+            "end": 2688
+          },
+          "text": "annotations"
+        },
+        {
+          "id": "I110-2",
+          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "span": {
+            "begin": 2705,
+            "end": 2710
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I119-2",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "span": {
+            "begin": 2756,
+            "end": 2763
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I2-3",
+          "obj": "MESH:D003379 (Countertransference, score: 13.101)",
+          "span": {
+            "begin": 2773,
+            "end": 2786
+          },
+          "text": "bidirectional"
+        },
+        {
+          "id": "I3-3",
+          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "span": {
+            "begin": 2787,
+            "end": 2792
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I6-3",
+          "obj": "MESH:D008040 (Genetic Linkage, score: 11.162)",
+          "span": {
+            "begin": 2803,
+            "end": 2811
+          },
+          "text": "linkages"
+        },
+        {
+          "id": "I10-3",
+          "obj": "MESH:D009949 (Orientation, score: 11.296)",
+          "span": {
+            "begin": 2835,
+            "end": 2849
+          },
+          "text": "directionality"
+        },
+        {
+          "id": "I16-3",
+          "obj": "MESH:D003463 (Cues, score: 13.266)",
+          "span": {
+            "begin": 2877,
+            "end": 2884
+          },
+          "text": "sources"
+        },
+        {
+          "id": "I21-3",
+          "obj": "MESH:D045473 (SARS Virus, score: 5.44)",
+          "span": {
+            "begin": 2898,
+            "end": 2907
+          },
+          "text": "SARS-CoV-"
+        },
+        {
+          "id": "I22-3",
+          "obj": "MESH:D012816 (Signs and Symptoms, score: 7.473)",
+          "span": {
+            "begin": 2909,
+            "end": 2917
+          },
+          "text": "symptoms"
+        },
+        {
+          "id": "I33-3",
+          "obj": "MESH:D016420 (Comment, score: 11.528)",
+          "span": {
+            "begin": 3122,
+            "end": 3139
+          },
+          "text": "recent commentary"
+        },
+        {
+          "id": "I36-3",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "span": {
+            "begin": 3146,
+            "end": 3157
+          },
+          "text": "information"
+        },
+        {
+          "id": "I39-3",
+          "obj": "MESH:D004608 (Eligibility Determination, score: 13.085)",
+          "span": {
+            "begin": 3171,
+            "end": 3178
+          },
+          "text": "entered"
+        },
+        {
+          "id": "I43-3",
+          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "span": {
+            "begin": 3198,
+            "end": 3206
+          },
+          "text": "database"
+        },
+        {
+          "id": "I45-3",
+          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "span": {
+            "begin": 3210,
+            "end": 3215
+          },
+          "text": "edges"
+        },
+        {
+          "id": "I51-3",
+          "obj": "MESH:D010641 (Phenotype, score: 4.301)",
+          "span": {
+            "begin": 3245,
+            "end": 3255
+          },
+          "text": "phenotypes"
+        },
+        {
+          "id": "I55-3",
+          "obj": "MESH:D007256 (Information Systems, score: 9.315)",
+          "span": {
+            "begin": 3273,
+            "end": 3291
+          },
+          "text": "identifier systems"
+        },
+        {
+          "id": "I60-3",
+          "obj": "MESH:D019991 (Database, score: 3.733)",
+          "span": {
+            "begin": 3310,
+            "end": 3319
+          },
+          "text": "databases"
+        },
+        {
+          "id": "I68-3",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "span": {
+            "begin": 3359,
+            "end": 3363
+          },
+          "text": "Data"
+        },
+        {
+          "id": "I75-3",
+          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "span": {
+            "begin": 3464,
+            "end": 3468
+          },
+          "text": "data"
+        },
+        {
+          "id": "I76-3",
+          "obj": "MESH:D016662 (Virus Integration, score: 9.132)",
+          "span": {
+            "begin": 3469,
+            "end": 3480
+          },
+          "text": "integration"
+        },
+        {
+          "id": "I82-3",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 12.204)",
+          "span": {
+            "begin": 3510,
+            "end": 3534
+          },
+          "text": "knowledge graph database"
+        },
+        {
+          "id": "I85-3",
+          "obj": "MESH:D009355 (Neomycin, score: 14.519)",
+          "span": {
+            "begin": 3535,
+            "end": 3540
+          },
+          "text": "Neo4J"
+        },
+        {
+          "id": "I89-3",
+          "obj": "MESH:D000081406 (Cyclophilin D, score: 10.976)",
+          "span": {
+            "begin": 3574,
+            "end": 3580
+          },
+          "text": "Cypher"
+        },
+        {
+          "id": "I93-3",
+          "obj": "MESH:D003196 (Computer Graphics, score: 10.059)",
+          "span": {
+            "begin": 3599,
+            "end": 3604
+          },
+          "text": "graph"
+        },
+        {
+          "id": "I94-3",
+          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "span": {
+            "begin": 3605,
+            "end": 3613
+          },
+          "text": "database"
+        },
+        {
+          "id": "I95-3",
+          "obj": "MESH:D020475 (Examination Questions, score: 11.576)",
+          "span": {
+            "begin": 3614,
+            "end": 3621
+          },
+          "text": "queries"
+        },
+        {
+          "id": "I100-3",
+          "obj": "MESH:D056910 (Republic of Korea, score: 13.193)",
+          "span": {
+            "begin": 3654,
+            "end": 3656
+          },
+          "text": "KG"
+        },
+        {
+          "id": "I110-3",
+          "obj": "MESH:D056910 (Republic of Korea, score: 13.193)",
+          "span": {
+            "begin": 3697,
+            "end": 3699
+          },
+          "text": "KG"
+        },
+        {
+          "id": "I12-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 8.783)",
+          "span": {
+            "begin": 3773,
+            "end": 3792
+          },
+          "text": "linagliptin\u2014COVID-1"
+        },
+        {
+          "id": "I13-4",
+          "obj": "MESH:D003142 (Communication, score: 12.01)",
+          "span": {
+            "begin": 3794,
+            "end": 3804
+          },
+          "text": "connection"
+        },
+        {
+          "id": "I16-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 3815,
+            "end": 3826
+          },
+          "text": "Linagliptin"
+        },
+        {
+          "id": "I19-4",
+          "obj": "MESH:D003920 (Diabetes Mellitus, score: 6.096)",
+          "span": {
+            "begin": 3832,
+            "end": 3847
+          },
+          "text": "type  diabetes"
+        },
+        {
+          "id": "I23-4",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "span": {
+            "begin": 3854,
+            "end": 3858
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I27-4",
+          "obj": "MESH:D016430 (Clinical Trial, score: 3.524)",
+          "span": {
+            "begin": 3878,
+            "end": 3893
+          },
+          "text": "clinical trials"
+        },
+        {
+          "id": "I32-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 3958,
+            "end": 3969
+          },
+          "text": "Linagliptin"
+        },
+        {
+          "id": "I34-4",
+          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 7.422)",
+          "span": {
+            "begin": 3979,
+            "end": 4000
+          },
+          "text": "dipeptidyl peptidase-"
+        },
+        {
+          "id": "I39-4",
+          "obj": "MESH:D006728 (Hormones, score: 0.007)",
+          "span": {
+            "begin": 4026,
+            "end": 4034
+          },
+          "text": "hormones"
+        },
+        {
+          "id": "I41-4",
+          "obj": "MESH:D000078790 (Insulin Secretion, score: 8.199)",
+          "span": {
+            "begin": 4047,
+            "end": 4065
+          },
+          "text": "insulin production"
+        },
+        {
+          "id": "I48-4",
+          "obj": "MESH:D015854 (Up-Regulation, score: 11.079)",
+          "span": {
+            "begin": 4085,
+            "end": 4098
+          },
+          "text": "overexpressed"
+        },
+        {
+          "id": "I50-4",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 4102,
+            "end": 4110
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I52-4",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "span": {
+            "begin": 4116,
+            "end": 4119
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I54-4",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 4130,
+            "end": 4138
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I56-4",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "span": {
+            "begin": 4144,
+            "end": 4147
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I60-4",
+          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "span": {
+            "begin": 4162,
+            "end": 4166
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I64-4",
+          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "span": {
+            "begin": 4186,
+            "end": 4192
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I65-4",
+          "obj": "MESH:D012816 (Signs and Symptoms, score: 7.473)",
+          "span": {
+            "begin": 4193,
+            "end": 4201
+          },
+          "text": "symptoms"
+        },
+        {
+          "id": "I70-4",
+          "obj": "MESH:D015854 (Up-Regulation, score: 10.352)",
+          "span": {
+            "begin": 4222,
+            "end": 4231
+          },
+          "text": "increased"
+        },
+        {
+          "id": "I71-4",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "span": {
+            "begin": 4232,
+            "end": 4242
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I74-4",
+          "obj": "MESH:D058605 (Host-Derived Cellular Factors, score: 11.735)",
+          "span": {
+            "begin": 4250,
+            "end": 4263
+          },
+          "text": "host receptor"
+        },
+        {
+          "id": "I76-4",
+          "obj": "MESH:D000085962 (Angiotensin-Converting Enzyme 2, score: 9.111)",
+          "span": {
+            "begin": 4264,
+            "end": 4268
+          },
+          "text": "ACE2"
+        },
+        {
+          "id": "I81-4",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "span": {
+            "begin": 4295,
+            "end": 4300
+          },
+          "text": "query"
+        },
+        {
+          "id": "I83-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 9.781)",
+          "span": {
+            "begin": 4305,
+            "end": 4324
+          },
+          "text": "linagliptin-COVID-1"
+        },
+        {
+          "id": "I84-4",
+          "obj": "MESH:D010152 (Pair Bond, score: 10.414)",
+          "span": {
+            "begin": 4326,
+            "end": 4330
+          },
+          "text": "pair"
+        },
+        {
+          "id": "I86-4",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "span": {
+            "begin": 4336,
+            "end": 4341
+          },
+          "text": "Query"
+        },
+        {
+          "id": "I87-4",
+          "obj": "MESH:D003196 (Computer Graphics, score: 10.059)",
+          "span": {
+            "begin": 4342,
+            "end": 4347
+          },
+          "text": "graph"
+        },
+        {
+          "id": "I89-4",
+          "obj": "MESH:D001680 (Biographies as Topic, score: 13.947)",
+          "span": {
+            "begin": 4353,
+            "end": 4365
+          },
+          "text": "answer graph"
+        },
+        {
+          "id": "I92-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 11.411)",
+          "span": {
+            "begin": 4370,
+            "end": 4398
+          },
+          "text": "linagliptin-DPP4-T2D-COVID-1"
+        },
+        {
+          "id": "I93-4",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "span": {
+            "begin": 4400,
+            "end": 4407
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I95-4",
+          "obj": "MESH:D001680 (Biographies as Topic, score: 13.947)",
+          "span": {
+            "begin": 4413,
+            "end": 4425
+          },
+          "text": "answer graph"
+        },
+        {
+          "id": "I98-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 11.471)",
+          "span": {
+            "begin": 4430,
+            "end": 4458
+          },
+          "text": "linagliptin-ACE2-T2D-COVID-1"
+        },
+        {
+          "id": "I99-4",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "span": {
+            "begin": 4460,
+            "end": 4467
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I101-4",
+          "obj": "MESH:D000287 (Administration, Topical, score: 12.168)",
+          "span": {
+            "begin": 4471,
+            "end": 4478
+          },
+          "text": "applied"
+        },
+        {
+          "id": "I106-4",
+          "obj": "MESH:D008722 (Methods, score: 12.352)",
+          "span": {
+            "begin": 4510,
+            "end": 4521
+          },
+          "text": "mechanistic"
+        },
+        {
+          "id": "I107-4",
+          "obj": "MESH:D063132 (Connectome, score: 10.947)",
+          "span": {
+            "begin": 4522,
+            "end": 4533
+          },
+          "text": "connections"
+        },
+        {
+          "id": "I109-4",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 4542,
+            "end": 4553
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I117-4",
+          "obj": "MESH:D016896 (Treatment Outcome, score: 11.796)",
+          "span": {
+            "begin": 4599,
+            "end": 4617
+          },
+          "text": "therapeutic effect"
+        },
+        {
+          "id": "I122-4",
+          "obj": "MESH:D064420 (Drug-Related Side Effects and Adverse Reactions, score: 9.206)",
+          "span": {
+            "begin": 4639,
+            "end": 4651
+          },
+          "text": "side effects"
+        },
+        {
+          "id": "I6-5",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "span": {
+            "begin": 4695,
+            "end": 4700
+          },
+          "text": "query"
+        },
+        {
+          "id": "I12-5",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 8.486)",
+          "span": {
+            "begin": 4739,
+            "end": 4744
+          },
+          "text": "nodes"
+        },
+        {
+          "id": "I19-5",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "span": {
+            "begin": 4779,
+            "end": 4789
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I23-5",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 9.808)",
+          "span": {
+            "begin": 4807,
+            "end": 4811
+          },
+          "text": "node"
+        },
+        {
+          "id": "I27-5",
+          "obj": "MESH:D005796 (Genes, score: 2.873)",
+          "span": {
+            "begin": 4823,
+            "end": 4827
+          },
+          "text": "gene"
+        },
+        {
+          "id": "I37-5",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 8.486)",
+          "span": {
+            "begin": 4870,
+            "end": 4875
+          },
+          "text": "nodes"
+        },
+        {
+          "id": "I46-5",
+          "obj": "MESH:D008198 (Lymph Nodes, score: 9.808)",
+          "span": {
+            "begin": 4919,
+            "end": 4923
+          },
+          "text": "node"
+        },
+        {
+          "id": "I57-5",
+          "obj": "MESH:D010641 (Phenotype, score: 5.994)",
+          "span": {
+            "begin": 4971,
+            "end": 4981
+          },
+          "text": "phenotypic"
+        },
+        {
+          "id": "I58-5",
+          "obj": "MESH:D000071253 (Metadata, score: 12.335)",
+          "span": {
+            "begin": 4982,
+            "end": 4989
+          },
+          "text": "feature"
+        },
+        {
+          "id": "I66-5",
+          "obj": "MESH:D005796 (Genes, score: 2.873)",
+          "span": {
+            "begin": 5024,
+            "end": 5028
+          },
+          "text": "gene"
+        },
+        {
+          "id": "I70-5",
+          "obj": "MESH:D010641 (Phenotype, score: 5.994)",
+          "span": {
+            "begin": 5042,
+            "end": 5052
+          },
+          "text": "phenotypic"
+        },
+        {
+          "id": "I71-5",
+          "obj": "MESH:D000071253 (Metadata, score: 12.335)",
+          "span": {
+            "begin": 5053,
+            "end": 5060
+          },
+          "text": "feature"
+        },
+        {
+          "id": "I84-5",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 5131,
+            "end": 5142
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I87-5",
+          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "span": {
+            "begin": 5159,
+            "end": 5164
+          },
+          "text": "query"
+        },
+        {
+          "id": "I90-5",
+          "obj": "MESH:D016467 (Monograph, score: 11.684)",
+          "span": {
+            "begin": 5178,
+            "end": 5187
+          },
+          "text": "subgraphs"
+        },
+        {
+          "id": "I94-5",
+          "obj": "MESH:D000465 (Algorithms, score: 4.104)",
+          "span": {
+            "begin": 5201,
+            "end": 5210
+          },
+          "text": "algorithm"
+        },
+        {
+          "id": "I97-5",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "span": {
+            "begin": 5226,
+            "end": 5233
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I100-5",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "span": {
+            "begin": 5244,
+            "end": 5251
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I104-5",
+          "obj": "MESH:D033182 (Intention, score: 11.965)",
+          "span": {
+            "begin": 5265,
+            "end": 5274
+          },
+          "text": "rationale"
+        },
+        {
+          "id": "I107-5",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 5283,
+            "end": 5294
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I108-5",
+          "obj": "MESH:D016430 (Clinical Trial, score: 0.011)",
+          "span": {
+            "begin": 5295,
+            "end": 5309
+          },
+          "text": "clinical trial"
+        },
+        {
+          "id": "I1-6",
+          "obj": "MESH:D000077002 (GRADE Approach, score: 12.976)",
+          "span": {
+            "begin": 5369,
+            "end": 5375
+          },
+          "text": "ranked"
+        },
+        {
+          "id": "I5-6",
+          "obj": "MESH:D011014 (Pneumonia, score: 3.659)",
+          "span": {
+            "begin": 5395,
+            "end": 5415
+          },
+          "text": "conditions\u2014pneumonia"
+        },
+        {
+          "id": "I6-6",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "span": {
+            "begin": 5417,
+            "end": 5420
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I8-6",
+          "obj": "MESH:D006973 (Hypertension, score: 10.619)",
+          "span": {
+            "begin": 5425,
+            "end": 5451
+          },
+          "text": "hypertensive disorder\u2014were"
+        },
+        {
+          "id": "I12-6",
+          "obj": "MESH:D001244 (Association, score: 9.26)",
+          "span": {
+            "begin": 5466,
+            "end": 5481
+          },
+          "text": "associated with"
+        },
+        {
+          "id": "I15-6",
+          "obj": "MESH:D005796 (Genes, score: 0.008)",
+          "span": {
+            "begin": 5492,
+            "end": 5497
+          },
+          "text": "Genes"
+        },
+        {
+          "id": "I16-6",
+          "obj": "MESH:D001244 (Association, score: 9.26)",
+          "span": {
+            "begin": 5498,
+            "end": 5513
+          },
+          "text": "associated with"
+        },
+        {
+          "id": "I19-6",
+          "obj": "MESH:D004194 (Disease, score: 12.672)",
+          "span": {
+            "begin": 5520,
+            "end": 5530
+          },
+          "text": "conditions"
+        },
+        {
+          "id": "I24-6",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 5550,
+            "end": 5561
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I30-6",
+          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
+          "span": {
+            "begin": 5590,
+            "end": 5599
+          },
+          "text": "Pneumonia"
+        },
+        {
+          "id": "I39-6",
+          "obj": "MESH:D005796 (Genes, score: 0.008)",
+          "span": {
+            "begin": 5641,
+            "end": 5646
+          },
+          "text": "genes"
+        },
+        {
+          "id": "I42-6",
+          "obj": "MESH:D016212 (Transforming Growth Factor beta, score: 0.009)",
+          "span": {
+            "begin": 5658,
+            "end": 5689
+          },
+          "text": "transforming growth factor beta"
+        },
+        {
+          "id": "I48-6",
+          "obj": "MESH:D007266 (Inhibition, Psychological, score: 7.458)",
+          "span": {
+            "begin": 5704,
+            "end": 5714
+          },
+          "text": "inhibition"
+        },
+        {
+          "id": "I54-6",
+          "obj": "MESH:D004198 (Disease Susceptibility, score: 5.598)",
+          "span": {
+            "begin": 5745,
+            "end": 5759
+          },
+          "text": "susceptibility"
+        },
+        {
+          "id": "I56-6",
+          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
+          "span": {
+            "begin": 5763,
+            "end": 5772
+          },
+          "text": "pneumonia"
+        },
+        {
+          "id": "I58-6",
+          "obj": "MESH:D051379 (Mice, score: 0.007)",
+          "span": {
+            "begin": 5776,
+            "end": 5780
+          },
+          "text": "mice"
+        },
+        {
+          "id": "I61-6",
+          "obj": "MESH:D010403 (Penicillin Resistance, score: 11.64)",
+          "span": {
+            "begin": 5788,
+            "end": 5807
+          },
+          "text": "pneumonia-resistant"
+        },
+        {
+          "id": "I62-6",
+          "obj": "MESH:D010641 (Phenotype, score: 0.008)",
+          "span": {
+            "begin": 5808,
+            "end": 5817
+          },
+          "text": "phenotype"
+        },
+        {
+          "id": "I64-6",
+          "obj": "MESH:D000069476 (Linagliptin, score: 10.953)",
+          "span": {
+            "begin": 5830,
+            "end": 5886
+          },
+          "text": "linagliptin \u2018significantly decrease"
+        },
+        {
+          "id": "I72-6",
+          "obj": "MESH:D059467 (Transcriptome, score: 9.725)",
+          "span": {
+            "begin": 5895,
+            "end": 5905
+          },
+          "text": "transcript"
+        },
+        {
+          "id": "I73-6",
+          "obj": "MESH:D016422 (Letter, score: 13.311)",
+          "span": {
+            "begin": 5906,
+            "end": 5912
+          },
+          "text": "levels"
+        },
+        {
+          "id": "I79-6",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 5945,
+            "end": 5956
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I81-6",
+          "obj": "MESH:D007266 (Inhibition, Psychological, score: 8.646)",
+          "span": {
+            "begin": 5961,
+            "end": 5968
+          },
+          "text": "inhibit"
+        },
+        {
+          "id": "I83-6",
+          "obj": "MESH:D014158 (Transcription, Genetic, score: 6.368)",
+          "span": {
+            "begin": 5976,
+            "end": 5989
+          },
+          "text": "transcription"
+        },
+        {
+          "id": "I87-6",
+          "obj": "MESH:D015854 (Up-Regulation, score: 10.467)",
+          "span": {
+            "begin": 6008,
+            "end": 6016
+          },
+          "text": "increase"
+        },
+        {
+          "id": "I88-6",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 6017,
+            "end": 6025
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I89-6",
+          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "span": {
+            "begin": 6027,
+            "end": 6031
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I93-6",
+          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "span": {
+            "begin": 6051,
+            "end": 6057
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I94-6",
+          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
+          "span": {
+            "begin": 6058,
+            "end": 6067
+          },
+          "text": "pneumonia"
+        },
+        {
+          "id": "I104-6",
+          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "span": {
+            "begin": 6115,
+            "end": 6121
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I105-6",
+          "obj": "MESH:D010336 (Pathology, score: 6.932)",
+          "span": {
+            "begin": 6122,
+            "end": 6133
+          },
+          "text": "pathologies"
+        },
+        {
+          "id": "I110-6",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "span": {
+            "begin": 6154,
+            "end": 6157
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I111-6",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 6158,
+            "end": 6166
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I114-6",
+          "obj": "MESH:D007266 (Inhibition, Psychological, score: 7.458)",
+          "span": {
+            "begin": 6177,
+            "end": 6187
+          },
+          "text": "inhibition"
+        },
+        {
+          "id": "I5-7",
+          "obj": "MESH:D007600 (Judgment, score: 11.154)",
+          "span": {
+            "begin": 6222,
+            "end": 6231
+          },
+          "text": "inference"
+        },
+        {
+          "id": "I7-7",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 6244,
+            "end": 6255
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I14-7",
+          "obj": "MESH:D058605 (Host-Derived Cellular Factors, score: 11.735)",
+          "span": {
+            "begin": 6305,
+            "end": 6318
+          },
+          "text": "host receptor"
+        },
+        {
+          "id": "I17-7",
+          "obj": "MESH:D045473 (SARS Virus, score: 5.44)",
+          "span": {
+            "begin": 6323,
+            "end": 6332
+          },
+          "text": "SARS-CoV-"
+        },
+        {
+          "id": "I19-7",
+          "obj": "MESH:D000069476 (Linagliptin, score: 11.471)",
+          "span": {
+            "begin": 6341,
+            "end": 6369
+          },
+          "text": "Linagliptin-ACE2-T2D-COVID-1"
+        },
+        {
+          "id": "I22-7",
+          "obj": "MESH:D015536 (Down-Regulation, score: 5.024)",
+          "span": {
+            "begin": 6382,
+            "end": 6396
+          },
+          "text": "Downregulation"
+        },
+        {
+          "id": "I24-7",
+          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "span": {
+            "begin": 6400,
+            "end": 6403
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I25-7",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "span": {
+            "begin": 6405,
+            "end": 6415
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I27-7",
+          "obj": "MESH:D008168 (Lung, score: 0.008)",
+          "span": {
+            "begin": 6419,
+            "end": 6423
+          },
+          "text": "lung"
+        },
+        {
+          "id": "I28-7",
+          "obj": "MESH:D014024 (Tissues, score: 3.216)",
+          "span": {
+            "begin": 6424,
+            "end": 6430
+          },
+          "text": "tissue"
+        },
+        {
+          "id": "I31-7",
+          "obj": "MESH:D001244 (Association, score: 9.26)",
+          "span": {
+            "begin": 6440,
+            "end": 6455
+          },
+          "text": "associated with"
+        },
+        {
+          "id": "I33-7",
+          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "span": {
+            "begin": 6456,
+            "end": 6462
+          },
+          "text": "severe"
+        },
+        {
+          "id": "I35-7",
+          "obj": "MESH:D000066891 (Critical Care Outcomes, score: 10.307)",
+          "span": {
+            "begin": 6472,
+            "end": 6489
+          },
+          "text": "clinical outcomes"
+        },
+        {
+          "id": "I37-7",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "span": {
+            "begin": 6491,
+            "end": 6501
+          },
+          "text": "Expression"
+        },
+        {
+          "id": "I39-7",
+          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "span": {
+            "begin": 6505,
+            "end": 6508
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I41-7",
+          "obj": "MESH:D015854 (Up-Regulation, score: 10.352)",
+          "span": {
+            "begin": 6513,
+            "end": 6522
+          },
+          "text": "increased"
+        },
+        {
+          "id": "I43-7",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 6526,
+            "end": 6534
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I45-7",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "span": {
+            "begin": 6540,
+            "end": 6543
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I47-7",
+          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "span": {
+            "begin": 6551,
+            "end": 6554
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I50-7",
+          "obj": "MESH:D057911 (Angiotensin Receptor Antagonists, score: 4.275)",
+          "span": {
+            "begin": 6570,
+            "end": 6599
+          },
+          "text": "angiotensin-receptor blockers"
+        },
+        {
+          "id": "I56-7",
+          "obj": "MESH:D016896 (Treatment Outcome, score: 10.791)",
+          "span": {
+            "begin": 6621,
+            "end": 6626
+          },
+          "text": "treat"
+        },
+        {
+          "id": "I57-7",
+          "obj": "MESH:D009272 (Persons, score: 8.457)",
+          "span": {
+            "begin": 6627,
+            "end": 6638
+          },
+          "text": "individuals"
+        },
+        {
+          "id": "I63-7",
+          "obj": "MESH:D000068397 (Clinical Study, score: 9.058)",
+          "span": {
+            "begin": 6669,
+            "end": 6674
+          },
+          "text": "study"
+        },
+        {
+          "id": "I66-7",
+          "obj": "MESH:D000284 (Administration, Oral, score: 10.333)",
+          "span": {
+            "begin": 6693,
+            "end": 6707
+          },
+          "text": "administration"
+        },
+        {
+          "id": "I68-7",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 6711,
+            "end": 6722
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I70-7",
+          "obj": "MESH:D015854 (Up-Regulation, score: 7.957)",
+          "span": {
+            "begin": 6737,
+            "end": 6748
+          },
+          "text": "upregulated"
+        },
+        {
+          "id": "I71-7",
+          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "span": {
+            "begin": 6749,
+            "end": 6752
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I72-7",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "span": {
+            "begin": 6754,
+            "end": 6764
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I77-7",
+          "obj": "MESH:D000056 (Accident Prevention, score: 11.917)",
+          "span": {
+            "begin": 6783,
+            "end": 6793
+          },
+          "text": "preventing"
+        },
+        {
+          "id": "I80-7",
+          "obj": "MESH:D004719 (Endomyocardial Fibrosis, score: 8.999)",
+          "span": {
+            "begin": 6817,
+            "end": 6833
+          },
+          "text": "cardiac fibrosis"
+        },
+        {
+          "id": "I83-7",
+          "obj": "MESH:D023421 (Models, Animal, score: 3.692)",
+          "span": {
+            "begin": 6837,
+            "end": 6850
+          },
+          "text": "animal models"
+        },
+        {
+          "id": "I90-7",
+          "obj": "MESH:D015854 (Up-Regulation, score: 7.835)",
+          "span": {
+            "begin": 6873,
+            "end": 6885
+          },
+          "text": "upregulating"
+        },
+        {
+          "id": "I91-7",
+          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "span": {
+            "begin": 6886,
+            "end": 6889
+          },
+          "text": "ACE"
+        },
+        {
+          "id": "I94-7",
+          "obj": "MESH:D024803 (Biomedical Enhancement, score: 13.369)",
+          "span": {
+            "begin": 6900,
+            "end": 6910
+          },
+          "text": "beneficial"
+        },
+        {
+          "id": "I96-7",
+          "obj": "MESH:D017809 (Fatal Outcome, score: 13.65)",
+          "span": {
+            "begin": 6914,
+            "end": 6925
+          },
+          "text": "detrimental"
+        },
+        {
+          "id": "I98-7",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 6929,
+            "end": 6937
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I102-7",
+          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "span": {
+            "begin": 6961,
+            "end": 6964
+          },
+          "text": "T2D"
+        },
+        {
+          "id": "I105-7",
+          "obj": "MESH:D007600 (Judgment, score: 11.154)",
+          "span": {
+            "begin": 6985,
+            "end": 6994
+          },
+          "text": "inference"
+        },
+        {
+          "id": "I106-7",
+          "obj": "MESH:D030881 (Disclosure, score: 12.665)",
+          "span": {
+            "begin": 6995,
+            "end": 7002
+          },
+          "text": "reveals"
+        },
+        {
+          "id": "I109-7",
+          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "span": {
+            "begin": 7017,
+            "end": 7024
+          },
+          "text": "pathway"
+        },
+        {
+          "id": "I111-7",
+          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "span": {
+            "begin": 7033,
+            "end": 7044
+          },
+          "text": "linagliptin"
+        },
+        {
+          "id": "I6-8",
+          "obj": "MESH:D001669 (Biochemical Phenomena, score: 8.443)",
+          "span": {
+            "begin": 7103,
+            "end": 7123
+          },
+          "text": "biochemical pathways"
+        },
+        {
+          "id": "I8-8",
+          "obj": "MESH:D001244 (Association, score: 6.994)",
+          "span": {
+            "begin": 7124,
+            "end": 7135
+          },
+          "text": "associating"
+        },
+        {
+          "id": "I10-8",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "span": {
+            "begin": 7138,
+            "end": 7142
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I20-8",
+          "obj": "MESH:D000068036 (Graphic Novel, score: 11.456)",
+          "span": {
+            "begin": 7219,
+            "end": 7224
+          },
+          "text": "novel"
+        },
+        {
+          "id": "I21-8",
+          "obj": "MESH:D007600 (Judgment, score: 11.777)",
+          "span": {
+            "begin": 7225,
+            "end": 7235
+          },
+          "text": "inferences"
+        },
+        {
+          "id": "I28-8",
+          "obj": "MESH:D051188 (Knowledge Bases, score: 6.041)",
+          "span": {
+            "begin": 7305,
+            "end": 7318
+          },
+          "text": "knowledgebase"
+        },
+        {
+          "id": "I30-8",
+          "obj": "MESH:D057405 (Webcast, score: 11.863)",
+          "span": {
+            "begin": 7323,
+            "end": 7326
+          },
+          "text": "web"
+        },
+        {
+          "id": "I31-8",
+          "obj": "MESH:D011168 (Portal System, score: 5.456)",
+          "span": {
+            "begin": 7327,
+            "end": 7333
+          },
+          "text": "portal"
+        },
+        {
+          "id": "I33-8",
+          "obj": "MESH:D018511 (Systems Integration, score: 10.366)",
+          "span": {
+            "begin": 7339,
+            "end": 7349
+          },
+          "text": "integrates"
+        },
+        {
+          "id": "I36-8",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "span": {
+            "begin": 7363,
+            "end": 7370
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I37-8",
+          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "span": {
+            "begin": 7371,
+            "end": 7381
+          },
+          "text": "biomedical"
+        },
+        {
+          "id": "I38-8",
+          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "span": {
+            "begin": 7382,
+            "end": 7397
+          },
+          "text": "knowledge graph"
+        },
+        {
+          "id": "I41-8",
+          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "span": {
+            "begin": 7403,
+            "end": 7414
+          },
+          "text": "information"
+        },
+        {
+          "id": "I45-8",
+          "obj": "MESH:D011642 (Publications, score: 6.697)",
+          "span": {
+            "begin": 7438,
+            "end": 7447
+          },
+          "text": "published"
+        },
+        {
+          "id": "I46-8",
+          "obj": "MESH:D008490 (Medical Informatics, score: 11.81)",
+          "span": {
+            "begin": 7448,
+            "end": 7470
+          },
+          "text": "biomedical information"
+        },
+        {
+          "id": "I63-8",
+          "obj": "MESH:D013404 (Suggestion, score: 12.691)",
+          "span": {
+            "begin": 7583,
+            "end": 7593
+          },
+          "text": "hypotheses"
+        },
+        {
+          "id": "I65-8",
+          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "span": {
+            "begin": 7605,
+            "end": 7609
+          },
+          "text": "drug"
+        },
+        {
+          "id": "I66-8",
+          "obj": "MESH:D058492 (Drug Repositioning, score: 9.751)",
+          "span": {
+            "begin": 7610,
+            "end": 7621
+          },
+          "text": "repurposing"
+        },
+        {
+          "id": "I100-8",
+          "obj": "MESH:D063990 (Gene Ontology, score: 8.692)",
+          "span": {
+            "begin": 7879,
+            "end": 7887
+          },
+          "text": "ontology"
+        },
+        {
+          "id": "I104-8",
+          "obj": "MESH:D049881 (Unio, score: 11.921)",
+          "span": {
+            "begin": 7902,
+            "end": 7913
+          },
+          "text": "unification"
+        },
+        {
+          "id": "I106-8",
+          "obj": "MESH:D001695 (Biology, score: 0.006)",
+          "span": {
+            "begin": 7917,
+            "end": 7924
+          },
+          "text": "biology"
+        },
+        {
+          "id": "I109-8",
+          "obj": "MESH:D003920 (Diabetes Mellitus, score: 3.803)",
+          "span": {
+            "begin": 7938,
+            "end": 7946
+          },
+          "text": "diabetes"
+        },
+        {
+          "id": "I112-8",
+          "obj": "MESH:D001244 (Association, score: 0.007)",
+          "span": {
+            "begin": 7956,
+            "end": 7967
+          },
+          "text": "association"
+        },
+        {
+          "id": "I116-8",
+          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 9.728)",
+          "span": {
+            "begin": 7982,
+            "end": 7985
+          },
+          "text": "DPP"
+        },
+        {
+          "id": "I0-9",
+          "obj": "MESH:D008564 (Membrane Potentials, score: 11.26)",
+          "span": {
+            "begin": 8006,
+            "end": 8015
+          },
+          "text": "Potential"
+        },
+        {
+          "id": "I1-9",
+          "obj": "MESH:D015510 (Clinical Medicine, score: 8.953)",
+          "span": {
+            "begin": 8016,
+            "end": 8024
+          },
+          "text": "clinical"
+        },
+        {
+          "id": "I3-9",
+          "obj": "MESH:D013812 (Therapeutics, score: 6.389)",
+          "span": {
+            "begin": 8029,
+            "end": 8040
+          },
+          "text": "therapeutic"
+        },
+        {
+          "id": "I5-9",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "span": {
+            "begin": 8054,
+            "end": 8061
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I8-9",
+          "obj": "MESH:D015287 (Neurokinin B, score: 13.457)",
+          "span": {
+            "begin": 8069,
+            "end": 8072
+          },
+          "text": "KGB"
+        },
+        {
+          "id": "I9-9",
+          "obj": "MESH:D018511 (Systems Integration, score: 9.782)",
+          "span": {
+            "begin": 8074,
+            "end": 8084
+          },
+          "text": "integrated"
+        },
+        {
+          "id": "I10-9",
+          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
+          "span": {
+            "begin": 8085,
+            "end": 8101
+          },
+          "text": "knowledge graphs"
+        },
+        {
+          "id": "I13-9",
+          "obj": "MESH:D004033 (Diet Fads, score: 13.66)",
+          "span": {
+            "begin": 8107,
+            "end": 8116
+          },
+          "text": "federated"
+        },
+        {
+          "id": "I14-9",
+          "obj": "MESH:D003463 (Cues, score: 13.266)",
+          "span": {
+            "begin": 8117,
+            "end": 8124
+          },
+          "text": "sources"
+        },
+        {
+          "id": "I16-9",
+          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "span": {
+            "begin": 8129,
+            "end": 8137
+          },
+          "text": "patients"
+        },
+        {
+          "id": "I18-9",
+          "obj": "MESH:D006973 (Hypertension, score: 0.008)",
+          "span": {
+            "begin": 8143,
+            "end": 8155
+          },
+          "text": "hypertension"
+        },
+        {
+          "id": "I20-9",
+          "obj": "MESH:D003920 (Diabetes Mellitus, score: 0.008)",
+          "span": {
+            "begin": 8160,
+            "end": 8177
+          },
+          "text": "diabetes mellitus"
+        },
+        {
+          "id": "I24-9",
+          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "span": {
+            "begin": 8191,
+            "end": 8195
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I30-9",
+          "obj": "MESH:D002965 (Classification, score: 10.013)",
+          "span": {
+            "begin": 8229,
+            "end": 8237
+          },
+          "text": "Taxonomy"
+        },
+        {
+          "id": "I31-9",
+          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "span": {
+            "begin": 8238,
+            "end": 8246
+          },
+          "text": "database"
+        },
+        {
+          "id": "I32-9",
+          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "span": {
+            "begin": 8247,
+            "end": 8254
+          },
+          "text": "ROBOKOP"
+        },
+        {
+          "id": "I34-9",
+          "obj": "MESH:D000075403 (Semantic Web, score: 13.925)",
+          "span": {
+            "begin": 8259,
+            "end": 8276
+          },
+          "text": "abstraction layer"
+        },
+        {
+          "id": "I37-9",
+          "obj": "MESH:D055030 (Drug Users, score: 12.372)",
+          "span": {
+            "begin": 8281,
+            "end": 8285
+          },
+          "text": "user"
+        },
+        {
+          "id": "I38-9",
+          "obj": "MESH:D014584 (User-Computer Interface, score: 12.662)",
+          "span": {
+            "begin": 8286,
+            "end": 8299
+          },
+          "text": "interface for"
+        },
+        {
+          "id": "I40-9",
+          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
+          "span": {
+            "begin": 8300,
+            "end": 8316
+          },
+          "text": "knowledge graphs"
+        },
+        {
+          "id": "I44-9",
+          "obj": "MESH:D020475 (Examination Questions, score: 11.596)",
+          "span": {
+            "begin": 8328,
+            "end": 8346
+          },
+          "text": "question answering"
+        },
+        {
+          "id": "I46-9",
+          "obj": "MESH:D000083505 (Social Interaction, score: 9.376)",
+          "span": {
+            "begin": 8347,
+            "end": 8359
+          },
+          "text": "Interactions"
+        },
+        {
+          "id": "I48-9",
+          "obj": "MESH:D007004 (Hypoglycemic Agents, score: 8.53)",
+          "span": {
+            "begin": 8368,
+            "end": 8391
+          },
+          "text": "antihyperglycemic drugs"
+        },
+        {
+          "id": "I52-9",
+          "obj": "MESH:D012084 (Renin-Angiotensin System, score: 0.011)",
+          "span": {
+            "begin": 8400,
+            "end": 8424
+          },
+          "text": "renin-angiotensin system"
+        },
+        {
+          "id": "I54-9",
+          "obj": "MESH:D011336 (Probability, score: 13.014)",
+          "span": {
+            "begin": 8426,
+            "end": 8434
+          },
+          "text": "putative"
+        },
+        {
+          "id": "I55-9",
+          "obj": "MESH:D012380 (Role, score: 2.644)",
+          "span": {
+            "begin": 8435,
+            "end": 8440
+          },
+          "text": "roles"
+        },
+        {
+          "id": "I59-9",
+          "obj": "MESH:D016454 (Review, score: 9.784)",
+          "span": {
+            "begin": 8456,
+            "end": 8467
+          },
+          "text": "mini-review"
+        },
+        {
+          "id": "I64-9",
+          "obj": "MESH:D004198 (Disease Susceptibility, score: 5.598)",
+          "span": {
+            "begin": 8495,
+            "end": 8509
+          },
+          "text": "susceptibility"
+        },
+        {
+          "id": "I66-9",
+          "obj": "MESH:D011018 (Pneumonia, Pneumococcal, score: 8.266)",
+          "span": {
+            "begin": 8513,
+            "end": 8544
+          },
+          "text": "invasive pneumococcal pneumonia"
+        },
+        {
+          "id": "I70-9",
+          "obj": "MESH:D051379 (Mice, score: 0.007)",
+          "span": {
+            "begin": 8548,
+            "end": 8552
+          },
+          "text": "mice"
+        },
+        {
+          "id": "I72-9",
+          "obj": "MESH:D003920 (Diabetes Mellitus, score: 0.008)",
+          "span": {
+            "begin": 8563,
+            "end": 8580
+          },
+          "text": "diabetes mellitus"
+        },
+        {
+          "id": "I75-9",
+          "obj": "MESH:D000085962 (Angiotensin-Converting Enzyme 2, score: 9.111)",
+          "span": {
+            "begin": 8585,
+            "end": 8589
+          },
+          "text": "ACE2"
+        },
+        {
+          "id": "I79-9",
+          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "span": {
+            "begin": 8615,
+            "end": 8619
+          },
+          "text": "risk"
+        },
+        {
+          "id": "I81-9",
+          "obj": "MESH:D016207 (Cytokines, score: 2.872)",
+          "span": {
+            "begin": 8624,
+            "end": 8632
+          },
+          "text": "cytokine"
+        },
+        {
+          "id": "I82-9",
+          "obj": "MESH:D018390 (Gene Targeting, score: 11.262)",
+          "span": {
+            "begin": 8633,
+            "end": 8642
+          },
+          "text": "targeting"
+        },
+        {
+          "id": "I84-9",
+          "obj": "MESH:D002908 (Chronic Disease, score: 11.78)",
+          "span": {
+            "begin": 8646,
+            "end": 8675
+          },
+          "text": "chronic inflammatory diseases"
+        },
+        {
+          "id": "I90-9",
+          "obj": "MESH:D000893 (Anti-Inflammatory Agents, score: 4.901)",
+          "span": {
+            "begin": 8697,
+            "end": 8714
+          },
+          "text": "anti-inflammatory"
+        },
+        {
+          "id": "I93-9",
+          "obj": "MESH:D000088962 (Antifibrotic Agents, score: 6.786)",
+          "span": {
+            "begin": 8726,
+            "end": 8745
+          },
+          "text": "antifibrotic effect"
+        },
+        {
+          "id": "I96-9",
+          "obj": "MESH:D000284 (Administration, Oral, score: 7.162)",
+          "span": {
+            "begin": 8749,
+            "end": 8753
+          },
+          "text": "oral"
+        },
+        {
+          "id": "I97-9",
+          "obj": "MESH:D035926 (Hepatophyta, score: 12.35)",
+          "span": {
+            "begin": 8754,
+            "end": 8766
+          },
+          "text": "hepatotropic"
+        },
+        {
+          "id": "I98-9",
+          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 9.728)",
+          "span": {
+            "begin": 8767,
+            "end": 8770
+          },
+          "text": "DPP"
+        },
+        {
+          "id": "I101-9",
+          "obj": "MESH:D008960 (Models, Psychological, score: 8.382)",
+          "span": {
+            "begin": 8786,
+            "end": 8792
+          },
+          "text": "models"
+        },
+        {
+          "id": "I103-9",
+          "obj": "MESH:D065626 (Non-alcoholic Fatty Liver Disease, score: 10.541)",
+          "span": {
+            "begin": 8796,
+            "end": 8800
+          },
+          "text": "NASH"
+        },
+        {
+          "id": "I105-9",
+          "obj": "MESH:D008105 (Liver Cirrhosis, Biliary, score: 7.854)",
+          "span": {
+            "begin": 8805,
+            "end": 8821
+          },
+          "text": "biliary fibrosis"
+        },
+        {
+          "id": "I107-9",
+          "obj": "MESH:D014021 (Tissue Preservation, score: 8.228)",
+          "span": {
+            "begin": 8822,
+            "end": 8834
+          },
+          "text": "Preservation"
+        },
+        {
+          "id": "I109-9",
+          "obj": "MESH:D004763 (Glucagon-Like Peptides, score: 4.195)",
+          "span": {
+            "begin": 8838,
+            "end": 8860
+          },
+          "text": "glucagon-like peptide-"
+        },
+        {
+          "id": "I111-9",
+          "obj": "MESH:D016422 (Letter, score: 13.353)",
+          "span": {
+            "begin": 8862,
+            "end": 8867
+          },
+          "text": "level"
+        },
+        {
+          "id": "I112-9",
+          "obj": "MESH:D015536 (Down-Regulation, score: 12.598)",
+          "span": {
+            "begin": 8868,
+            "end": 8878
+          },
+          "text": "attenuates"
+        },
+        {
+          "id": "I115-9",
+          "obj": "MESH:D005355 (Fibrosis, score: 4.842)",
+          "span": {
+            "begin": 8902,
+            "end": 8917
+          },
+          "text": "tissue fibrosis"
+        },
+        {
+          "id": "I119-9",
+          "obj": "MESH:D044140 (Receptor, Angiotensin, Type 1, score: 11.201)",
+          "span": {
+            "begin": 8930,
+            "end": 8936
+          },
+          "text": "AT1/AT"
+        },
+        {
+          "id": "I121-9",
+          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "span": {
+            "begin": 8947,
+            "end": 8957
+          },
+          "text": "expression"
+        },
+        {
+          "id": "I123-9",
+          "obj": "MESH:D000085962 (Angiotensin-Converting Enzyme 2, score: 9.561)",
+          "span": {
+            "begin": 8962,
+            "end": 9002
+          },
+          "text": "angiotensin-converting enzyme  activity"
+        },
+        {
+          "id": "I128-9",
+          "obj": "MESH:D051381 (Rats, score: 3.228)",
+          "span": {
+            "begin": 9006,
+            "end": 9009
+          },
+          "text": "rat"
+        },
+        {
+          "id": "I129-9",
+          "obj": "MESH:D006321 (Heart, score: 0.007)",
+          "span": {
+            "begin": 9010,
+            "end": 9015
+          },
+          "text": "heart"
         }
       ],
       "project": "https://med-nemo-sapbert.apps.renci.org/annotate/"
