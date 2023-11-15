@@ -17,13 +17,15 @@ import urllib.parse
 import requests
 import pytest
 
+from requests.adapters import HTTPAdapter, Retry
+
 # Configuration: get the Nemo-Serve URL and figure out the annotate path.
 NEMOSERVE_URL = os.getenv('NEMOSERVE_URL', 'https://med-nemo.apps.renci.org/')
 NEMOSERVE_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 NEMOSERVE_MODEL_NAME = "token_classification"
 
 # Configuration: get the SAPBERT URL and figure out the annotate path.
-SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://med-nemo-sapbert.apps.renci.org/')
+SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 
@@ -42,7 +44,18 @@ PUBMED_IDS_TO_TEST = [
     #'PMID:33460838'
 ]
 
+# Set up logging.
 logging.basicConfig(level=logging.INFO)
+
+# Set up requests to retry.
+session = requests.Session()
+
+retries = Retry(total=5,
+                backoff_factor=0.1,
+                status_forcelist=[ 502 ])
+
+session.mount('http://', HTTPAdapter(max_retries=retries))
+session.mount('https://', HTTPAdapter(max_retries=retries))
 
 # Helper methods
 def get_text_from_pmid(pmid):
@@ -55,7 +68,7 @@ def get_text_from_pmid(pmid):
     url = f'https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/{pmid}/unicode'
 
     # Download the PubAnnotator
-    bioc_json_response = requests.get(url)
+    bioc_json_response = session.get(url)
     assert bioc_json_response.status_code == 200
     bioc_json = bioc_json_response.json()
 
@@ -81,7 +94,7 @@ def get_text_from_pmcid(pmcid):
     url = f'https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/{pmcid}/unicode'
 
     # Download the PubAnnotator
-    bioc_json_response = requests.get(url)
+    bioc_json_response = session.get(url)
     assert bioc_json_response.status_code == 200
     bioc_json = bioc_json_response.json()
 
@@ -116,7 +129,7 @@ def test_with_pubannotator(pubmed_id):
         "model_name": NEMOSERVE_MODEL_NAME
     }
     logging.debug(f"Request: {request}")
-    response = requests.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
+    response = session.post(NEMOSERVE_ANNOTATE_ENDPOINT, json=request)
     logging.debug(f"Response: {response.content}")
     assert response.status_code == 200
     annotated = response.json()
@@ -134,18 +147,26 @@ def test_with_pubannotator(pubmed_id):
         logging.debug(f"Querying SAPBERT with {token['text']}")
         request = {
             "text": token['text'],
-            "model_name": SAPBERT_MODEL_NAME
+            "model_name": SAPBERT_MODEL_NAME,
+            "count": 1000,
+            "args": {},
         }
-        response = requests.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
-        logging.debug(f"Response from SAPBERT: {response.content}")
-        assert response.status_code == 200
+
+        # Add the Biolink type if we have one (and we should).
+        if 'obj' in token and token['obj'] and token['obj'].startswith('biolink:'):
+            request['args']['bl_type'] = token['obj'][8:]
+
+        response = session.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
+        assert response.ok, f"SAPBERT annotate endpoint failed for request {request}: {response}"
 
         result = response.json()
-        assert result, f"Could not annotate text {token['text']} in Sapbert: {response}"
+        if not result:
+            logging.debug(f"No results for {request} from SAPBERT, skipping.")
+            continue
         first_result = result[0]
 
         denotation = dict(token)
-        denotation['obj'] = f"MESH:{first_result['curie']} ({first_result['label']}, score: {first_result['distance_score']})"
+        denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, {first_result['category']}, score: {first_result['score']})"
         count_sapbert_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.

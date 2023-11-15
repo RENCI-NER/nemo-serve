@@ -2908,7 +2908,7 @@
       "denotations": [
         {
           "id": "I1-",
-          "obj": "MESH:D018511 (Systems Integration, score: 9.887)",
+          "obj": "UMLS:C1705422 (Integration (data processing), biolink:Activity, score: 0.216497302055)",
           "span": {
             "begin": 11,
             "end": 22
@@ -2917,7 +2917,7 @@
         },
         {
           "id": "I4-",
-          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "obj": "UMLS:C1511726 (Data, biolink:InformationContentEntity, score: 0.128288924694)",
           "span": {
             "begin": 41,
             "end": 45
@@ -2926,7 +2926,7 @@
         },
         {
           "id": "I7-",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 55,
             "end": 62
@@ -2935,7 +2935,7 @@
         },
         {
           "id": "I9-",
-          "obj": "MESH:D020504 (Abstracts, score: 8.193)",
+          "obj": "UMLS:C0600678 (Abstract Summary, biolink:Publication, score: 0.2702293396)",
           "span": {
             "begin": 72,
             "end": 80
@@ -2944,7 +2944,7 @@
         },
         {
           "id": "I10-",
-          "obj": "MESH:D017418 (Meta-Analysis, score: 12.871)",
+          "obj": "UMLS:C1706244 (Summary (document), biolink:Publication, score: 0.125572443008)",
           "span": {
             "begin": 81,
             "end": 88
@@ -2953,7 +2953,7 @@
         },
         {
           "id": "I16-",
-          "obj": "MESH:D058873 (Pandemics, score: 2.454)",
+          "obj": "UMLS:C1615608 (Pandemics, biolink:Phenomenon, score: 0.145165085793)",
           "span": {
             "begin": 117,
             "end": 125
@@ -2962,7 +2962,7 @@
         },
         {
           "id": "I22-",
-          "obj": "MESH:D051188 (Knowledge Bases, score: 6.041)",
+          "obj": "UMLS:C0022752 (Knowledge Bases, biolink:Publication, score: 0.218747973442)",
           "span": {
             "begin": 159,
             "end": 172
@@ -2971,7 +2971,7 @@
         },
         {
           "id": "I28-",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 213,
             "end": 223
@@ -2980,7 +2980,7 @@
         },
         {
           "id": "I34-",
-          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
+          "obj": "UMLS:C1705987 (Pathway (interactions), biolink:InformationContentEntity, score: 0.167230248451)",
           "span": {
             "begin": 261,
             "end": 269
@@ -2989,7 +2989,7 @@
         },
         {
           "id": "I36-",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 280,
             "end": 290
@@ -2998,7 +2998,7 @@
         },
         {
           "id": "I37-",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 291,
             "end": 306
@@ -3007,7 +3007,7 @@
         },
         {
           "id": "I40-",
-          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "obj": "UMLS:C1533716 (Information, biolink:InformationContentEntity, score: 0.134603619576)",
           "span": {
             "begin": 312,
             "end": 323
@@ -3016,7 +3016,7 @@
         },
         {
           "id": "I43-",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 336,
             "end": 346
@@ -3025,7 +3025,7 @@
         },
         {
           "id": "I44-",
-          "obj": "MESH:D008091 (Literature, score: 0.008)",
+          "obj": "UMLS:C0023866 (Literature, biolink:Publication, score: 0.0992566347122)",
           "span": {
             "begin": 347,
             "end": 357
@@ -3034,7 +3034,7 @@
         },
         {
           "id": "I60-",
-          "obj": "MESH:D013404 (Suggestion, score: 12.691)",
+          "obj": "UMLS:C0681799 (research question, biolink:InformationContentEntity, score: 0.382898330688)",
           "span": {
             "begin": 457,
             "end": 467
@@ -3043,7 +3043,7 @@
         },
         {
           "id": "I65-",
-          "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.280814528465)",
           "span": {
             "begin": 500,
             "end": 505
@@ -3052,7 +3052,7 @@
         },
         {
           "id": "I67-",
-          "obj": "MESH:D015510 (Clinical Medicine, score: 8.953)",
+          "obj": "UMLS:C0205210 (Clinical, biolink:InformationContentEntity, score: 0.131728768349)",
           "span": {
             "begin": 510,
             "end": 518
@@ -3061,7 +3061,7 @@
         },
         {
           "id": "I68-",
-          "obj": "MESH:D015198 (Designer Drugs, score: 11.594)",
+          "obj": "UMLS:C0308714 (Concept Veterinary Drug, biolink:Drug, score: 0.328157067299)",
           "span": {
             "begin": 519,
             "end": 534
@@ -3070,7 +3070,7 @@
         },
         {
           "id": "I75-",
-          "obj": "MESH:D023361 (Validation Study, score: 12.407)",
+          "obj": "UMLS:C1456348 (Confirm, biolink:InformationContentEntity, score: 0.221165597439)",
           "span": {
             "begin": 579,
             "end": 591
@@ -3079,7 +3079,7 @@
         },
         {
           "id": "I76-",
-          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 9.821)",
+          "obj": "UMLS:C1705987 (Pathway (interactions), biolink:InformationContentEntity, score: 0.167230248451)",
           "span": {
             "begin": 592,
             "end": 600
@@ -3088,7 +3088,7 @@
         },
         {
           "id": "I78-",
-          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.272700965405)",
           "span": {
             "begin": 604,
             "end": 608
@@ -3097,7 +3097,7 @@
         },
         {
           "id": "I79-",
-          "obj": "MESH:D020228 (Pharmacologic Actions, score: 10.981)",
+          "obj": "UMLS:C3266814 (Action, biolink:Activity, score: 0.115566313267)",
           "span": {
             "begin": 609,
             "end": 615
@@ -3106,7 +3106,7 @@
         },
         {
           "id": "I82-",
-          "obj": "MESH:D000077626 (Implementation Science, score: 7.85)",
+          "obj": "UMLS:C0557981 (Implementation of planned interventions, biolink:Activity, score: 0.287507653236)",
           "span": {
             "begin": 634,
             "end": 648
@@ -3115,7 +3115,7 @@
         },
         {
           "id": "I92-",
-          "obj": "MESH:D013664 (Teaching Materials, score: 11.968)",
+          "obj": "UMLS:C1442085 (Instructions, biolink:Publication, score: 0.137608885765)",
           "span": {
             "begin": 725,
             "end": 737
@@ -3124,7 +3124,7 @@
         },
         {
           "id": "I96-",
-          "obj": "MESH:D031301 (Robinia, score: 14.686)",
+          "obj": "UMLS:C2733500 (Confusion, respiratory rate, blood pressure, 65 years of age or older score, biolink:Publication, score: 0.470954835415)",
           "span": {
             "begin": 755,
             "end": 809
@@ -3133,7 +3133,7 @@
         },
         {
           "id": "I105-",
-          "obj": "MESH:D004526 (Efficiency, score: 11.346)",
+          "obj": "UMLS:C1704419 (Effective, biolink:InformationContentEntity, score: 0.118043243885)",
           "span": {
             "begin": 842,
             "end": 851
@@ -3142,7 +3142,7 @@
         },
         {
           "id": "I106-",
-          "obj": "MESH:D004364 (Pharmaceutical Preparations, score: 11.081)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.22122502327)",
           "span": {
             "begin": 852,
             "end": 863
@@ -3151,7 +3151,7 @@
         },
         {
           "id": "I116-",
-          "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.280814528465)",
           "span": {
             "begin": 914,
             "end": 919
@@ -3160,7 +3160,7 @@
         },
         {
           "id": "I122-",
-          "obj": "MESH:D058873 (Pandemics, score: 2.454)",
+          "obj": "UMLS:C1615608 (Pandemics, biolink:Phenomenon, score: 0.145165085793)",
           "span": {
             "begin": 949,
             "end": 957
@@ -3169,7 +3169,7 @@
         },
         {
           "id": "I11-1",
-          "obj": "MESH:D004364 (Pharmaceutical Preparations, score: 11.081)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.22122502327)",
           "span": {
             "begin": 1037,
             "end": 1048
@@ -3178,7 +3178,7 @@
         },
         {
           "id": "I12-1",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 1050,
             "end": 1060
@@ -3187,7 +3187,7 @@
         },
         {
           "id": "I13-1",
-          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.303879857063)",
           "span": {
             "begin": 1061,
             "end": 1077
@@ -3196,7 +3196,7 @@
         },
         {
           "id": "I19-1",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 1101,
             "end": 1111
@@ -3205,7 +3205,7 @@
         },
         {
           "id": "I20-1",
-          "obj": "MESH:D009769 (Object Attachment, score: 11.79)",
+          "obj": "UMLS:C1882134 (Object Property, biolink:Publication, score: 0.286536097527)",
           "span": {
             "begin": 1112,
             "end": 1119
@@ -3214,7 +3214,7 @@
         },
         {
           "id": "I33-1",
-          "obj": "MESH:D008564 (Membrane Potentials, score: 11.26)",
+          "obj": "UMLS:C3245505 (Potential, biolink:InformationContentEntity, score: 0.121181368828)",
           "span": {
             "begin": 1205,
             "end": 1214
@@ -3223,7 +3223,7 @@
         },
         {
           "id": "I34-1",
-          "obj": "MESH:D019727 (Proxy, score: 13.084)",
+          "obj": "UMLS:C0750492 (Probably, biolink:InformationContentEntity, score: 0.348772287369)",
           "span": {
             "begin": 1215,
             "end": 1224
@@ -3232,7 +3232,7 @@
         },
         {
           "id": "I35-1",
-          "obj": "MESH:D004358 (Drug Therapy, score: 10.101)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.280814528465)",
           "span": {
             "begin": 1225,
             "end": 1230
@@ -3241,7 +3241,7 @@
         },
         {
           "id": "I41-1",
-          "obj": "MESH:D007398 (Interpersonal Relations, score: 11.18)",
+          "obj": "UMLS:C0439849 (Relationships, biolink:InformationContentEntity, score: 0.119477748871)",
           "span": {
             "begin": 1259,
             "end": 1272
@@ -3250,7 +3250,7 @@
         },
         {
           "id": "I43-1",
-          "obj": "MESH:D051188 (Knowledge Bases, score: 13.561)",
+          "obj": "UMLS:C1517892 (Links List, biolink:Publication, score: 0.321734726429)",
           "span": {
             "begin": 1281,
             "end": 1302
@@ -3259,7 +3259,7 @@
         },
         {
           "id": "I50-1",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 1323,
             "end": 1330
@@ -3268,7 +3268,7 @@
         },
         {
           "id": "I51-1",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 1331,
             "end": 1346
@@ -3277,7 +3277,7 @@
         },
         {
           "id": "I59-1",
-          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "obj": "UMLS:C1533716 (Information, biolink:InformationContentEntity, score: 0.134603619576)",
           "span": {
             "begin": 1387,
             "end": 1398
@@ -3286,7 +3286,7 @@
         },
         {
           "id": "I62-1",
-          "obj": "MESH:D011642 (Publications, score: 0.007)",
+          "obj": "UMLS:C0034036 (Publications, biolink:Publication, score: 0.122500002384)",
           "span": {
             "begin": 1411,
             "end": 1423
@@ -3295,7 +3295,7 @@
         },
         {
           "id": "I65-1",
-          "obj": "MESH:D019359 (Knowledge, score: 10.99)",
+          "obj": "UMLS:C0022752 (Knowledge Bases, biolink:Publication, score: 0.292469263077)",
           "span": {
             "begin": 1434,
             "end": 1451
@@ -3304,7 +3304,7 @@
         },
         {
           "id": "I86-1",
-          "obj": "MESH:D008091 (Literature, score: 12.101)",
+          "obj": "UMLS:C3541382 (Text (foundation metadata concept), biolink:Publication, score: 0.297658205032)",
           "span": {
             "begin": 1601,
             "end": 1610
@@ -3313,7 +3313,7 @@
         },
         {
           "id": "I87-1",
-          "obj": "MESH:D008373 (Manuscripts as Topic, score: 10.487)",
+          "obj": "UMLS:C0600659 (Manuscripts, biolink:Publication, score: 0.282209992409)",
           "span": {
             "begin": 1611,
             "end": 1626
@@ -3322,7 +3322,7 @@
         },
         {
           "id": "I90-1",
-          "obj": "MESH:D038081 (Organogenesis, score: 11.236)",
+          "obj": "UMLS:C0376585 (Cross-Sectional Anatomy, biolink:Publication, score: 0.369512856007)",
           "span": {
             "begin": 1632,
             "end": 1643
@@ -3331,7 +3331,7 @@
         },
         {
           "id": "I91-1",
-          "obj": "MESH:D011356 (Product Labeling, score: 11.847)",
+          "obj": "UMLS:C0456816 (TVRL alphanumeric labels, biolink:Publication, score: 0.340714216232)",
           "span": {
             "begin": 1644,
             "end": 1651
@@ -3340,7 +3340,7 @@
         },
         {
           "id": "I101-1",
-          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "obj": "UMLS:C1511726 (Data, biolink:InformationContentEntity, score: 0.128288924694)",
           "span": {
             "begin": 1743,
             "end": 1747
@@ -3349,7 +3349,7 @@
         },
         {
           "id": "I108-1",
-          "obj": "MESH:D031301 (Robinia, score: 11.847)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.416903853416)",
           "span": {
             "begin": 1782,
             "end": 1791
@@ -3358,7 +3358,7 @@
         },
         {
           "id": "I109-1",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 1792,
             "end": 1807
@@ -3367,7 +3367,7 @@
         },
         {
           "id": "I113-1",
-          "obj": "MESH:D020494 (Phrases, score: 10.335)",
+          "obj": "UMLS:C0876929 (Sentence, biolink:Publication, score: 0.114627182484)",
           "span": {
             "begin": 1823,
             "end": 1831
@@ -3376,7 +3376,7 @@
         },
         {
           "id": "I115-1",
-          "obj": "MESH:D020494 (Phrases, score: 10.335)",
+          "obj": "UMLS:C0876929 (Sentence, biolink:Publication, score: 0.114627182484)",
           "span": {
             "begin": 1835,
             "end": 1843
@@ -3385,7 +3385,7 @@
         },
         {
           "id": "I117-1",
-          "obj": "MESH:D002452 (Cell Count, score: 9.576)",
+          "obj": "UMLS:C0439157 (counts, biolink:InformationContentEntity, score: 0.110186934471)",
           "span": {
             "begin": 1849,
             "end": 1855
@@ -3394,7 +3394,7 @@
         },
         {
           "id": "I119-1",
-          "obj": "MESH:D020502 (Terminology, score: 11.612)",
+          "obj": "UMLS:C1268085 (Non-human body structure, biolink:NamedThing, score: 0.432083129883)",
           "span": {
             "begin": 1859,
             "end": 1876
@@ -3403,7 +3403,7 @@
         },
         {
           "id": "I123-1",
-          "obj": "MESH:D060085 (Coinfection, score: 12.709)",
+          "obj": "UMLS:C0205420 (Concurrent, biolink:InformationContentEntity, score: 0.34352093935)",
           "span": {
             "begin": 1885,
             "end": 1899
@@ -3412,7 +3412,7 @@
         },
         {
           "id": "I6-2",
-          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "obj": "UMLS:C2697523 (Graph Edge, biolink:InformationContentEntity, score: 0.20860517025)",
           "span": {
             "begin": 1932,
             "end": 1937
@@ -3421,7 +3421,7 @@
         },
         {
           "id": "I10-2",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 1955,
             "end": 1970
@@ -3430,7 +3430,7 @@
         },
         {
           "id": "I23-2",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 2069,
             "end": 2079
@@ -3439,7 +3439,7 @@
         },
         {
           "id": "I24-2",
-          "obj": "MESH:D020502 (Terminology, score: 12.439)",
+          "obj": "UMLS:C0678594 (Structure, biolink:InformationContentEntity, score: 0.354640722275)",
           "span": {
             "begin": 2080,
             "end": 2096
@@ -3448,7 +3448,7 @@
         },
         {
           "id": "I26-2",
-          "obj": "MESH:D011356 (Product Labeling, score: 11.847)",
+          "obj": "UMLS:C0456816 (TVRL alphanumeric labels, biolink:Publication, score: 0.340714216232)",
           "span": {
             "begin": 2097,
             "end": 2104
@@ -3457,7 +3457,7 @@
         },
         {
           "id": "I29-2",
-          "obj": "MESH:D015994 (Incidence, score: 13.465)",
+          "obj": "UMLS:C0449788 (Count of entities, biolink:InformationContentEntity, score: 0.295951724052)",
           "span": {
             "begin": 2113,
             "end": 2133
@@ -3466,7 +3466,7 @@
         },
         {
           "id": "I33-2",
-          "obj": "MESH:D010209 (Paper, score: 0.007)",
+          "obj": "UMLS:C0030351 (Paper, biolink:PhysicalEntity, score: 0.114127457142)",
           "span": {
             "begin": 2141,
             "end": 2146
@@ -3475,7 +3475,7 @@
         },
         {
           "id": "I36-2",
-          "obj": "MESH:D020494 (Phrases, score: 10.335)",
+          "obj": "UMLS:C0876929 (Sentence, biolink:Publication, score: 0.114627182484)",
           "span": {
             "begin": 2159,
             "end": 2167
@@ -3484,7 +3484,7 @@
         },
         {
           "id": "I43-2",
-          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "obj": "UMLS:C2697523 (Graph Edge, biolink:InformationContentEntity, score: 0.20860517025)",
           "span": {
             "begin": 2202,
             "end": 2207
@@ -3493,7 +3493,7 @@
         },
         {
           "id": "I46-2",
-          "obj": "MESH:D058977 (Molecular Sequence Annotation, score: 11.413)",
+          "obj": "UMLS:C4684623 (Data Item, biolink:NamedThing, score: 0.422807455063)",
           "span": {
             "begin": 2223,
             "end": 2233
@@ -3502,7 +3502,7 @@
         },
         {
           "id": "I47-2",
-          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "obj": "UMLS:C1511726 (Data, biolink:InformationContentEntity, score: 0.128288924694)",
           "span": {
             "begin": 2234,
             "end": 2238
@@ -3511,7 +3511,7 @@
         },
         {
           "id": "I50-2",
-          "obj": "MESH:D014780 (Viruses, score: 5.129)",
+          "obj": "PR:000036197 (viral protein, biolink:Protein, score: 0.299687743187)",
           "span": {
             "begin": 2247,
             "end": 2252
@@ -3520,7 +3520,7 @@
         },
         {
           "id": "I51-2",
-          "obj": "MESH:D011506 (Proteins, score: 0.009)",
+          "obj": "UMLS:C0033684 (Proteins, biolink:Protein, score: 0.120564460754)",
           "span": {
             "begin": 2253,
             "end": 2261
@@ -3528,17 +3528,8 @@
           "text": "proteins"
         },
         {
-          "id": "I55-2",
-          "obj": "MESH:D000086402 (SARS-CoV-2, score: 0.008)",
-          "span": {
-            "begin": 2282,
-            "end": 2292
-          },
-          "text": "SARS-CoV-2"
-        },
-        {
           "id": "I68-2",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 2411,
             "end": 2426
@@ -3547,7 +3538,7 @@
         },
         {
           "id": "I72-2",
-          "obj": "MESH:D044423 (Kelp, score: 13.815)",
+          "obj": "UMLS:C4527064 (London Deauville Criteria Point Scale X, biolink:Publication, score: 0.490531682968)",
           "span": {
             "begin": 2444,
             "end": 2447
@@ -3556,7 +3547,7 @@
         },
         {
           "id": "I79-2",
-          "obj": "MESH:D046348 (Gophers, score: 13.017)",
+          "obj": "UMLS:C1138831 (Gene Ontology, biolink:Publication, score: 0.382031083107)",
           "span": {
             "begin": 2511,
             "end": 2514
@@ -3565,7 +3556,7 @@
         },
         {
           "id": "I80-2",
-          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "obj": "UMLS:C1511726 (Data, biolink:InformationContentEntity, score: 0.128288924694)",
           "span": {
             "begin": 2515,
             "end": 2519
@@ -3574,7 +3565,7 @@
         },
         {
           "id": "I90-2",
-          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "obj": "UMLS:C0242356 (Databases, biolink:Publication, score: 0.129083037376)",
           "span": {
             "begin": 2582,
             "end": 2590
@@ -3583,7 +3574,7 @@
         },
         {
           "id": "I92-2",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 2595,
             "end": 2610
@@ -3592,7 +3583,7 @@
         },
         {
           "id": "I95-2",
-          "obj": "MESH:D008198 (Lymph Nodes, score: 8.486)",
+          "obj": "UMLS:C0443268 (nodal (pertaining to a node), biolink:InformationContentEntity, score: 0.212711691856)",
           "span": {
             "begin": 2620,
             "end": 2625
@@ -3601,7 +3592,7 @@
         },
         {
           "id": "I99-2",
-          "obj": "MESH:D011506 (Proteins, score: 0.009)",
+          "obj": "UMLS:C0033684 (Proteins, biolink:Protein, score: 0.120564460754)",
           "span": {
             "begin": 2637,
             "end": 2645
@@ -3610,7 +3601,7 @@
         },
         {
           "id": "I101-2",
-          "obj": "MESH:D020224 (Expressed Sequence Tags, score: 14.029)",
+          "obj": "UMLS:C2981739 (n-x Nomenclature, biolink:Publication, score: 0.394143044949)",
           "span": {
             "begin": 2652,
             "end": 2661
@@ -3619,7 +3610,7 @@
         },
         {
           "id": "I104-2",
-          "obj": "MESH:D063990 (Gene Ontology, score: 11.133)",
+          "obj": "UMLS:C1138831 (Gene Ontology, biolink:Publication, score: 0.258863210678)",
           "span": {
             "begin": 2674,
             "end": 2676
@@ -3628,7 +3619,7 @@
         },
         {
           "id": "I105-2",
-          "obj": "MESH:D000071253 (Metadata, score: 11.567)",
+          "obj": "UMLS:C4684623 (Data Item, biolink:NamedThing, score: 0.418159604073)",
           "span": {
             "begin": 2677,
             "end": 2688
@@ -3637,7 +3628,7 @@
         },
         {
           "id": "I110-2",
-          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "obj": "UMLS:C2697523 (Graph Edge, biolink:InformationContentEntity, score: 0.20860517025)",
           "span": {
             "begin": 2705,
             "end": 2710
@@ -3646,7 +3637,7 @@
         },
         {
           "id": "I119-2",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 2756,
             "end": 2763
@@ -3655,7 +3646,7 @@
         },
         {
           "id": "I2-3",
-          "obj": "MESH:D003379 (Countertransference, score: 13.101)",
+          "obj": "UMLS:C0443155 (Biplanar, biolink:InformationContentEntity, score: 0.322126150131)",
           "span": {
             "begin": 2773,
             "end": 2786
@@ -3664,7 +3655,7 @@
         },
         {
           "id": "I3-3",
-          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "obj": "UMLS:C2697523 (Graph Edge, biolink:InformationContentEntity, score: 0.20860517025)",
           "span": {
             "begin": 2787,
             "end": 2792
@@ -3673,7 +3664,7 @@
         },
         {
           "id": "I6-3",
-          "obj": "MESH:D008040 (Genetic Linkage, score: 11.162)",
+          "obj": "UMLS:C0332280 (Linkage concept, biolink:InformationContentEntity, score: 0.248291552067)",
           "span": {
             "begin": 2803,
             "end": 2811
@@ -3682,7 +3673,7 @@
         },
         {
           "id": "I10-3",
-          "obj": "MESH:D009949 (Orientation, score: 11.296)",
+          "obj": "UMLS:C0449738 (Direction, biolink:InformationContentEntity, score: 0.216872692108)",
           "span": {
             "begin": 2835,
             "end": 2849
@@ -3691,7 +3682,7 @@
         },
         {
           "id": "I16-3",
-          "obj": "MESH:D003463 (Cues, score: 13.266)",
+          "obj": "UMLS:C0449416 (Source, biolink:PhenotypicFeature, score: 0.157838582993)",
           "span": {
             "begin": 2877,
             "end": 2884
@@ -3699,17 +3690,8 @@
           "text": "sources"
         },
         {
-          "id": "I21-3",
-          "obj": "MESH:D045473 (SARS Virus, score: 5.44)",
-          "span": {
-            "begin": 2898,
-            "end": 2907
-          },
-          "text": "SARS-CoV-"
-        },
-        {
           "id": "I22-3",
-          "obj": "MESH:D012816 (Signs and Symptoms, score: 7.473)",
+          "obj": "NCIT:C4876 (Symptom, biolink:PhenotypicFeature, score: 0.135322093964)",
           "span": {
             "begin": 2909,
             "end": 2917
@@ -3718,7 +3700,7 @@
         },
         {
           "id": "I33-3",
-          "obj": "MESH:D016420 (Comment, score: 11.528)",
+          "obj": "UMLS:C0947611 (Comment, biolink:Publication, score: 0.263050198555)",
           "span": {
             "begin": 3122,
             "end": 3139
@@ -3727,7 +3709,7 @@
         },
         {
           "id": "I36-3",
-          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "obj": "UMLS:C1533716 (Information, biolink:InformationContentEntity, score: 0.134603619576)",
           "span": {
             "begin": 3146,
             "end": 3157
@@ -3736,7 +3718,7 @@
         },
         {
           "id": "I39-3",
-          "obj": "MESH:D004608 (Eligibility Determination, score: 13.085)",
+          "obj": "UMLS:C1550548 (entry - ActRelationshipCheckpoint, biolink:InformationContentEntity, score: 0.18554019928)",
           "span": {
             "begin": 3171,
             "end": 3178
@@ -3745,7 +3727,7 @@
         },
         {
           "id": "I43-3",
-          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "obj": "UMLS:C0242356 (Databases, biolink:Publication, score: 0.129083037376)",
           "span": {
             "begin": 3198,
             "end": 3206
@@ -3754,7 +3736,7 @@
         },
         {
           "id": "I45-3",
-          "obj": "MESH:D020489 (Outline, score: 13.194)",
+          "obj": "UMLS:C2697523 (Graph Edge, biolink:InformationContentEntity, score: 0.20860517025)",
           "span": {
             "begin": 3210,
             "end": 3215
@@ -3763,7 +3745,7 @@
         },
         {
           "id": "I51-3",
-          "obj": "MESH:D010641 (Phenotype, score: 4.301)",
+          "obj": "UMLS:C0031437 (Phenotype, biolink:OrganismAttribute, score: 0.156139135361)",
           "span": {
             "begin": 3245,
             "end": 3255
@@ -3772,7 +3754,7 @@
         },
         {
           "id": "I55-3",
-          "obj": "MESH:D007256 (Information Systems, score: 9.315)",
+          "obj": "UMLS:C3645612 (Identifier scheme, biolink:Publication, score: 0.207997202873)",
           "span": {
             "begin": 3273,
             "end": 3291
@@ -3781,7 +3763,7 @@
         },
         {
           "id": "I60-3",
-          "obj": "MESH:D019991 (Database, score: 3.733)",
+          "obj": "UMLS:C0242356 (Databases, biolink:Publication, score: 0.110228896141)",
           "span": {
             "begin": 3310,
             "end": 3319
@@ -3790,7 +3772,7 @@
         },
         {
           "id": "I68-3",
-          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "obj": "UMLS:C1511726 (Data, biolink:InformationContentEntity, score: 0.128288924694)",
           "span": {
             "begin": 3359,
             "end": 3363
@@ -3799,7 +3781,7 @@
         },
         {
           "id": "I75-3",
-          "obj": "MESH:D000077488 (Data Science, score: 10.085)",
+          "obj": "UMLS:C1511726 (Data, biolink:InformationContentEntity, score: 0.128288924694)",
           "span": {
             "begin": 3464,
             "end": 3468
@@ -3808,7 +3790,7 @@
         },
         {
           "id": "I76-3",
-          "obj": "MESH:D016662 (Virus Integration, score: 9.132)",
+          "obj": "UMLS:C1705422 (Integration (data processing), biolink:Activity, score: 0.265940070152)",
           "span": {
             "begin": 3469,
             "end": 3480
@@ -3817,7 +3799,7 @@
         },
         {
           "id": "I82-3",
-          "obj": "MESH:D051188 (Knowledge Bases, score: 12.204)",
+          "obj": "UMLS:C1706232 (Directed Acyclic Graph, biolink:Publication, score: 0.369925260544)",
           "span": {
             "begin": 3510,
             "end": 3534
@@ -3826,7 +3808,7 @@
         },
         {
           "id": "I85-3",
-          "obj": "MESH:D009355 (Neomycin, score: 14.519)",
+          "obj": "UMLS:C0441797 (Fourth edition, biolink:Publication, score: 0.452302515507)",
           "span": {
             "begin": 3535,
             "end": 3540
@@ -3835,7 +3817,7 @@
         },
         {
           "id": "I89-3",
-          "obj": "MESH:D000081406 (Cyclophilin D, score: 10.976)",
+          "obj": "UMLS:C0445556 (Mooris, biolink:Publication, score: 0.470184862614)",
           "span": {
             "begin": 3574,
             "end": 3580
@@ -3844,7 +3826,7 @@
         },
         {
           "id": "I93-3",
-          "obj": "MESH:D003196 (Computer Graphics, score: 10.059)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.244209647179)",
           "span": {
             "begin": 3599,
             "end": 3604
@@ -3853,7 +3835,7 @@
         },
         {
           "id": "I94-3",
-          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "obj": "UMLS:C0242356 (Databases, biolink:Publication, score: 0.129083037376)",
           "span": {
             "begin": 3605,
             "end": 3613
@@ -3862,7 +3844,7 @@
         },
         {
           "id": "I95-3",
-          "obj": "MESH:D020475 (Examination Questions, score: 11.576)",
+          "obj": "UMLS:C3543841 (Query (foundation metadata concept), biolink:Publication, score: 0.187658965588)",
           "span": {
             "begin": 3614,
             "end": 3621
@@ -3871,7 +3853,7 @@
         },
         {
           "id": "I100-3",
-          "obj": "MESH:D056910 (Republic of Korea, score: 13.193)",
+          "obj": "UMLS:C0439112 (Upper case Roman letter K, biolink:Publication, score: 0.390716671944)",
           "span": {
             "begin": 3654,
             "end": 3656
@@ -3880,7 +3862,7 @@
         },
         {
           "id": "I110-3",
-          "obj": "MESH:D056910 (Republic of Korea, score: 13.193)",
+          "obj": "UMLS:C0439112 (Upper case Roman letter K, biolink:Publication, score: 0.390716671944)",
           "span": {
             "begin": 3697,
             "end": 3699
@@ -3889,7 +3871,7 @@
         },
         {
           "id": "I12-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 8.783)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.281816840172)",
           "span": {
             "begin": 3773,
             "end": 3792
@@ -3898,7 +3880,7 @@
         },
         {
           "id": "I13-4",
-          "obj": "MESH:D003142 (Communication, score: 12.01)",
+          "obj": "UMLS:C0449379 (Connection, biolink:InformationContentEntity, score: 0.102734088898)",
           "span": {
             "begin": 3794,
             "end": 3804
@@ -3907,7 +3889,7 @@
         },
         {
           "id": "I16-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 3815,
             "end": 3826
@@ -3916,7 +3898,7 @@
         },
         {
           "id": "I19-4",
-          "obj": "MESH:D003920 (Diabetes Mellitus, score: 6.096)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.190716981888)",
           "span": {
             "begin": 3832,
             "end": 3847
@@ -3925,7 +3907,7 @@
         },
         {
           "id": "I23-4",
-          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.272700965405)",
           "span": {
             "begin": 3854,
             "end": 3858
@@ -3934,7 +3916,7 @@
         },
         {
           "id": "I27-4",
-          "obj": "MESH:D016430 (Clinical Trial, score: 3.524)",
+          "obj": "UMLS:C0008976 (Clinical Trials, biolink:Activity, score: 0.118999958038)",
           "span": {
             "begin": 3878,
             "end": 3893
@@ -3943,7 +3925,7 @@
         },
         {
           "id": "I32-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 3958,
             "end": 3969
@@ -3952,7 +3934,7 @@
         },
         {
           "id": "I34-4",
-          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 7.422)",
+          "obj": "UMLS:C1295479 (Dipeptidyl-dipeptidase, biolink:ChemicalEntity, score: 0.175420641899)",
           "span": {
             "begin": 3979,
             "end": 4000
@@ -3961,7 +3943,7 @@
         },
         {
           "id": "I39-4",
-          "obj": "MESH:D006728 (Hormones, score: 0.007)",
+          "obj": "MESH:D006728 (Hormones, biolink:ChemicalEntity, score: 0.124987006187)",
           "span": {
             "begin": 4026,
             "end": 4034
@@ -3970,7 +3952,7 @@
         },
         {
           "id": "I41-4",
-          "obj": "MESH:D000078790 (Insulin Secretion, score: 8.199)",
+          "obj": "PR:000050339 (insulin hormone, biolink:Protein, score: 0.436851322651)",
           "span": {
             "begin": 4047,
             "end": 4065
@@ -3979,7 +3961,7 @@
         },
         {
           "id": "I48-4",
-          "obj": "MESH:D015854 (Up-Regulation, score: 11.079)",
+          "obj": "UMLS:C2267118 (Vascular Growth Increase, biolink:PhysiologicalProcess, score: 0.444808244705)",
           "span": {
             "begin": 4085,
             "end": 4098
@@ -3988,7 +3970,7 @@
         },
         {
           "id": "I50-4",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 4102,
             "end": 4110
@@ -3997,7 +3979,7 @@
         },
         {
           "id": "I52-4",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.212926030159)",
           "span": {
             "begin": 4116,
             "end": 4119
@@ -4006,7 +3988,7 @@
         },
         {
           "id": "I54-4",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 4130,
             "end": 4138
@@ -4015,7 +3997,7 @@
         },
         {
           "id": "I56-4",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.212926030159)",
           "span": {
             "begin": 4144,
             "end": 4147
@@ -4024,7 +4006,7 @@
         },
         {
           "id": "I60-4",
-          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "obj": "UMLS:C0035647 (Risk, biolink:InformationContentEntity, score: 0.130911588669)",
           "span": {
             "begin": 4162,
             "end": 4166
@@ -4033,7 +4015,7 @@
         },
         {
           "id": "I64-4",
-          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "obj": "UMLS:C0205082 (Severe (severity modifier), biolink:DiseaseOrPhenotypicFeature, score: 0.146518230438)",
           "span": {
             "begin": 4186,
             "end": 4192
@@ -4042,7 +4024,7 @@
         },
         {
           "id": "I65-4",
-          "obj": "MESH:D012816 (Signs and Symptoms, score: 7.473)",
+          "obj": "NCIT:C4876 (Symptom, biolink:PhenotypicFeature, score: 0.135322093964)",
           "span": {
             "begin": 4193,
             "end": 4201
@@ -4051,7 +4033,7 @@
         },
         {
           "id": "I70-4",
-          "obj": "MESH:D015854 (Up-Regulation, score: 10.352)",
+          "obj": "UMLS:C0205217 (Increased, biolink:InformationContentEntity, score: 0.123267173767)",
           "span": {
             "begin": 4222,
             "end": 4231
@@ -4060,7 +4042,7 @@
         },
         {
           "id": "I71-4",
-          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "obj": "UMLS:C4709341 (Gene Expression Interactions, biolink:PhysiologicalProcess, score: 0.418795704842)",
           "span": {
             "begin": 4232,
             "end": 4242
@@ -4069,7 +4051,7 @@
         },
         {
           "id": "I74-4",
-          "obj": "MESH:D058605 (Host-Derived Cellular Factors, score: 11.735)",
+          "obj": "UMLS:C0052892 (bacterial adhesin receptor, biolink:Protein, score: 0.32224214077)",
           "span": {
             "begin": 4250,
             "end": 4263
@@ -4078,7 +4060,7 @@
         },
         {
           "id": "I76-4",
-          "obj": "MESH:D000085962 (Angiotensin-Converting Enzyme 2, score: 9.111)",
+          "obj": "UniProtKB:Q9BYF1 (ACE2_HUMAN Angiotensin-converting enzyme 2 (sprot), biolink:Protein, score: 0.254532337189)",
           "span": {
             "begin": 4264,
             "end": 4268
@@ -4087,7 +4069,7 @@
         },
         {
           "id": "I81-4",
-          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "obj": "UMLS:C3543841 (Query (foundation metadata concept), biolink:Publication, score: 0.155128121376)",
           "span": {
             "begin": 4295,
             "end": 4300
@@ -4096,7 +4078,7 @@
         },
         {
           "id": "I83-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 9.781)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.282920181751)",
           "span": {
             "begin": 4305,
             "end": 4324
@@ -4105,7 +4087,7 @@
         },
         {
           "id": "I84-4",
-          "obj": "MESH:D010152 (Pair Bond, score: 10.414)",
+          "obj": "UMLS:C1709450 (Pair, biolink:InformationContentEntity, score: 0.121287107468)",
           "span": {
             "begin": 4326,
             "end": 4330
@@ -4114,7 +4096,7 @@
         },
         {
           "id": "I86-4",
-          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "obj": "UMLS:C3543841 (Query (foundation metadata concept), biolink:Publication, score: 0.155128121376)",
           "span": {
             "begin": 4336,
             "end": 4341
@@ -4123,7 +4105,7 @@
         },
         {
           "id": "I87-4",
-          "obj": "MESH:D003196 (Computer Graphics, score: 10.059)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.244209647179)",
           "span": {
             "begin": 4342,
             "end": 4347
@@ -4132,7 +4114,7 @@
         },
         {
           "id": "I89-4",
-          "obj": "MESH:D001680 (Biographies as Topic, score: 13.947)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.364490509033)",
           "span": {
             "begin": 4353,
             "end": 4365
@@ -4141,7 +4123,7 @@
         },
         {
           "id": "I92-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 11.411)",
+          "obj": "PUBCHEM.COMPOUND:122189866 (Linagliptin Acetamide, biolink:SmallMolecule, score: 0.378163933754)",
           "span": {
             "begin": 4370,
             "end": 4398
@@ -4150,7 +4132,7 @@
         },
         {
           "id": "I93-4",
-          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "obj": "UMLS:C1704259 (Biochemical Pathway, biolink:MolecularActivity, score: 0.314855217934)",
           "span": {
             "begin": 4400,
             "end": 4407
@@ -4159,7 +4141,7 @@
         },
         {
           "id": "I95-4",
-          "obj": "MESH:D001680 (Biographies as Topic, score: 13.947)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.364490509033)",
           "span": {
             "begin": 4413,
             "end": 4425
@@ -4168,7 +4150,7 @@
         },
         {
           "id": "I98-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 11.471)",
+          "obj": "PUBCHEM.COMPOUND:122189866 (Linagliptin Acetamide, biolink:SmallMolecule, score: 0.349816083908)",
           "span": {
             "begin": 4430,
             "end": 4458
@@ -4177,7 +4159,7 @@
         },
         {
           "id": "I99-4",
-          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "obj": "UMLS:C1704259 (Biochemical Pathway, biolink:MolecularActivity, score: 0.314855217934)",
           "span": {
             "begin": 4460,
             "end": 4467
@@ -4186,7 +4168,7 @@
         },
         {
           "id": "I101-4",
-          "obj": "MESH:D000287 (Administration, Topical, score: 12.168)",
+          "obj": "UMLS:C4521676 (Apply (administration method), biolink:InformationContentEntity, score: 0.153041958809)",
           "span": {
             "begin": 4471,
             "end": 4478
@@ -4195,7 +4177,7 @@
         },
         {
           "id": "I106-4",
-          "obj": "MESH:D008722 (Methods, score: 12.352)",
+          "obj": "UMLS:C0441712 (Mechanism (attribute), biolink:InformationContentEntity, score: 0.232782900333)",
           "span": {
             "begin": 4510,
             "end": 4521
@@ -4204,7 +4186,7 @@
         },
         {
           "id": "I107-4",
-          "obj": "MESH:D063132 (Connectome, score: 10.947)",
+          "obj": "UMLS:C0449379 (Connection, biolink:InformationContentEntity, score: 0.1757158041)",
           "span": {
             "begin": 4522,
             "end": 4533
@@ -4213,7 +4195,7 @@
         },
         {
           "id": "I109-4",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 4542,
             "end": 4553
@@ -4222,7 +4204,7 @@
         },
         {
           "id": "I117-4",
-          "obj": "MESH:D016896 (Treatment Outcome, score: 11.796)",
+          "obj": "UMLS:C1527144 (Therapeutic Effect, biolink:ClinicalAttribute, score: 0.121056258678)",
           "span": {
             "begin": 4599,
             "end": 4617
@@ -4231,7 +4213,7 @@
         },
         {
           "id": "I122-4",
-          "obj": "MESH:D064420 (Drug-Related Side Effects and Adverse Reactions, score: 9.206)",
+          "obj": "UMLS:C0879626 (Adverse effects, biolink:Disease, score: 0.201870918274)",
           "span": {
             "begin": 4639,
             "end": 4651
@@ -4240,7 +4222,7 @@
         },
         {
           "id": "I6-5",
-          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "obj": "UMLS:C3543841 (Query (foundation metadata concept), biolink:Publication, score: 0.155128121376)",
           "span": {
             "begin": 4695,
             "end": 4700
@@ -4249,7 +4231,7 @@
         },
         {
           "id": "I12-5",
-          "obj": "MESH:D008198 (Lymph Nodes, score: 8.486)",
+          "obj": "UMLS:C0443268 (nodal (pertaining to a node), biolink:InformationContentEntity, score: 0.212711691856)",
           "span": {
             "begin": 4739,
             "end": 4744
@@ -4258,7 +4240,7 @@
         },
         {
           "id": "I19-5",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 4779,
             "end": 4789
@@ -4267,7 +4249,7 @@
         },
         {
           "id": "I23-5",
-          "obj": "MESH:D008198 (Lymph Nodes, score: 9.808)",
+          "obj": "UMLS:C0443268 (nodal (pertaining to a node), biolink:InformationContentEntity, score: 0.182167172432)",
           "span": {
             "begin": 4807,
             "end": 4811
@@ -4276,7 +4258,7 @@
         },
         {
           "id": "I27-5",
-          "obj": "MESH:D005796 (Genes, score: 2.873)",
+          "obj": "UMLS:C0017337 (Genes, biolink:Gene, score: 0.139221191406)",
           "span": {
             "begin": 4823,
             "end": 4827
@@ -4285,7 +4267,7 @@
         },
         {
           "id": "I37-5",
-          "obj": "MESH:D008198 (Lymph Nodes, score: 8.486)",
+          "obj": "UMLS:C0443268 (nodal (pertaining to a node), biolink:InformationContentEntity, score: 0.212711691856)",
           "span": {
             "begin": 4870,
             "end": 4875
@@ -4294,7 +4276,7 @@
         },
         {
           "id": "I46-5",
-          "obj": "MESH:D008198 (Lymph Nodes, score: 9.808)",
+          "obj": "UMLS:C0443268 (nodal (pertaining to a node), biolink:InformationContentEntity, score: 0.182167172432)",
           "span": {
             "begin": 4919,
             "end": 4923
@@ -4303,7 +4285,7 @@
         },
         {
           "id": "I57-5",
-          "obj": "MESH:D010641 (Phenotype, score: 5.994)",
+          "obj": "UMLS:C0031437 (Phenotype, biolink:OrganismAttribute, score: 0.178065061569)",
           "span": {
             "begin": 4971,
             "end": 4981
@@ -4312,7 +4294,7 @@
         },
         {
           "id": "I58-5",
-          "obj": "MESH:D000071253 (Metadata, score: 12.335)",
+          "obj": "UMLS:C2346469 (Image Feature, biolink:InformationContentEntity, score: 0.267730236053)",
           "span": {
             "begin": 4982,
             "end": 4989
@@ -4321,7 +4303,7 @@
         },
         {
           "id": "I66-5",
-          "obj": "MESH:D005796 (Genes, score: 2.873)",
+          "obj": "UMLS:C0017337 (Genes, biolink:Gene, score: 0.139221191406)",
           "span": {
             "begin": 5024,
             "end": 5028
@@ -4330,7 +4312,7 @@
         },
         {
           "id": "I70-5",
-          "obj": "MESH:D010641 (Phenotype, score: 5.994)",
+          "obj": "UMLS:C0031437 (Phenotype, biolink:OrganismAttribute, score: 0.178065061569)",
           "span": {
             "begin": 5042,
             "end": 5052
@@ -4339,7 +4321,7 @@
         },
         {
           "id": "I71-5",
-          "obj": "MESH:D000071253 (Metadata, score: 12.335)",
+          "obj": "UMLS:C2346469 (Image Feature, biolink:InformationContentEntity, score: 0.267730236053)",
           "span": {
             "begin": 5053,
             "end": 5060
@@ -4348,7 +4330,7 @@
         },
         {
           "id": "I84-5",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 5131,
             "end": 5142
@@ -4357,7 +4339,7 @@
         },
         {
           "id": "I87-5",
-          "obj": "MESH:D020475 (Examination Questions, score: 12.079)",
+          "obj": "UMLS:C3543841 (Query (foundation metadata concept), biolink:Publication, score: 0.155128121376)",
           "span": {
             "begin": 5159,
             "end": 5164
@@ -4366,7 +4348,7 @@
         },
         {
           "id": "I90-5",
-          "obj": "MESH:D016467 (Monograph, score: 11.684)",
+          "obj": "UMLS:C0442180 (Sub-location, biolink:InformationContentEntity, score: 0.396128773689)",
           "span": {
             "begin": 5178,
             "end": 5187
@@ -4375,7 +4357,7 @@
         },
         {
           "id": "I94-5",
-          "obj": "MESH:D000465 (Algorithms, score: 4.104)",
+          "obj": "UMLS:C0002045 (algorithm, biolink:Publication, score: 0.126067042351)",
           "span": {
             "begin": 5201,
             "end": 5210
@@ -4384,7 +4366,7 @@
         },
         {
           "id": "I97-5",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 5226,
             "end": 5233
@@ -4393,7 +4375,7 @@
         },
         {
           "id": "I100-5",
-          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "obj": "UMLS:C1705987 (Pathway (interactions), biolink:InformationContentEntity, score: 0.184637904167)",
           "span": {
             "begin": 5244,
             "end": 5251
@@ -4402,7 +4384,7 @@
         },
         {
           "id": "I104-5",
-          "obj": "MESH:D033182 (Intention, score: 11.965)",
+          "obj": "UMLS:C2346608 (Justification of text, biolink:InformationContentEntity, score: 0.328070700169)",
           "span": {
             "begin": 5265,
             "end": 5274
@@ -4411,7 +4393,7 @@
         },
         {
           "id": "I107-5",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 5283,
             "end": 5294
@@ -4420,7 +4402,7 @@
         },
         {
           "id": "I108-5",
-          "obj": "MESH:D016430 (Clinical Trial, score: 0.011)",
+          "obj": "UMLS:C0008976 (Clinical Trials, biolink:Activity, score: 0.141027152538)",
           "span": {
             "begin": 5295,
             "end": 5309
@@ -4429,7 +4411,7 @@
         },
         {
           "id": "I1-6",
-          "obj": "MESH:D000077002 (GRADE Approach, score: 12.976)",
+          "obj": "UMLS:C0441801 (Numeric grade, biolink:Publication, score: 0.338831186295)",
           "span": {
             "begin": 5369,
             "end": 5375
@@ -4438,7 +4420,7 @@
         },
         {
           "id": "I5-6",
-          "obj": "MESH:D011014 (Pneumonia, score: 3.659)",
+          "obj": "MONDO:0005249 (pneumonia, biolink:Disease, score: 0.146695256233)",
           "span": {
             "begin": 5395,
             "end": 5415
@@ -4447,7 +4429,7 @@
         },
         {
           "id": "I6-6",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.212926030159)",
           "span": {
             "begin": 5417,
             "end": 5420
@@ -4456,7 +4438,7 @@
         },
         {
           "id": "I8-6",
-          "obj": "MESH:D006973 (Hypertension, score: 10.619)",
+          "obj": "MONDO:0005044 (hypertensive disorder, biolink:Disease, score: 0.173294603825)",
           "span": {
             "begin": 5425,
             "end": 5451
@@ -4465,7 +4447,7 @@
         },
         {
           "id": "I12-6",
-          "obj": "MESH:D001244 (Association, score: 9.26)",
+          "obj": "UMLS:C0332281 (Associated with, biolink:InformationContentEntity, score: 0.141817688942)",
           "span": {
             "begin": 5466,
             "end": 5481
@@ -4474,7 +4456,7 @@
         },
         {
           "id": "I15-6",
-          "obj": "MESH:D005796 (Genes, score: 0.008)",
+          "obj": "UMLS:C0017337 (Genes, biolink:Gene, score: 0.117510557175)",
           "span": {
             "begin": 5492,
             "end": 5497
@@ -4483,7 +4465,7 @@
         },
         {
           "id": "I16-6",
-          "obj": "MESH:D001244 (Association, score: 9.26)",
+          "obj": "UMLS:C0332281 (Associated with, biolink:InformationContentEntity, score: 0.141817688942)",
           "span": {
             "begin": 5498,
             "end": 5513
@@ -4492,7 +4474,7 @@
         },
         {
           "id": "I19-6",
-          "obj": "MESH:D004194 (Disease, score: 12.672)",
+          "obj": "UMLS:C2107096 (conditions influencing health status, biolink:Disease, score: 0.298208773136)",
           "span": {
             "begin": 5520,
             "end": 5530
@@ -4501,7 +4483,7 @@
         },
         {
           "id": "I24-6",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "UMLS:C2719771 (saxagliptin hydrochloride, biolink:Protein, score: 0.311573147774)",
           "span": {
             "begin": 5550,
             "end": 5561
@@ -4510,7 +4492,7 @@
         },
         {
           "id": "I30-6",
-          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
+          "obj": "MONDO:0005249 (pneumonia, biolink:Disease, score: 0.135076344013)",
           "span": {
             "begin": 5590,
             "end": 5599
@@ -4519,7 +4501,7 @@
         },
         {
           "id": "I39-6",
-          "obj": "MESH:D005796 (Genes, score: 0.008)",
+          "obj": "UMLS:C0017337 (Genes, biolink:Gene, score: 0.117510557175)",
           "span": {
             "begin": 5641,
             "end": 5646
@@ -4528,7 +4510,7 @@
         },
         {
           "id": "I42-6",
-          "obj": "MESH:D016212 (Transforming Growth Factor beta, score: 0.009)",
+          "obj": "UMLS:C0040690 (Transforming Growth Factor beta, biolink:Protein, score: 0.141118884087)",
           "span": {
             "begin": 5658,
             "end": 5689
@@ -4537,7 +4519,7 @@
         },
         {
           "id": "I48-6",
-          "obj": "MESH:D007266 (Inhibition, Psychological, score: 7.458)",
+          "obj": "UMLS:C3463820 (Inhibition, biolink:Activity, score: 0.120359957218)",
           "span": {
             "begin": 5704,
             "end": 5714
@@ -4546,7 +4528,7 @@
         },
         {
           "id": "I54-6",
-          "obj": "MESH:D004198 (Disease Susceptibility, score: 5.598)",
+          "obj": "UMLS:C0012655 (Disease susceptibility, biolink:ClinicalAttribute, score: 0.210328936577)",
           "span": {
             "begin": 5745,
             "end": 5759
@@ -4555,7 +4537,7 @@
         },
         {
           "id": "I56-6",
-          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
+          "obj": "MONDO:0005249 (pneumonia, biolink:Disease, score: 0.135076344013)",
           "span": {
             "begin": 5763,
             "end": 5772
@@ -4564,7 +4546,7 @@
         },
         {
           "id": "I58-6",
-          "obj": "MESH:D051379 (Mice, score: 0.007)",
+          "obj": "UMLS:C0025914 (House mice, biolink:OrganismTaxon, score: 0.247007012367)",
           "span": {
             "begin": 5776,
             "end": 5780
@@ -4573,7 +4555,7 @@
         },
         {
           "id": "I61-6",
-          "obj": "MESH:D010403 (Penicillin Resistance, score: 11.64)",
+          "obj": "UMLS:C2242761 (pneumonia due to drug resistant Streptococcus pneumoniae, biolink:Disease, score: 0.30968272686)",
           "span": {
             "begin": 5788,
             "end": 5807
@@ -4582,7 +4564,7 @@
         },
         {
           "id": "I62-6",
-          "obj": "MESH:D010641 (Phenotype, score: 0.008)",
+          "obj": "UMLS:C0031437 (Phenotype, biolink:OrganismAttribute, score: 0.122398436069)",
           "span": {
             "begin": 5808,
             "end": 5817
@@ -4591,7 +4573,7 @@
         },
         {
           "id": "I64-6",
-          "obj": "MESH:D000069476 (Linagliptin, score: 10.953)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.416205346584)",
           "span": {
             "begin": 5830,
             "end": 5886
@@ -4600,7 +4582,7 @@
         },
         {
           "id": "I72-6",
-          "obj": "MESH:D059467 (Transcriptome, score: 9.725)",
+          "obj": "UMLS:C1519595 (RNA Transcript, biolink:ChemicalEntity, score: 0.261254191399)",
           "span": {
             "begin": 5895,
             "end": 5905
@@ -4609,7 +4591,7 @@
         },
         {
           "id": "I73-6",
-          "obj": "MESH:D016422 (Letter, score: 13.311)",
+          "obj": "UMLS:C0441889 (Levels (qualifier value), biolink:InformationContentEntity, score: 0.151576399803)",
           "span": {
             "begin": 5906,
             "end": 5912
@@ -4618,7 +4600,7 @@
         },
         {
           "id": "I79-6",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 5945,
             "end": 5956
@@ -4627,7 +4609,7 @@
         },
         {
           "id": "I81-6",
-          "obj": "MESH:D007266 (Inhibition, Psychological, score: 8.646)",
+          "obj": "UMLS:C3463820 (Inhibition, biolink:Activity, score: 0.194563746452)",
           "span": {
             "begin": 5961,
             "end": 5968
@@ -4636,7 +4618,7 @@
         },
         {
           "id": "I83-6",
-          "obj": "MESH:D014158 (Transcription, Genetic, score: 6.368)",
+          "obj": "UMLS:C0598720 (RNA Transport, biolink:PhysiologicalProcess, score: 0.347513794899)",
           "span": {
             "begin": 5976,
             "end": 5989
@@ -4645,7 +4627,7 @@
         },
         {
           "id": "I87-6",
-          "obj": "MESH:D015854 (Up-Regulation, score: 10.467)",
+          "obj": "UMLS:C0442805 (Increase, biolink:InformationContentEntity, score: 0.12620228529)",
           "span": {
             "begin": 6008,
             "end": 6016
@@ -4654,7 +4636,7 @@
         },
         {
           "id": "I88-6",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 6017,
             "end": 6025
@@ -4663,7 +4645,7 @@
         },
         {
           "id": "I89-6",
-          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "obj": "UMLS:C0035647 (Risk, biolink:InformationContentEntity, score: 0.130911588669)",
           "span": {
             "begin": 6027,
             "end": 6031
@@ -4672,7 +4654,7 @@
         },
         {
           "id": "I93-6",
-          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "obj": "UMLS:C0205082 (Severe (severity modifier), biolink:DiseaseOrPhenotypicFeature, score: 0.146518230438)",
           "span": {
             "begin": 6051,
             "end": 6057
@@ -4681,7 +4663,7 @@
         },
         {
           "id": "I94-6",
-          "obj": "MESH:D011014 (Pneumonia, score: 0.007)",
+          "obj": "MONDO:0005249 (pneumonia, biolink:Disease, score: 0.135076344013)",
           "span": {
             "begin": 6058,
             "end": 6067
@@ -4690,7 +4672,7 @@
         },
         {
           "id": "I104-6",
-          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "obj": "UMLS:C0205082 (Severe (severity modifier), biolink:DiseaseOrPhenotypicFeature, score: 0.146518230438)",
           "span": {
             "begin": 6115,
             "end": 6121
@@ -4699,7 +4681,7 @@
         },
         {
           "id": "I105-6",
-          "obj": "MESH:D010336 (Pathology, score: 6.932)",
+          "obj": "UMLS:C1285578 (Observable entity, biolink:NamedThing, score: 0.456010580063)",
           "span": {
             "begin": 6122,
             "end": 6133
@@ -4708,7 +4690,7 @@
         },
         {
           "id": "I110-6",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.212926030159)",
           "span": {
             "begin": 6154,
             "end": 6157
@@ -4717,7 +4699,7 @@
         },
         {
           "id": "I111-6",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 6158,
             "end": 6166
@@ -4726,7 +4708,7 @@
         },
         {
           "id": "I114-6",
-          "obj": "MESH:D007266 (Inhibition, Psychological, score: 7.458)",
+          "obj": "UMLS:C3463820 (Inhibition, biolink:Activity, score: 0.120359957218)",
           "span": {
             "begin": 6177,
             "end": 6187
@@ -4735,7 +4717,7 @@
         },
         {
           "id": "I5-7",
-          "obj": "MESH:D007600 (Judgment, score: 11.154)",
+          "obj": "UMLS:C0242199 (Bayesian Prediction, biolink:InformationContentEntity, score: 0.34998857975)",
           "span": {
             "begin": 6222,
             "end": 6231
@@ -4744,7 +4726,7 @@
         },
         {
           "id": "I7-7",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 6244,
             "end": 6255
@@ -4753,7 +4735,7 @@
         },
         {
           "id": "I14-7",
-          "obj": "MESH:D058605 (Host-Derived Cellular Factors, score: 11.735)",
+          "obj": "UMLS:C0052892 (bacterial adhesin receptor, biolink:Protein, score: 0.32224214077)",
           "span": {
             "begin": 6305,
             "end": 6318
@@ -4761,26 +4743,8 @@
           "text": "host receptor"
         },
         {
-          "id": "I17-7",
-          "obj": "MESH:D045473 (SARS Virus, score: 5.44)",
-          "span": {
-            "begin": 6323,
-            "end": 6332
-          },
-          "text": "SARS-CoV-"
-        },
-        {
-          "id": "I19-7",
-          "obj": "MESH:D000069476 (Linagliptin, score: 11.471)",
-          "span": {
-            "begin": 6341,
-            "end": 6369
-          },
-          "text": "Linagliptin-ACE2-T2D-COVID-1"
-        },
-        {
           "id": "I22-7",
-          "obj": "MESH:D015536 (Down-Regulation, score: 5.024)",
+          "obj": "UMLS:C0013081 (Down-Regulation, biolink:MolecularActivity, score: 0.167111694813)",
           "span": {
             "begin": 6382,
             "end": 6396
@@ -4789,7 +4753,7 @@
         },
         {
           "id": "I24-7",
-          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "obj": "UniProtKB:P12821 (ACE_HUMAN Angiotensin-converting enzyme (sprot), biolink:Protein, score: 0.219700872898)",
           "span": {
             "begin": 6400,
             "end": 6403
@@ -4798,7 +4762,7 @@
         },
         {
           "id": "I25-7",
-          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "obj": "UMLS:C4709341 (Gene Expression Interactions, biolink:PhysiologicalProcess, score: 0.418795704842)",
           "span": {
             "begin": 6405,
             "end": 6415
@@ -4807,7 +4771,7 @@
         },
         {
           "id": "I27-7",
-          "obj": "MESH:D008168 (Lung, score: 0.008)",
+          "obj": "UBERON:0002048 (lung, biolink:GrossAnatomicalStructure, score: 0.131487250328)",
           "span": {
             "begin": 6419,
             "end": 6423
@@ -4816,7 +4780,7 @@
         },
         {
           "id": "I28-7",
-          "obj": "MESH:D014024 (Tissues, score: 3.216)",
+          "obj": "UBERON:0000479 (tissue, biolink:GrossAnatomicalStructure, score: 0.125137925148)",
           "span": {
             "begin": 6424,
             "end": 6430
@@ -4825,7 +4789,7 @@
         },
         {
           "id": "I31-7",
-          "obj": "MESH:D001244 (Association, score: 9.26)",
+          "obj": "UMLS:C0332281 (Associated with, biolink:InformationContentEntity, score: 0.141817688942)",
           "span": {
             "begin": 6440,
             "end": 6455
@@ -4834,7 +4798,7 @@
         },
         {
           "id": "I33-7",
-          "obj": "MESH:D012769 (Shock, score: 14.271)",
+          "obj": "UMLS:C0205082 (Severe (severity modifier), biolink:DiseaseOrPhenotypicFeature, score: 0.146518230438)",
           "span": {
             "begin": 6456,
             "end": 6462
@@ -4843,7 +4807,7 @@
         },
         {
           "id": "I35-7",
-          "obj": "MESH:D000066891 (Critical Care Outcomes, score: 10.307)",
+          "obj": "UMLS:C0679250 (Disease Outcome, biolink:PhenotypicFeature, score: 0.263682961464)",
           "span": {
             "begin": 6472,
             "end": 6489
@@ -4852,7 +4816,7 @@
         },
         {
           "id": "I37-7",
-          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "obj": "UMLS:C4709341 (Gene Expression Interactions, biolink:PhysiologicalProcess, score: 0.418795704842)",
           "span": {
             "begin": 6491,
             "end": 6501
@@ -4861,7 +4825,7 @@
         },
         {
           "id": "I39-7",
-          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "obj": "UniProtKB:P12821 (ACE_HUMAN Angiotensin-converting enzyme (sprot), biolink:Protein, score: 0.219700872898)",
           "span": {
             "begin": 6505,
             "end": 6508
@@ -4870,7 +4834,7 @@
         },
         {
           "id": "I41-7",
-          "obj": "MESH:D015854 (Up-Regulation, score: 10.352)",
+          "obj": "UMLS:C0205217 (Increased, biolink:InformationContentEntity, score: 0.123267173767)",
           "span": {
             "begin": 6513,
             "end": 6522
@@ -4879,7 +4843,7 @@
         },
         {
           "id": "I43-7",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 6526,
             "end": 6534
@@ -4888,7 +4852,7 @@
         },
         {
           "id": "I45-7",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.212926030159)",
           "span": {
             "begin": 6540,
             "end": 6543
@@ -4897,7 +4861,7 @@
         },
         {
           "id": "I47-7",
-          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "obj": "UniProtKB:P12821 (ACE_HUMAN Angiotensin-converting enzyme (sprot), biolink:Protein, score: 0.219700872898)",
           "span": {
             "begin": 6551,
             "end": 6554
@@ -4906,7 +4870,7 @@
         },
         {
           "id": "I50-7",
-          "obj": "MESH:D057911 (Angiotensin Receptor Antagonists, score: 4.275)",
+          "obj": "UMLS:C0815017 (Angiotensin Receptor Antagonists, biolink:Drug, score: 0.159659922123)",
           "span": {
             "begin": 6570,
             "end": 6599
@@ -4915,7 +4879,7 @@
         },
         {
           "id": "I56-7",
-          "obj": "MESH:D016896 (Treatment Outcome, score: 10.791)",
+          "obj": "UMLS:C1522326 (Treating, biolink:InformationContentEntity, score: 0.186581373215)",
           "span": {
             "begin": 6621,
             "end": 6626
@@ -4924,7 +4888,7 @@
         },
         {
           "id": "I57-7",
-          "obj": "MESH:D009272 (Persons, score: 8.457)",
+          "obj": "UMLS:C0027361 (Persons, biolink:PopulationOfIndividualOrganisms, score: 0.23363006115)",
           "span": {
             "begin": 6627,
             "end": 6638
@@ -4933,7 +4897,7 @@
         },
         {
           "id": "I63-7",
-          "obj": "MESH:D000068397 (Clinical Study, score: 9.058)",
+          "obj": "UMLS:C0681814 (research study, biolink:Activity, score: 0.203473985195)",
           "span": {
             "begin": 6669,
             "end": 6674
@@ -4942,7 +4906,7 @@
         },
         {
           "id": "I66-7",
-          "obj": "MESH:D000284 (Administration, Oral, score: 10.333)",
+          "obj": "UMLS:C1533734 (Administration procedure, biolink:Procedure, score: 0.182599365711)",
           "span": {
             "begin": 6693,
             "end": 6707
@@ -4951,7 +4915,7 @@
         },
         {
           "id": "I68-7",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 6711,
             "end": 6722
@@ -4960,7 +4924,7 @@
         },
         {
           "id": "I70-7",
-          "obj": "MESH:D015854 (Up-Regulation, score: 7.957)",
+          "obj": "UMLS:C0041904 (Up-Regulation (Physiology), biolink:MolecularActivity, score: 0.22935795784)",
           "span": {
             "begin": 6737,
             "end": 6748
@@ -4969,7 +4933,7 @@
         },
         {
           "id": "I71-7",
-          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "obj": "UniProtKB:P12821 (ACE_HUMAN Angiotensin-converting enzyme (sprot), biolink:Protein, score: 0.219700872898)",
           "span": {
             "begin": 6749,
             "end": 6752
@@ -4978,7 +4942,7 @@
         },
         {
           "id": "I72-7",
-          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "obj": "UMLS:C4709341 (Gene Expression Interactions, biolink:PhysiologicalProcess, score: 0.418795704842)",
           "span": {
             "begin": 6754,
             "end": 6764
@@ -4987,7 +4951,7 @@
         },
         {
           "id": "I77-7",
-          "obj": "MESH:D000056 (Accident Prevention, score: 11.917)",
+          "obj": "UMLS:C1292733 (Preventing (action), biolink:InformationContentEntity, score: 0.132612705231)",
           "span": {
             "begin": 6783,
             "end": 6793
@@ -4996,7 +4960,7 @@
         },
         {
           "id": "I80-7",
-          "obj": "MESH:D004719 (Endomyocardial Fibrosis, score: 8.999)",
+          "obj": "UMLS:C1399176 (heart; myofibrosis, biolink:Disease, score: 0.228316545486)",
           "span": {
             "begin": 6817,
             "end": 6833
@@ -5005,7 +4969,7 @@
         },
         {
           "id": "I83-7",
-          "obj": "MESH:D023421 (Models, Animal, score: 3.692)",
+          "obj": "MESH:D023421 (Models, Animal, biolink:OrganismTaxon, score: 0.178735792637)",
           "span": {
             "begin": 6837,
             "end": 6850
@@ -5014,7 +4978,7 @@
         },
         {
           "id": "I90-7",
-          "obj": "MESH:D015854 (Up-Regulation, score: 7.835)",
+          "obj": "UMLS:C0041904 (Up-Regulation (Physiology), biolink:MolecularActivity, score: 0.21326059103)",
           "span": {
             "begin": 6873,
             "end": 6885
@@ -5023,7 +4987,7 @@
         },
         {
           "id": "I91-7",
-          "obj": "MESH:D031002 (Acer, score: 10.494)",
+          "obj": "UniProtKB:P12821 (ACE_HUMAN Angiotensin-converting enzyme (sprot), biolink:Protein, score: 0.219700872898)",
           "span": {
             "begin": 6886,
             "end": 6889
@@ -5032,7 +4996,7 @@
         },
         {
           "id": "I94-7",
-          "obj": "MESH:D024803 (Biomedical Enhancement, score: 13.369)",
+          "obj": "UMLS:C0814225 (Benefit, biolink:InformationContentEntity, score: 0.276484251022)",
           "span": {
             "begin": 6900,
             "end": 6910
@@ -5041,7 +5005,7 @@
         },
         {
           "id": "I96-7",
-          "obj": "MESH:D017809 (Fatal Outcome, score: 13.65)",
+          "obj": "UMLS:C5447940 (Harmfulness Category, biolink:InformationContentEntity, score: 0.300854384899)",
           "span": {
             "begin": 6914,
             "end": 6925
@@ -5050,7 +5014,7 @@
         },
         {
           "id": "I98-7",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 6929,
             "end": 6937
@@ -5059,7 +5023,7 @@
         },
         {
           "id": "I102-7",
-          "obj": "MESH:D003924 (Diabetes Mellitus, Type 2, score: 9.203)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.212926030159)",
           "span": {
             "begin": 6961,
             "end": 6964
@@ -5068,7 +5032,7 @@
         },
         {
           "id": "I105-7",
-          "obj": "MESH:D007600 (Judgment, score: 11.154)",
+          "obj": "UMLS:C0242199 (Bayesian Prediction, biolink:InformationContentEntity, score: 0.34998857975)",
           "span": {
             "begin": 6985,
             "end": 6994
@@ -5077,7 +5041,7 @@
         },
         {
           "id": "I106-7",
-          "obj": "MESH:D030881 (Disclosure, score: 12.665)",
+          "obj": "UMLS:C0443289 (Revealed, biolink:InformationContentEntity, score: 0.146060228348)",
           "span": {
             "begin": 6995,
             "end": 7002
@@ -5086,7 +5050,7 @@
         },
         {
           "id": "I109-7",
-          "obj": "MESH:D053898 (Biosynthetic Pathways, score: 10.161)",
+          "obj": "UMLS:C1704259 (Biochemical Pathway, biolink:MolecularActivity, score: 0.314855217934)",
           "span": {
             "begin": 7017,
             "end": 7024
@@ -5095,7 +5059,7 @@
         },
         {
           "id": "I111-7",
-          "obj": "MESH:D000069476 (Linagliptin, score: 0.008)",
+          "obj": "PUBCHEM.COMPOUND:10096344 (Linagliptin, biolink:SmallMolecule, score: 0.193774700165)",
           "span": {
             "begin": 7033,
             "end": 7044
@@ -5104,7 +5068,7 @@
         },
         {
           "id": "I6-8",
-          "obj": "MESH:D001669 (Biochemical Phenomena, score: 8.443)",
+          "obj": "UMLS:C1704259 (Biochemical Pathway, biolink:MolecularActivity, score: 0.127517342567)",
           "span": {
             "begin": 7103,
             "end": 7123
@@ -5113,7 +5077,7 @@
         },
         {
           "id": "I8-8",
-          "obj": "MESH:D001244 (Association, score: 6.994)",
+          "obj": "UMLS:C0750490 (Associate - relationship, biolink:InformationContentEntity, score: 0.213768362999)",
           "span": {
             "begin": 7124,
             "end": 7135
@@ -5122,7 +5086,7 @@
         },
         {
           "id": "I10-8",
-          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.272700965405)",
           "span": {
             "begin": 7138,
             "end": 7142
@@ -5131,7 +5095,7 @@
         },
         {
           "id": "I20-8",
-          "obj": "MESH:D000068036 (Graphic Novel, score: 11.456)",
+          "obj": "UMLS:C0205314 (New, biolink:InformationContentEntity, score: 0.251804947853)",
           "span": {
             "begin": 7219,
             "end": 7224
@@ -5140,7 +5104,7 @@
         },
         {
           "id": "I21-8",
-          "obj": "MESH:D007600 (Judgment, score: 11.777)",
+          "obj": "UMLS:C4305583 (Volition interpretation, biolink:InformationContentEntity, score: 0.377603411674)",
           "span": {
             "begin": 7225,
             "end": 7235
@@ -5149,7 +5113,7 @@
         },
         {
           "id": "I28-8",
-          "obj": "MESH:D051188 (Knowledge Bases, score: 6.041)",
+          "obj": "UMLS:C0022752 (Knowledge Bases, biolink:Publication, score: 0.218747973442)",
           "span": {
             "begin": 7305,
             "end": 7318
@@ -5158,7 +5122,7 @@
         },
         {
           "id": "I30-8",
-          "obj": "MESH:D057405 (Webcast, score: 11.863)",
+          "obj": "UMLS:C2349146 (Web Site, biolink:Publication, score: 0.269491314888)",
           "span": {
             "begin": 7323,
             "end": 7326
@@ -5167,7 +5131,7 @@
         },
         {
           "id": "I31-8",
-          "obj": "MESH:D011168 (Portal System, score: 5.456)",
+          "obj": "UMLS:C5202962 (YES Portal, biolink:Publication, score: 0.284265756607)",
           "span": {
             "begin": 7327,
             "end": 7333
@@ -5176,7 +5140,7 @@
         },
         {
           "id": "I33-8",
-          "obj": "MESH:D018511 (Systems Integration, score: 10.366)",
+          "obj": "UMLS:C1705422 (Integration (data processing), biolink:Activity, score: 0.25813126564)",
           "span": {
             "begin": 7339,
             "end": 7349
@@ -5185,7 +5149,7 @@
         },
         {
           "id": "I36-8",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 7363,
             "end": 7370
@@ -5194,7 +5158,7 @@
         },
         {
           "id": "I37-8",
-          "obj": "MESH:D035843 (Biomedical Research, score: 9.64)",
+          "obj": "UMLS:C0205476 (Medical, biolink:InformationContentEntity, score: 0.264303445816)",
           "span": {
             "begin": 7371,
             "end": 7381
@@ -5203,7 +5167,7 @@
         },
         {
           "id": "I38-8",
-          "obj": "MESH:D019359 (Knowledge, score: 11.266)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.313638925552)",
           "span": {
             "begin": 7382,
             "end": 7397
@@ -5212,7 +5176,7 @@
         },
         {
           "id": "I41-8",
-          "obj": "MESH:D000090462 (Infodemiology, score: 10.339)",
+          "obj": "UMLS:C1533716 (Information, biolink:InformationContentEntity, score: 0.134603619576)",
           "span": {
             "begin": 7403,
             "end": 7414
@@ -5221,7 +5185,7 @@
         },
         {
           "id": "I45-8",
-          "obj": "MESH:D011642 (Publications, score: 6.697)",
+          "obj": "UMLS:C0034036 (Publications, biolink:Publication, score: 0.182598948479)",
           "span": {
             "begin": 7438,
             "end": 7447
@@ -5230,7 +5194,7 @@
         },
         {
           "id": "I46-8",
-          "obj": "MESH:D008490 (Medical Informatics, score: 11.81)",
+          "obj": "UMLS:C1533716 (Information, biolink:InformationContentEntity, score: 0.342759549618)",
           "span": {
             "begin": 7448,
             "end": 7470
@@ -5239,7 +5203,7 @@
         },
         {
           "id": "I63-8",
-          "obj": "MESH:D013404 (Suggestion, score: 12.691)",
+          "obj": "UMLS:C0681799 (research question, biolink:InformationContentEntity, score: 0.382898330688)",
           "span": {
             "begin": 7583,
             "end": 7593
@@ -5248,7 +5212,7 @@
         },
         {
           "id": "I65-8",
-          "obj": "MESH:D004358 (Drug Therapy, score: 9.658)",
+          "obj": "UMLS:C0456386 (Medicament, biolink:Drug, score: 0.272700965405)",
           "span": {
             "begin": 7605,
             "end": 7609
@@ -5257,7 +5221,7 @@
         },
         {
           "id": "I66-8",
-          "obj": "MESH:D058492 (Drug Repositioning, score: 9.751)",
+          "obj": "UMLS:C0678335 (reinstatement, biolink:InformationContentEntity, score: 0.344499349594)",
           "span": {
             "begin": 7610,
             "end": 7621
@@ -5266,7 +5230,7 @@
         },
         {
           "id": "I100-8",
-          "obj": "MESH:D063990 (Gene Ontology, score: 8.692)",
+          "obj": "UMLS:C1551338 (Entity, biolink:NamedThing, score: 0.413592755795)",
           "span": {
             "begin": 7879,
             "end": 7887
@@ -5275,7 +5239,7 @@
         },
         {
           "id": "I104-8",
-          "obj": "MESH:D049881 (Unio, score: 11.921)",
+          "obj": "UMLS:C1706076 (Unification process, biolink:InformationContentEntity, score: 0.155969321728)",
           "span": {
             "begin": 7902,
             "end": 7913
@@ -5284,7 +5248,7 @@
         },
         {
           "id": "I106-8",
-          "obj": "MESH:D001695 (Biology, score: 0.006)",
+          "obj": "UMLS:C1551338 (Entity, biolink:NamedThing, score: 0.443359017372)",
           "span": {
             "begin": 7917,
             "end": 7924
@@ -5293,7 +5257,7 @@
         },
         {
           "id": "I109-8",
-          "obj": "MESH:D003920 (Diabetes Mellitus, score: 3.803)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.145118653774)",
           "span": {
             "begin": 7938,
             "end": 7946
@@ -5302,7 +5266,7 @@
         },
         {
           "id": "I112-8",
-          "obj": "MESH:D001244 (Association, score: 0.007)",
+          "obj": "UMLS:C0750490 (Associate - relationship, biolink:InformationContentEntity, score: 0.260958254337)",
           "span": {
             "begin": 7956,
             "end": 7967
@@ -5311,7 +5275,7 @@
         },
         {
           "id": "I116-8",
-          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 9.728)",
+          "obj": "UMLS:C4321290 (Hydrolytic Lysosomal N-terminal Tripeptidyl Peptidase [EPC], biolink:Drug, score: 0.455489993095)",
           "span": {
             "begin": 7982,
             "end": 7985
@@ -5320,7 +5284,7 @@
         },
         {
           "id": "I0-9",
-          "obj": "MESH:D008564 (Membrane Potentials, score: 11.26)",
+          "obj": "UMLS:C3245505 (Potential, biolink:InformationContentEntity, score: 0.121181368828)",
           "span": {
             "begin": 8006,
             "end": 8015
@@ -5329,7 +5293,7 @@
         },
         {
           "id": "I1-9",
-          "obj": "MESH:D015510 (Clinical Medicine, score: 8.953)",
+          "obj": "UMLS:C0205210 (Clinical, biolink:InformationContentEntity, score: 0.131728768349)",
           "span": {
             "begin": 8016,
             "end": 8024
@@ -5338,7 +5302,7 @@
         },
         {
           "id": "I3-9",
-          "obj": "MESH:D013812 (Therapeutics, score: 6.389)",
+          "obj": "UMLS:C0302350 (Therapeutic, biolink:InformationContentEntity, score: 0.13297533989)",
           "span": {
             "begin": 8029,
             "end": 8040
@@ -5347,7 +5311,7 @@
         },
         {
           "id": "I5-9",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 8054,
             "end": 8061
@@ -5356,7 +5320,7 @@
         },
         {
           "id": "I8-9",
-          "obj": "MESH:D015287 (Neurokinin B, score: 13.457)",
+          "obj": "UMLS:C1098316 (lysylglycine, biolink:Protein, score: 0.402221560478)",
           "span": {
             "begin": 8069,
             "end": 8072
@@ -5365,7 +5329,7 @@
         },
         {
           "id": "I9-9",
-          "obj": "MESH:D018511 (Systems Integration, score: 9.782)",
+          "obj": "UMLS:C0376478 (Multimedia, biolink:Publication, score: 0.293910264969)",
           "span": {
             "begin": 8074,
             "end": 8084
@@ -5374,7 +5338,7 @@
         },
         {
           "id": "I10-9",
-          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.303879857063)",
           "span": {
             "begin": 8085,
             "end": 8101
@@ -5383,7 +5347,7 @@
         },
         {
           "id": "I13-9",
-          "obj": "MESH:D004033 (Diet Fads, score: 13.66)",
+          "obj": "UMLS:C0015663 (Fasting, biolink:PhenotypicFeature, score: 0.342724680901)",
           "span": {
             "begin": 8107,
             "end": 8116
@@ -5392,7 +5356,7 @@
         },
         {
           "id": "I14-9",
-          "obj": "MESH:D003463 (Cues, score: 13.266)",
+          "obj": "UMLS:C0449416 (Source, biolink:PhenotypicFeature, score: 0.157838582993)",
           "span": {
             "begin": 8117,
             "end": 8124
@@ -5401,7 +5365,7 @@
         },
         {
           "id": "I16-9",
-          "obj": "MESH:D010361 (Patients, score: 0.008)",
+          "obj": "UMLS:C0030705 (Patients, biolink:Cohort, score: 0.11347335577)",
           "span": {
             "begin": 8129,
             "end": 8137
@@ -5410,7 +5374,7 @@
         },
         {
           "id": "I18-9",
-          "obj": "MESH:D006973 (Hypertension, score: 0.008)",
+          "obj": "MONDO:0005044 (hypertensive disorder, biolink:Disease, score: 0.177862048149)",
           "span": {
             "begin": 8143,
             "end": 8155
@@ -5419,7 +5383,7 @@
         },
         {
           "id": "I20-9",
-          "obj": "MESH:D003920 (Diabetes Mellitus, score: 0.008)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.11449855566)",
           "span": {
             "begin": 8160,
             "end": 8177
@@ -5428,7 +5392,7 @@
         },
         {
           "id": "I24-9",
-          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "obj": "UMLS:C0035647 (Risk, biolink:InformationContentEntity, score: 0.130911588669)",
           "span": {
             "begin": 8191,
             "end": 8195
@@ -5437,7 +5401,7 @@
         },
         {
           "id": "I30-9",
-          "obj": "MESH:D002965 (Classification, score: 10.013)",
+          "obj": "UMLS:C0683327 (diagnostic classification, biolink:Publication, score: 0.333012104034)",
           "span": {
             "begin": 8229,
             "end": 8237
@@ -5446,7 +5410,7 @@
         },
         {
           "id": "I31-9",
-          "obj": "MESH:D019991 (Database, score: 0.007)",
+          "obj": "UMLS:C0242356 (Databases, biolink:Publication, score: 0.129083037376)",
           "span": {
             "begin": 8238,
             "end": 8246
@@ -5455,7 +5419,7 @@
         },
         {
           "id": "I32-9",
-          "obj": "MESH:D031301 (Robinia, score: 11.61)",
+          "obj": "UMLS:C5554802 (Robarts Histopathology Index Score, biolink:Publication, score: 0.44350874424)",
           "span": {
             "begin": 8247,
             "end": 8254
@@ -5464,7 +5428,7 @@
         },
         {
           "id": "I34-9",
-          "obj": "MESH:D000075403 (Semantic Web, score: 13.925)",
+          "obj": "UMLS:C2827995 (Graph Layout, biolink:InformationContentEntity, score: 0.377810359001)",
           "span": {
             "begin": 8259,
             "end": 8276
@@ -5473,7 +5437,7 @@
         },
         {
           "id": "I37-9",
-          "obj": "MESH:D055030 (Drug Users, score: 12.372)",
+          "obj": "UMLS:C1947944 (Use - dosing instruction imperative, biolink:Publication, score: 0.30708694458)",
           "span": {
             "begin": 8281,
             "end": 8285
@@ -5482,7 +5446,7 @@
         },
         {
           "id": "I38-9",
-          "obj": "MESH:D014584 (User-Computer Interface, score: 12.662)",
+          "obj": "UMLS:C0042117 (User-Computer Interface, biolink:Publication, score: 0.326129078865)",
           "span": {
             "begin": 8286,
             "end": 8299
@@ -5491,7 +5455,7 @@
         },
         {
           "id": "I40-9",
-          "obj": "MESH:D003196 (Computer Graphics, score: 11.763)",
+          "obj": "UMLS:C0681493 (Graph - visual representation, biolink:Publication, score: 0.303879857063)",
           "span": {
             "begin": 8300,
             "end": 8316
@@ -5500,7 +5464,7 @@
         },
         {
           "id": "I44-9",
-          "obj": "MESH:D020475 (Examination Questions, score: 11.596)",
+          "obj": "UMLS:C1522634 (Question (inquiry), biolink:Publication, score: 0.205060660839)",
           "span": {
             "begin": 8328,
             "end": 8346
@@ -5509,7 +5473,7 @@
         },
         {
           "id": "I46-9",
-          "obj": "MESH:D000083505 (Social Interaction, score: 9.376)",
+          "obj": "UMLS:C1704675 (Interaction, biolink:InformationContentEntity, score: 0.145688891411)",
           "span": {
             "begin": 8347,
             "end": 8359
@@ -5518,7 +5482,7 @@
         },
         {
           "id": "I48-9",
-          "obj": "MESH:D007004 (Hypoglycemic Agents, score: 8.53)",
+          "obj": "UMLS:C0020616 (Hypoglycemic Agents, biolink:Drug, score: 0.233852565289)",
           "span": {
             "begin": 8368,
             "end": 8391
@@ -5527,7 +5491,7 @@
         },
         {
           "id": "I52-9",
-          "obj": "MESH:D012084 (Renin-Angiotensin System, score: 0.011)",
+          "obj": "UBERON:0018229 (renin-angiotensin system, biolink:GrossAnatomicalStructure, score: 0.116822600365)",
           "span": {
             "begin": 8400,
             "end": 8424
@@ -5536,7 +5500,7 @@
         },
         {
           "id": "I54-9",
-          "obj": "MESH:D011336 (Probability, score: 13.014)",
+          "obj": "UMLS:C4684849 (Presumed, biolink:InformationContentEntity, score: 0.254688978195)",
           "span": {
             "begin": 8426,
             "end": 8434
@@ -5545,7 +5509,7 @@
         },
         {
           "id": "I55-9",
-          "obj": "MESH:D012380 (Role, score: 2.644)",
+          "obj": "UMLS:C1705810 (Generic Role, biolink:InformationContentEntity, score: 0.236578345299)",
           "span": {
             "begin": 8435,
             "end": 8440
@@ -5554,7 +5518,7 @@
         },
         {
           "id": "I59-9",
-          "obj": "MESH:D016454 (Review, score: 9.784)",
+          "obj": "UMLS:C0815257 (narrative review, biolink:Publication, score: 0.341315090656)",
           "span": {
             "begin": 8456,
             "end": 8467
@@ -5563,7 +5527,7 @@
         },
         {
           "id": "I64-9",
-          "obj": "MESH:D004198 (Disease Susceptibility, score: 5.598)",
+          "obj": "UMLS:C1455997 (genetic susceptibility to disease (history), biolink:PhenotypicFeature, score: 0.270826637745)",
           "span": {
             "begin": 8495,
             "end": 8509
@@ -5572,7 +5536,7 @@
         },
         {
           "id": "I66-9",
-          "obj": "MESH:D011018 (Pneumonia, Pneumococcal, score: 8.266)",
+          "obj": "UMLS:C1320214 (Invasive Streptococcus pneumoniae disease, biolink:Disease, score: 0.224006474018)",
           "span": {
             "begin": 8513,
             "end": 8544
@@ -5581,7 +5545,7 @@
         },
         {
           "id": "I70-9",
-          "obj": "MESH:D051379 (Mice, score: 0.007)",
+          "obj": "UMLS:C0025914 (House mice, biolink:OrganismTaxon, score: 0.247007012367)",
           "span": {
             "begin": 8548,
             "end": 8552
@@ -5590,7 +5554,7 @@
         },
         {
           "id": "I72-9",
-          "obj": "MESH:D003920 (Diabetes Mellitus, score: 0.008)",
+          "obj": "MONDO:0005015 (diabetes mellitus, biolink:Disease, score: 0.11449855566)",
           "span": {
             "begin": 8563,
             "end": 8580
@@ -5599,7 +5563,7 @@
         },
         {
           "id": "I75-9",
-          "obj": "MESH:D000085962 (Angiotensin-Converting Enzyme 2, score: 9.111)",
+          "obj": "UniProtKB:Q9BYF1 (ACE2_HUMAN Angiotensin-converting enzyme 2 (sprot), biolink:Protein, score: 0.254532337189)",
           "span": {
             "begin": 8585,
             "end": 8589
@@ -5608,7 +5572,7 @@
         },
         {
           "id": "I79-9",
-          "obj": "MESH:D012306 (Risk, score: 0.008)",
+          "obj": "UMLS:C0035647 (Risk, biolink:InformationContentEntity, score: 0.130911588669)",
           "span": {
             "begin": 8615,
             "end": 8619
@@ -5617,7 +5581,7 @@
         },
         {
           "id": "I81-9",
-          "obj": "MESH:D016207 (Cytokines, score: 2.872)",
+          "obj": "UMLS:C0079189 (cytokine, biolink:Protein, score: 0.135729670525)",
           "span": {
             "begin": 8624,
             "end": 8632
@@ -5626,7 +5590,7 @@
         },
         {
           "id": "I82-9",
-          "obj": "MESH:D018390 (Gene Targeting, score: 11.262)",
+          "obj": "UMLS:C1521840 (Target, biolink:InformationContentEntity, score: 0.241744756699)",
           "span": {
             "begin": 8633,
             "end": 8642
@@ -5635,7 +5599,7 @@
         },
         {
           "id": "I84-9",
-          "obj": "MESH:D002908 (Chronic Disease, score: 11.78)",
+          "obj": "UMLS:C1290886 (Chronic inflammatory disorder, biolink:Disease, score: 0.122479557991)",
           "span": {
             "begin": 8646,
             "end": 8675
@@ -5644,7 +5608,7 @@
         },
         {
           "id": "I90-9",
-          "obj": "MESH:D000893 (Anti-Inflammatory Agents, score: 4.901)",
+          "obj": "UMLS:C0003209 (Anti-Inflammatory Agents, biolink:Drug, score: 0.175593793392)",
           "span": {
             "begin": 8697,
             "end": 8714
@@ -5653,7 +5617,7 @@
         },
         {
           "id": "I93-9",
-          "obj": "MESH:D000088962 (Antifibrotic Agents, score: 6.786)",
+          "obj": "UMLS:C0151501 (Anticoagulant effect decreased, biolink:PhenotypicFeature, score: 0.385637402534)",
           "span": {
             "begin": 8726,
             "end": 8745
@@ -5662,7 +5626,7 @@
         },
         {
           "id": "I96-9",
-          "obj": "MESH:D000284 (Administration, Oral, score: 7.162)",
+          "obj": "UMLS:C0442027 (Oral, biolink:InformationContentEntity, score: 0.131809771061)",
           "span": {
             "begin": 8749,
             "end": 8753
@@ -5671,7 +5635,7 @@
         },
         {
           "id": "I97-9",
-          "obj": "MESH:D035926 (Hepatophyta, score: 12.35)",
+          "obj": "UMLS:C0450202 (Hepatopleural, biolink:InformationContentEntity, score: 0.400551199913)",
           "span": {
             "begin": 8754,
             "end": 8766
@@ -5680,7 +5644,7 @@
         },
         {
           "id": "I98-9",
-          "obj": "MESH:D018819 (Dipeptidyl Peptidase 4, score: 9.728)",
+          "obj": "UMLS:C4321290 (Hydrolytic Lysosomal N-terminal Tripeptidyl Peptidase [EPC], biolink:Drug, score: 0.455489993095)",
           "span": {
             "begin": 8767,
             "end": 8770
@@ -5689,7 +5653,7 @@
         },
         {
           "id": "I101-9",
-          "obj": "MESH:D008960 (Models, Psychological, score: 8.382)",
+          "obj": "UMLS:C0684309 (Disease model, biolink:BiologicalEntity, score: 0.278434276581)",
           "span": {
             "begin": 8786,
             "end": 8792
@@ -5698,7 +5662,7 @@
         },
         {
           "id": "I103-9",
-          "obj": "MESH:D065626 (Non-alcoholic Fatty Liver Disease, score: 10.541)",
+          "obj": "MONDO:0007027 (non-alcoholic steatohepatitis, biolink:Disease, score: 0.232795119286)",
           "span": {
             "begin": 8796,
             "end": 8800
@@ -5707,7 +5671,7 @@
         },
         {
           "id": "I105-9",
-          "obj": "MESH:D008105 (Liver Cirrhosis, Biliary, score: 7.854)",
+          "obj": "HP:0001395 (Hepatic fibrosis, biolink:PhenotypicFeature, score: 0.314897477627)",
           "span": {
             "begin": 8805,
             "end": 8821
@@ -5716,7 +5680,7 @@
         },
         {
           "id": "I107-9",
-          "obj": "MESH:D014021 (Tissue Preservation, score: 8.228)",
+          "obj": "UMLS:C1514402 (Preservation Technique, biolink:Procedure, score: 0.184171617031)",
           "span": {
             "begin": 8822,
             "end": 8834
@@ -5725,7 +5689,7 @@
         },
         {
           "id": "I109-9",
-          "obj": "MESH:D004763 (Glucagon-Like Peptides, score: 4.195)",
+          "obj": "UMLS:C0014361 (Glucagon-Like Peptides, biolink:Protein, score: 0.160553693771)",
           "span": {
             "begin": 8838,
             "end": 8860
@@ -5734,7 +5698,7 @@
         },
         {
           "id": "I111-9",
-          "obj": "MESH:D016422 (Letter, score: 13.353)",
+          "obj": "UMLS:C0441889 (Levels (qualifier value), biolink:InformationContentEntity, score: 0.162172794342)",
           "span": {
             "begin": 8862,
             "end": 8867
@@ -5743,7 +5707,7 @@
         },
         {
           "id": "I112-9",
-          "obj": "MESH:D015536 (Down-Regulation, score: 12.598)",
+          "obj": "UMLS:C0599946 (Attenuation, biolink:Activity, score: 0.188813567162)",
           "span": {
             "begin": 8868,
             "end": 8878
@@ -5752,7 +5716,7 @@
         },
         {
           "id": "I115-9",
-          "obj": "MESH:D005355 (Fibrosis, score: 4.842)",
+          "obj": "NCIT:C3044 (Fibrosis, biolink:PhenotypicFeature, score: 0.1335542202)",
           "span": {
             "begin": 8902,
             "end": 8917
@@ -5761,7 +5725,7 @@
         },
         {
           "id": "I119-9",
-          "obj": "MESH:D044140 (Receptor, Angiotensin, Type 1, score: 11.201)",
+          "obj": "UniProtKB:P30556 (AGTR1_HUMAN Type-1 angiotensin II receptor (sprot), biolink:Protein, score: 0.321426510811)",
           "span": {
             "begin": 8930,
             "end": 8936
@@ -5770,7 +5734,7 @@
         },
         {
           "id": "I121-9",
-          "obj": "MESH:D015870 (Gene Expression, score: 7.911)",
+          "obj": "UMLS:C4709341 (Gene Expression Interactions, biolink:PhysiologicalProcess, score: 0.418795704842)",
           "span": {
             "begin": 8947,
             "end": 8957
@@ -5779,7 +5743,7 @@
         },
         {
           "id": "I123-9",
-          "obj": "MESH:D000085962 (Angiotensin-Converting Enzyme 2, score: 9.561)",
+          "obj": "GO:0008241 (peptidyl-dipeptidase activity, biolink:MolecularActivity, score: 0.313834905624)",
           "span": {
             "begin": 8962,
             "end": 9002
@@ -5788,7 +5752,7 @@
         },
         {
           "id": "I128-9",
-          "obj": "MESH:D051381 (Rats, score: 3.228)",
+          "obj": "NCBITaxon:10114 (Rattus, biolink:OrganismTaxon, score: 0.215966105461)",
           "span": {
             "begin": 9006,
             "end": 9009
@@ -5797,7 +5761,7 @@
         },
         {
           "id": "I129-9",
-          "obj": "MESH:D006321 (Heart, score: 0.007)",
+          "obj": "UMLS:C4037974 (Chest>Heart, biolink:AnatomicalEntity, score: 0.214069128036)",
           "span": {
             "begin": 9010,
             "end": 9015
@@ -5805,7 +5769,7 @@
           "text": "heart"
         }
       ],
-      "project": "https://med-nemo-sapbert.apps.renci.org/annotate/"
+      "project": "https://babel-sapbert.apps.renci.org/annotate/"
     }
   ]
 }
