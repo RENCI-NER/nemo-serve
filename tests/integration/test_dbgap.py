@@ -168,6 +168,10 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
         denotation['id'] = f"{first_result['curie']}"
 
+        # These should already be normalized. So let's set nn_id and nn_label.
+        denotation['nn_id'] = denotation['id']
+        denotation['nn_label'] = denotation['name']
+
         count_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.
