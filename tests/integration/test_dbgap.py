@@ -311,16 +311,15 @@ def run_summary_report():
     """Run all three annotations together, generate a summary report"""
 
     fieldnames = [
+        'dbgap_url',
         'var_id',
         'var_name',
         'dataset_url',
         'var_text',
-        'annotation_all',
-        'ann_scigraph',
-        'ann_sapbert_incr',
-        'ann_sapbert_absent',
-        'ann_nameres_incr',
-        'ann_nameres_absent']
+        'annotation_common',
+        'ann_sapbert_adds',
+        'ann_nameres_adds',
+        'ann_scigraph_adds']
 
     with open(OUTPUT_SUMMARY_FILE, 'w') as csv_file:
         # Write the header -- we do this once for all the dbGaP data dictionaries we want to test.
