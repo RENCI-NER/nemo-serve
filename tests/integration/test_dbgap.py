@@ -307,16 +307,7 @@ def annotation_string(annotation):
         annotation['text'],))
 
 def run_summary_report():
-    "Run all three annotations together, generate a summary report"
-
-    tree = ET.parse(OUTPUT_DBGAP_DATA_DICT_FILE)
-    data_table = tree.getroot()
-    dbgap_table_id = data_table.get('id')
-    dbgap_study_id = data_table.get('study_id')
-    dbgap_date_created = data_table.get('date_created')
-    dbgap_description = data_table.find('description').text
-    assert all([dbgap_table_id, dbgap_study_id, dbgap_date_created,
-                dbgap_description])
+    """Run all three annotations together, generate a summary report"""
 
     fieldnames = [
         'var_id',
@@ -331,45 +322,71 @@ def run_summary_report():
         'ann_nameres_absent']
 
     with open(OUTPUT_SUMMARY_FILE, 'w') as csv_file:
+        # Write the header -- we do this once for all the dbGaP data dictionaries we want to test.
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
 
-        for variable in data_table.findall('variable'):
-            var_id = variable.get('id')
-            var_name = variable.find('name').text
-            var_desc = variable.find('description').text
-            values = map(lambda val: val.get('code') + ": " + val.text,
-                         variable.findall('value'))
+        for dbgap_data_dict_url in DBGAP_DATA_DICTS_TO_TEST:
+            logging.info(f"Downloading {dbgap_data_dict_url}")
 
-            # get sets of 3-tuples for all annotations
-            sapbert_annotations = annotate_variable_using_babel_nemoserve(
-                var_name, var_desc, values, method='sapbert')
-            sapbert_set = {annotation_string(an)
-                           for an in sapbert_annotations if 'nn_id' in an}
+            # Download the data dictionary.
+            data_dict_response = requests.get(dbgap_data_dict_url)
+            assert data_dict_response.status_code == 200
 
-            nameres_annotations = annotate_variable_using_babel_nemoserve(
-                var_name, var_desc, values, method='nameres')
-            nameres_set = {annotation_string(an)
-                           for an in nameres_annotations if 'nn_id' in an}
+            data_table = ET.fromstring(data_dict_response.content)
+            dbgap_table_id = data_table.get('id')
+            dbgap_study_id = data_table.get('study_id')
+            dbgap_date_created = data_table.get('date_created')
+            dbgap_description = data_table.find('description').text
+            assert all([dbgap_table_id, dbgap_study_id, dbgap_date_created,
+                        dbgap_description])
 
-            scigraph_annotations = annotate_variable_using_scigraph(
-                var_name, var_desc, values)
-            scigraph_set = {annotation_string(an)
-                            for an in scigraph_annotations if 'nn_id' in an}
+            variables = data_table.findall('variable')
+            logging.info(f"Annotating {len(list(variables))} variables from {dbgap_data_dict_url}")
 
-            output = {
-                'var_id': var_id,
-                'var_name': var_name,
-                'dataset_url': '',
-                'var_text': make_annotation_text(var_name, var_desc, values),
-                'annotation_all': ";".join(sapbert_set & nameres_set & scigraph_set),
-                'ann_scigraph': ";".join(scigraph_set),
-                'ann_sapbert_incr': ";".join(sapbert_set - scigraph_set),
-                'ann_sapbert_absent': ";".join(scigraph_set - sapbert_set),
-                'ann_nameres_incr': ";".join(nameres_set - scigraph_set),
-                'ann_nameres_absent': ";".join(scigraph_set - nameres_set)
-            }
-            writer.writerow(output)
+            for variable in variables:
+                var_id = variable.get('id')
+                var_name = variable.find('name').text
+                var_desc = variable.find('description').text
+                values = map(lambda val: val.get('code') + ": " + val.text,
+                             variable.findall('value'))
+
+                logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Biomegatron/SAPBERT")
+
+                # get sets of 3-tuples for all annotations
+                sapbert_annotations = annotate_variable_using_babel_nemoserve(
+                    var_name, var_desc, values, method='sapbert')
+                sapbert_set = {annotation_string(an)
+                               for an in sapbert_annotations if 'nn_id' in an}
+
+                logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Biomegatron/NameRes")
+
+                nameres_annotations = annotate_variable_using_babel_nemoserve(
+                    var_name, var_desc, values, method='nameres')
+                nameres_set = {annotation_string(an)
+                               for an in nameres_annotations if 'nn_id' in an}
+
+                logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Monarch Scigraph")
+
+                scigraph_annotations = annotate_variable_using_scigraph(
+                    var_name, var_desc, values)
+                scigraph_set = {annotation_string(an)
+                                for an in scigraph_annotations if 'nn_id' in an}
+
+                output = {
+                    'var_id': var_id,
+                    'var_name': var_name,
+                    'dataset_url': '',
+                    'var_text': make_annotation_text(var_name, var_desc, values),
+                    'annotation_all': ";".join(sapbert_set & nameres_set & scigraph_set),
+                    'ann_scigraph': ";".join(scigraph_set),
+                    'ann_sapbert_incr': ";".join(sapbert_set - scigraph_set),
+                    'ann_sapbert_absent': ";".join(scigraph_set - sapbert_set),
+                    'ann_nameres_incr': ";".join(nameres_set - scigraph_set),
+                    'ann_nameres_absent': ";".join(scigraph_set - nameres_set)
+                }
+
+                writer.writerow(output)
 
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
 def test_download_dbgap_data_dict(dbgap_data_dict_url):
