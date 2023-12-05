@@ -307,11 +307,16 @@ def annotate_dbgap_data_dict(method):
                         f"{annotation['obj']}\n")
 
 def annotation_string(annotation):
-    "Take an annotation, return a three-part string that represents it"
+    """
+    Take an annotation, return a three-part string that represents it.
+
+    This used to contain annotation['text'] so you could see what text the engine used to make
+    the annotation, but if we take it out, we can do a much better job of grouping together
+    common annotations.
+    """
     return ":".join((
         annotation['nn_id'],
-        annotation['nn_label'],
-        annotation['text'],))
+        annotation['nn_label'],))
 
 def run_summary_report():
     """Run all three annotations together, generate a summary report"""
