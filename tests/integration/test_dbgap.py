@@ -62,7 +62,8 @@ OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
 OUTPUT_SUMMARY_FILE = os.path.join(OUTPUT_DIR, "annotation_summary_output.csv")
 # Which dbGaP data dictionaries should we test? This should be a URL that points directly to a data_dict.xml file.
 DBGAP_DATA_DICTS_TO_TEST = [
-    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml'
+    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml',
+    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs001387/phs001387.v3.p1/pheno_variable_summaries/phs001387.v3.pht008970.v2.TOPMed_WGS_THRV_Subject_Phenotypes.data_dict.xml',
 ]
 
 logging.basicConfig(level=logging.INFO)
