@@ -47,7 +47,7 @@ NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-
 MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
 
 # Configuration: NameRes
-NAMERES_URL = 'http://name-resolution-sri-dev.apps.renci.org/lookup?offset=0&limit=10&string='
+NAMERES_URL = 'http://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
 
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"
