@@ -373,17 +373,19 @@ def run_summary_report():
                 scigraph_set = {annotation_string(an)
                                 for an in scigraph_annotations if 'nn_id' in an}
 
+                # What concepts does everybody agree on?
+                annotation_common = sapbert_set & nameres_set & scigraph_set
+
                 output = {
+                    'dbgap_url': dbgap_data_dict_url,
                     'var_id': var_id,
                     'var_name': var_name,
                     'dataset_url': '',
                     'var_text': make_annotation_text(var_name, var_desc, values),
-                    'annotation_all': ";".join(sapbert_set & nameres_set & scigraph_set),
-                    'ann_scigraph': ";".join(scigraph_set),
-                    'ann_sapbert_incr': ";".join(sapbert_set - scigraph_set),
-                    'ann_sapbert_absent': ";".join(scigraph_set - sapbert_set),
-                    'ann_nameres_incr': ";".join(nameres_set - scigraph_set),
-                    'ann_nameres_absent': ";".join(scigraph_set - nameres_set)
+                    'annotation_common': ";".join(annotation_common),
+                    'ann_sapbert_adds': ";".join(sapbert_set - annotation_common),
+                    'ann_nameres_adds': ";".join(nameres_set - annotation_common),
+                    'ann_scigraph_adds': ";".join(scigraph_set - annotation_common)
                 }
 
                 writer.writerow(output)
