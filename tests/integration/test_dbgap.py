@@ -39,6 +39,7 @@ NEMOSERVE_MODEL_NAME = "token_classification"
 SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
+SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for reasonable results.
 
 # Configuration: the `/get_normalized_nodes` endpoint on a Node Normalization instance to use.
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/get_normalized_nodes')
@@ -128,8 +129,9 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             request = {
                 "text": text,
                 "model_name": SAPBERT_MODEL_NAME,
+                "count": SAPBERT_COUNT,
                 "args": {
-                    "bl_type": bl_type
+                    "bl_type": bl_type,
                 }
             }
 
