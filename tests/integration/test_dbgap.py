@@ -27,6 +27,7 @@ import os
 import urllib.parse
 import xml.etree.ElementTree as ET
 import requests
+import csv
 import pytest
 
 # Configuration: get the Nemo-Serve URL and figure out the annotate path.
@@ -38,6 +39,7 @@ NEMOSERVE_MODEL_NAME = "token_classification"
 SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
+SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for reasonable results.
 
 # Configuration: the `/get_normalized_nodes` endpoint on a Node Normalization instance to use.
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/get_normalized_nodes')
@@ -46,22 +48,31 @@ NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-
 MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
 
 # Configuration: NameRes
-NAMERES_URL = 'http://name-resolution-sri-dev.apps.renci.org/lookup?offset=0&limit=10&string='
+NAMERES_URL = 'http://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
 
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 OUTPUT_DBGAP_DATA_DICT_FILE = os.path.join(OUTPUT_DIR, "dbgap_data_dict.xml")
-OUTPUT_SAPBERT_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "sapbert_annot_output.txt")
-OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "scigraph_annot_output.txt")
-OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "nameres_annot_output.txt")
+OUTPUT_SAPBERT_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
+                                              "sapbert_annot_output.txt")
+OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
+                                               "scigraph_annot_output.txt")
+OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
+                                              "nameres_annot_output.txt")
+OUTPUT_SUMMARY_FILE = os.path.join(OUTPUT_DIR, "annotation_summary_output.csv")
 # Which dbGaP data dictionaries should we test? This should be a URL that points directly to a data_dict.xml file.
 DBGAP_DATA_DICTS_TO_TEST = [
-    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml'
+    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml',
+    'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs001387/phs001387.v3.p1/pheno_variable_summaries/phs001387.v3.pht008970.v2.TOPMed_WGS_THRV_Subject_Phenotypes.data_dict.xml',
 ]
 
 logging.basicConfig(level=logging.INFO)
 
+def make_annotation_text(var_name, desc, permissible_values):
+    "Return a string for annotation"
+    text: str = var_name + " " + desc + " " + " ".join(permissible_values)
+    return text
 
 def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, method='sapbert'):
     """
@@ -79,7 +90,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
     annotations = []
 
     # Make a request to Nemo-Serve to annotate all the text: variable name, description, values.
-    text = var_name + " " + desc + " " + " ".join(permissible_values)
+    text = make_annotation_text(var_name, desc, permissible_values)
     request = {
         "text": text,
         "model_name": NEMOSERVE_MODEL_NAME
@@ -118,8 +129,9 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             request = {
                 "text": text,
                 "model_name": SAPBERT_MODEL_NAME,
+                "count": SAPBERT_COUNT,
                 "args": {
-                    "bl_type": bl_type
+                    "bl_type": bl_type,
                 }
             }
 
@@ -158,6 +170,10 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
         denotation['id'] = f"{first_result['curie']}"
 
+        # These should already be normalized. So let's set nn_id and nn_label.
+        denotation['nn_id'] = denotation['id']
+        denotation['nn_label'] = denotation['name']
+
         count_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.
@@ -182,7 +198,7 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
     annotations = []
 
     # Make a request to Monarch SciGraph to annotate all the text: variable name, description, values.
-    text: str = var_name + " " + desc + " " + " ".join(permissible_values)
+    text = make_annotation_text(var_name, desc, permissible_values)
     request_url = MONARCH_SCIGRAPH_URL + urllib.parse.quote(text)
     logging.debug(f"Request to SciGraph: {request_url}")
     response = requests.post(request_url)
@@ -290,6 +306,100 @@ def annotate_dbgap_data_dict(method):
                 f.write(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: "
                         f"{annotation['obj']}\n")
 
+def annotation_string(annotation):
+    """
+    Take an annotation, return a three-part string that represents it.
+
+    This used to contain annotation['text'] so you could see what text the engine used to make
+    the annotation, but if we take it out, we can do a much better job of grouping together
+    common annotations.
+    """
+    return ":".join((
+        annotation['nn_id'],
+        annotation['nn_label'],))
+
+def run_summary_report():
+    """Run all three annotations together, generate a summary report"""
+
+    fieldnames = [
+        'dbgap_url',
+        'var_id',
+        'var_name',
+        'dataset_url',
+        'var_text',
+        'annotation_common',
+        'ann_sapbert_adds',
+        'ann_nameres_adds',
+        'ann_scigraph_adds']
+
+    with open(OUTPUT_SUMMARY_FILE, 'w') as csv_file:
+        # Write the header -- we do this once for all the dbGaP data dictionaries we want to test.
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for dbgap_data_dict_url in DBGAP_DATA_DICTS_TO_TEST:
+            logging.info(f"Downloading {dbgap_data_dict_url}")
+
+            # Download the data dictionary.
+            data_dict_response = requests.get(dbgap_data_dict_url)
+            assert data_dict_response.status_code == 200
+
+            data_table = ET.fromstring(data_dict_response.content)
+            dbgap_table_id = data_table.get('id')
+            dbgap_study_id = data_table.get('study_id')
+            dbgap_date_created = data_table.get('date_created')
+            dbgap_description = data_table.find('description').text
+            assert all([dbgap_table_id, dbgap_study_id, dbgap_date_created,
+                        dbgap_description])
+
+            variables = data_table.findall('variable')
+            logging.info(f"Annotating {len(list(variables))} variables from {dbgap_data_dict_url}")
+
+            for variable in variables:
+                var_id = variable.get('id')
+                var_name = variable.find('name').text
+                var_desc = variable.find('description').text
+                values = map(lambda val: val.get('code') + ": " + val.text,
+                             variable.findall('value'))
+
+                logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Biomegatron/SAPBERT")
+
+                # get sets of 3-tuples for all annotations
+                sapbert_annotations = annotate_variable_using_babel_nemoserve(
+                    var_name, var_desc, values, method='sapbert')
+                sapbert_set = {annotation_string(an)
+                               for an in sapbert_annotations if 'nn_id' in an}
+
+                logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Biomegatron/NameRes")
+
+                nameres_annotations = annotate_variable_using_babel_nemoserve(
+                    var_name, var_desc, values, method='nameres')
+                nameres_set = {annotation_string(an)
+                               for an in nameres_annotations if 'nn_id' in an}
+
+                logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Monarch Scigraph")
+
+                scigraph_annotations = annotate_variable_using_scigraph(
+                    var_name, var_desc, values)
+                scigraph_set = {annotation_string(an)
+                                for an in scigraph_annotations if 'nn_id' in an}
+
+                # What concepts does everybody agree on?
+                annotation_common = sapbert_set & nameres_set & scigraph_set
+
+                output = {
+                    'dbgap_url': dbgap_data_dict_url,
+                    'var_id': var_id,
+                    'var_name': var_name,
+                    'dataset_url': '',
+                    'var_text': make_annotation_text(var_name, var_desc, values),
+                    'annotation_common': ";".join(annotation_common),
+                    'ann_sapbert_adds': ";".join(sapbert_set - annotation_common),
+                    'ann_nameres_adds': ";".join(nameres_set - annotation_common),
+                    'ann_scigraph_adds': ";".join(scigraph_set - annotation_common)
+                }
+
+                writer.writerow(output)
 
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
 def test_download_dbgap_data_dict(dbgap_data_dict_url):
@@ -313,3 +423,8 @@ def test_scigraph_annotation_with_dbgap():
 
 def test_nameres_annotation_with_dbgap():
     annotate_dbgap_data_dict('nameres')
+
+if __name__ == '__main__':
+    # If we're calling this directly from the command line, let's run a summary
+    # report of all three annotation methods
+    run_summary_report()
