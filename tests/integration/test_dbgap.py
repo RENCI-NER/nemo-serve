@@ -162,7 +162,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
                 nameres_options['biolink_type'] = bl_type
 
             logging.info(f"Request to NameRes {NAMERES_ENDPOINT}: {nameres_options}")
-            response = requests.get(NAMERES_ENDPOINT, data=nameres_options)
+            response = requests.get(NAMERES_ENDPOINT, params=nameres_options)
             logging.debug(f"Response from nameres: {response.content}")
             if not response.status_code == 200:
                 logging.error(f"Server error from NameRes for text '{text}': {response}")
