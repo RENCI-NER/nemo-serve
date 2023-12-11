@@ -214,7 +214,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
     return annotations
 
 
-def annotate_variable_using_scigraph(var_name, desc, permissible_values):
+def annotate_variable_using_scigraph(var_name, desc, permissible_values, exclude_umls=True):
     """
     Annotate a variable using SciGraph.
 
@@ -242,6 +242,12 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
 
         for token in tokens:
             token_id = token['id']
+
+            if exclude_umls:
+                # Skip UMLS identifiers.
+                if token_id.startswith('UMLS:'):
+                    continue
+
             token_category = token['category']
             token_terms = '|'.join(token['terms'])
 
@@ -321,9 +327,9 @@ def annotate_dbgap_data_dict(method):
 
             if method == 'sapbert' or method == 'nameres':
                 annotations = annotate_variable_using_babel_nemoserve(var_name, var_desc, values,
-                                                                      method=method)
+                                                                      method=method, exclude_umls=True)
             elif method == 'scigraph':
-                annotations = annotate_variable_using_scigraph(var_name, var_desc, values)
+                annotations = annotate_variable_using_scigraph(var_name, var_desc, values, exclude_umls=True)
             else:
                 assert Exception("input method must be sapbert, scigraph, or nameres.")
 
@@ -334,6 +340,7 @@ def annotate_dbgap_data_dict(method):
                     nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
                 f.write(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: "
                         f"{annotation['obj']}\n")
+
 
 def annotation_string(annotation):
     """
@@ -395,21 +402,21 @@ def run_summary_report():
 
                 # get sets of 3-tuples for all annotations
                 sapbert_annotations = annotate_variable_using_babel_nemoserve(
-                    var_name, var_desc, values, method='sapbert')
+                    var_name, var_desc, values, method='sapbert', exclude_umls=True)
                 sapbert_set = {annotation_string(an)
                                for an in sapbert_annotations if 'nn_id' in an}
 
                 logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Biomegatron/NameRes")
 
                 nameres_annotations = annotate_variable_using_babel_nemoserve(
-                    var_name, var_desc, values, method='nameres')
+                    var_name, var_desc, values, method='nameres', exclude_umls=True)
                 nameres_set = {annotation_string(an)
                                for an in nameres_annotations if 'nn_id' in an}
 
                 logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Monarch Scigraph")
 
                 scigraph_annotations = annotate_variable_using_scigraph(
-                    var_name, var_desc, values)
+                    var_name, var_desc, values, exclude_umls=True)
                 scigraph_set = {annotation_string(an)
                                 for an in scigraph_annotations if 'nn_id' in an}
 
@@ -429,6 +436,7 @@ def run_summary_report():
                 }
 
                 writer.writerow(output)
+
 
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
 def test_download_dbgap_data_dict(dbgap_data_dict_url):
