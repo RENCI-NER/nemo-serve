@@ -74,7 +74,7 @@ def make_annotation_text(var_name, desc, permissible_values):
     text: str = var_name + " " + desc + " " + " ".join(permissible_values)
     return text
 
-def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, method='sapbert'):
+def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, method='sapbert', exclude_umls=True):
     """
     Annotate a variable using the Babel/NemoServe system we're developing with a default method sapbert,
     or with NameRes method that can be specified in the method input parameter.
@@ -141,6 +141,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             if not response.status_code == 200:
                 logging.error(f"Server error from SAPBERT for text '{text}': {response}")
                 continue
+
         elif method == "nameres":
             nameres_options = {
                 'offset': 0,
@@ -151,7 +152,8 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             # Some NameRes v1.3.8-specific options.
             if 'sri-dev.apps' in NAMERES_ENDPOINT:
                 nameres_options['autocomplete'] = 'false'
-                nameres_options['exclude_prefixes'] = 'UMLS'
+                if exclude_umls:
+                    nameres_options['exclude_prefixes'] = 'UMLS'
 
             if bl_type:
                 nameres_options['biolink_type'] = bl_type
@@ -168,20 +170,34 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             logging.info(f"Could not annotate text {token['text']} in Sapbert: {response}, {response.content}")
             continue
 
-        first_result = result[0]
+        if not exclude_umls:
+            # Just go with the best option.
+            best_result = result[0]
+        else:
+            # Skip all the results with a UMLS prefix.
+            best_result = None
+            for identifier in result:
+                if identifier['curie'].startswith('UMLS:'):
+                    continue
+                best_result = identifier
+                break
+
+            if not best_result:
+                logging.info(f"Annotate text {token['text']} in Sapbert got no non-UMLS responses: {response}, {response.content}")
+                continue
 
         denotation = dict(token)
         denotation['text'] = text
         if method == 'sapbert':
-            denotation['score'] = first_result['score']
-            denotation['name'] = first_result['name']
-            denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
+            denotation['score'] = best_result['score']
+            denotation['name'] = best_result['name']
+            denotation['obj'] = f"{best_result['curie']} ({best_result['name']}, score: {best_result['score']})"
         elif method == 'nameres':
-            denotation['name'] = first_result['label']
-            denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']}, score: {first_result['score']})"
+            denotation['name'] = best_result['label']
+            denotation['obj'] = f"{best_result['curie']} ({best_result['types'][0]}: {best_result['label']}, score: {best_result['score']})"
         else:
             raise RuntimeError(f"Unknown method: {method}")
-        denotation['id'] = f"{first_result['curie']}"
+        denotation['id'] = f"{best_result['curie']}"
 
         # These should already be normalized. So let's set nn_id and nn_label.
         denotation['nn_id'] = denotation['id']
