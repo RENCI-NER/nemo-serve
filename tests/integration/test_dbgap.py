@@ -150,7 +150,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
 
             # Some NameRes v1.3.8-specific options.
             if 'sri-dev.apps' in NAMERES_ENDPOINT:
-                nameres_options['autocomplete'] = 'true'
+                nameres_options['autocomplete'] = 'false'
                 nameres_options['exclude_prefixes'] = 'UMLS'
 
             if bl_type:
