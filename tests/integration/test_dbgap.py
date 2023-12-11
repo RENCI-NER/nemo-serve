@@ -48,7 +48,7 @@ NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-
 MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
 
 # Configuration: NameRes
-NAMERES_URL = 'http://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
+NAMERES_ENDPOINT = os.getenv('NAMERES_ENDPOINT', 'http://name-resolution-sri.renci.org/lookup')
 
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"
@@ -142,11 +142,22 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
                 logging.error(f"Server error from SAPBERT for text '{text}': {response}")
                 continue
         elif method == "nameres":
-            nameres_query = NAMERES_URL + urllib.parse.quote(text)
+            nameres_options = {
+                'offset': 0,
+                'limit': 10,
+                'string': text
+            }
+
+            # Some NameRes v1.3.8-specific options.
+            if 'sri-dev.apps' in NAMERES_ENDPOINT:
+                nameres_options['autocomplete'] = 'true'
+                nameres_options['exclude_prefixes'] = 'UMLS'
+
             if bl_type:
-                nameres_query = nameres_query + '&biolink_type=' + bl_type
-            logging.debug(f"Request to NameRes: {nameres_query}")
-            response = requests.post(nameres_query)
+                nameres_options['biolink_type'] = bl_type
+
+            logging.debug(f"Request to NameRes {NAMERES_ENDPOINT}: {nameres_options}")
+            response = requests.post(NAMERES_ENDPOINT, data=nameres_options)
             logging.debug(f"Response from nameres: {response.content}")
             if not response.status_code == 200:
                 logging.error(f"Server error from NameRes for text '{text}': {response}")
@@ -165,9 +176,11 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
             denotation['score'] = first_result['score']
             denotation['name'] = first_result['name']
             denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
-        else:  # nameres
+        elif method == 'nameres':
             denotation['name'] = first_result['label']
-            denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
+            denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']}, score: {first_result['score']})"
+        else:
+            raise RuntimeError(f"Unknown method: {method}")
         denotation['id'] = f"{first_result['curie']}"
 
         # These should already be normalized. So let's set nn_id and nn_label.
