@@ -30,6 +30,9 @@ import requests
 import csv
 import pytest
 
+# Configuration: should we exclude all UMLS identifiers?
+EXCLUDE_UMLS=False
+
 # Configuration: get the Nemo-Serve URL and figure out the annotate path.
 NEMOSERVE_URL = os.getenv('NEMOSERVE_URL', 'https://med-nemo.apps.renci.org/')
 NEMOSERVE_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
@@ -159,7 +162,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
                 nameres_options['biolink_type'] = bl_type
 
             logging.info(f"Request to NameRes {NAMERES_ENDPOINT}: {nameres_options}")
-            response = requests.post(NAMERES_ENDPOINT, data=nameres_options)
+            response = requests.get(NAMERES_ENDPOINT, data=nameres_options)
             logging.debug(f"Response from nameres: {response.content}")
             if not response.status_code == 200:
                 logging.error(f"Server error from NameRes for text '{text}': {response}")
@@ -327,9 +330,9 @@ def annotate_dbgap_data_dict(method):
 
             if method == 'sapbert' or method == 'nameres':
                 annotations = annotate_variable_using_babel_nemoserve(var_name, var_desc, values,
-                                                                      method=method, exclude_umls=True)
+                                                                      method=method, exclude_umls=EXCLUDE_UMLS)
             elif method == 'scigraph':
-                annotations = annotate_variable_using_scigraph(var_name, var_desc, values, exclude_umls=True)
+                annotations = annotate_variable_using_scigraph(var_name, var_desc, values, exclude_umls=EXCLUDE_UMLS)
             else:
                 assert Exception("input method must be sapbert, scigraph, or nameres.")
 
@@ -402,21 +405,21 @@ def run_summary_report():
 
                 # get sets of 3-tuples for all annotations
                 sapbert_annotations = annotate_variable_using_babel_nemoserve(
-                    var_name, var_desc, values, method='sapbert', exclude_umls=True)
+                    var_name, var_desc, values, method='sapbert', exclude_umls=EXCLUDE_UMLS)
                 sapbert_set = {annotation_string(an)
                                for an in sapbert_annotations if 'nn_id' in an}
 
                 logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Biomegatron/NameRes")
 
                 nameres_annotations = annotate_variable_using_babel_nemoserve(
-                    var_name, var_desc, values, method='nameres', exclude_umls=True)
+                    var_name, var_desc, values, method='nameres', exclude_umls=EXCLUDE_UMLS)
                 nameres_set = {annotation_string(an)
                                for an in nameres_annotations if 'nn_id' in an}
 
                 logging.info(f"Annotating {var_name}: {var_desc} ({values}) using Monarch Scigraph")
 
                 scigraph_annotations = annotate_variable_using_scigraph(
-                    var_name, var_desc, values, exclude_umls=True)
+                    var_name, var_desc, values, exclude_umls=EXCLUDE_UMLS)
                 scigraph_set = {annotation_string(an)
                                 for an in scigraph_annotations if 'nn_id' in an}
 
