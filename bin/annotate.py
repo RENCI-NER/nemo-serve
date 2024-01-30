@@ -61,10 +61,10 @@ with open(sys.argv[1], 'r') as input_file:
                 row['concept_resolver_score'] = concept_data.get('score', '')
 
                 types = concept_data.get('types', [])
-                if len(types) == 0:
-                    row['concept_resolver_types'] = json.dumps([types[0]])
+                if len(types) > 0:
+                    row['concept_resolver_types'] = str([types[0]])
                 else:
-                    row['concept_resolver_types'] = json.dumps([])
+                    row['concept_resolver_types'] = str([])
                     row['concept_resolver_error'] = 'ERR no types'
 
             logging.info(f"Annotated '{text}' in row {count_rows}: {json.dumps(results, indent=2, sort_keys=True)}")
