@@ -6,13 +6,23 @@ import sys
 import requests
 import logging
 
+from requests.adapters import HTTPAdapter, Retry
+
 # Eventually this will be a fully functional annotation tool, but for now, I'm going to use it for a specific use case.
+logging.basicConfig(level=logging.INFO)
 CONCEPT_RESOLVER_URL = 'https://concept-resolver.137.120.31.102.nip.io/lookup?string='
+MAX_RETRIES = Retry(total=5,
+                    backoff_factor=0.1)
+
+# Set up a Requests session with retries.
+session = requests.Session()
+
+session.mount('http://', HTTPAdapter(max_retries=MAX_RETRIES))
+session.mount('https://', HTTPAdapter(max_retries=MAX_RETRIES))
 
 # Read CSV file from argv[1] using the DictReader
 if len(sys.argv) < 1:
     raise RuntimeError(f"One argument needed: a CSV file to process")
-
 
 with open(sys.argv[1], 'r') as input_file:
     input_data = csv.DictReader(input_file)
@@ -40,7 +50,7 @@ with open(sys.argv[1], 'r') as input_file:
 
         logging.info(f"Processing row {count_rows} ('{text}')")
 
-        response = requests.get(CONCEPT_RESOLVER_URL + text)
+        response = session.get(CONCEPT_RESOLVER_URL + text)
         if response.status_code == 200:
             results = response.json()
 
@@ -50,14 +60,14 @@ with open(sys.argv[1], 'r') as input_file:
                 row['concept_resolver_label'] = concept_data.get('label', '')
                 row['concept_resolver_score'] = concept_data.get('score', '')
 
-                types_str = concept_data.get('types', '[]')
-                types = json.dumps(types_str)
-                if len(types) > 0:
-                    row['concept_resolver_types'] = types[0]
+                types = concept_data.get('types', [])
+                if len(types) == 0:
+                    row['concept_resolver_types'] = json.dumps([types[0]])
                 else:
-                    row['concept_resolver_types'] = 'ERR no types'
+                    row['concept_resolver_types'] = json.dumps([])
+                    row['concept_resolver_error'] = 'ERR no types'
 
-            logging.info(f"Annotated '{text}' in row {count_rows}: {json.dumps(row, indent=2, sort_keys=True)}")
+            logging.info(f"Annotated '{text}' in row {count_rows}: {json.dumps(results, indent=2, sort_keys=True)}")
         else:
             row['concept_resolver_error'] = f"ERR {response.status_code}"
 
