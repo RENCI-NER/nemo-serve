@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import logging
-from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
