@@ -56,33 +56,39 @@ class TokenClassificationModelWrapper(ModelWrapper):
         # Tracks how many split sentences have been added to chunks overall.
         splitted = 0
         while not window_end:
+            current_token_length = 0
             current_string = ""
             for index, sentence in enumerate(sentences[current_index:]):
-                possible_string = current_string + sentence
-                if self._get_token_length(possible_string) >= window_size:
+                sentence_token_length = self._get_token_length(sentence)
+                if sentence_token_length >= window_size:
+                    raise WindowOverflowError(
+                        f"string {current_string} cannot be subdivided "
+                        f"further but is long than "
+                        f"window_size {window_size}.")
+                if current_token_length + sentence_token_length >= window_size:
                     # New sentence would make the chunk too long. Yield the
                     # existing chunk and start a new chunk.
-                    current_string = ""
-                    if self._get_token_length(current_string) >= window_size:
-                        # Likely happens if single sentence is longer than
-                        # window_size. We will hopefully handle this better in
-                        # the future but for now we're just raising an error.
-                        raise WindowOverflowError(
-                            f"string {current_string} cannot be subdivided "
-                            f"further but is long than "
-                            f"window_size {window_size}.")
+                    logger.debug("sliding_window: Returning %d tokens: %s",
+                                 current_token_length, current_string)
                     yield current_string
-                    current_index = index
+                    current_string = ""
+                    current_token_length = 0
+                    current_index += index
                     break
 
                 # We can add the next sentence without going over the window, so
                 # we do so.
-                current_string = possible_string
+                logger.debug("sliding_window: Adding %d tokens to chunk: %s",
+                             sentence_token_length, sentence)
+                current_string += sentence
+                current_token_length += sentence_token_length
                 splitted += 1
 
             if splitted == len(sentences):
                 # we've reached the end of the text buffer. Spit out whatever
                 # remains.
+                logger.debug("Reached end of text input, returning %s",
+                             current_string)
                 window_end = True
                 yield current_string
 
