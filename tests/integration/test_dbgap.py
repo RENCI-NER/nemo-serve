@@ -61,6 +61,9 @@ OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
 OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR,
                                               "nameres_annot_output.txt")
 OUTPUT_SUMMARY_FILE = os.path.join(OUTPUT_DIR, "annotation_summary_output.csv")
+OUTPUT_SAPBERT_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "sapbert_annot_output.jsonl")
+OUTPUT_SCIGRAPH_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "scigraph_annot_output.jsonl")
+OUTPUT_NAMERES_ANNOTATION_FILE = os.path.join(OUTPUT_DIR, "nameres_annot_output.jsonl")
 # Which dbGaP data dictionaries should we test? This should be a URL that points directly to a data_dict.xml file.
 DBGAP_DATA_DICTS_TO_TEST = [
     'https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000810/phs000810.v1.p1/pheno_variable_summaries/phs000810.v1.pht004715.v1.HCHS_SOL_Cohort_Subject_Phenotypes.data_dict.xml',
@@ -160,15 +163,18 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
         first_result = result[0]
 
         denotation = dict(token)
+        denotation['id'] = first_result['curie']
         denotation['text'] = text
+        denotation['query_bl_type'] = bl_type
         if method == 'sapbert':
             denotation['score'] = first_result['score']
-            denotation['name'] = first_result['name']
+            denotation['label'] = first_result['name']
             denotation['obj'] = f"{first_result['curie']} ({first_result['name']}, score: {first_result['score']})"
+            denotation['category'] = first_result['category']
         else:  # nameres
-            denotation['name'] = first_result['label']
+            denotation['label'] = first_result['label']
             denotation['obj'] = f"{first_result['curie']} ({first_result['types'][0]}: {first_result['label']})"
-        denotation['id'] = f"{first_result['curie']}"
+            denotation['category'] = first_result['types'][0]
 
         # These should already be normalized. So let's set nn_id and nn_label.
         denotation['nn_id'] = denotation['id']
@@ -228,16 +234,16 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
     # Normalize identifiers.
     for annot in annotations:
         # Try to normalize the ID.
-        mesh = annot['id']
+        curie = annot['id']
 
         response = requests.get(NODE_NORM_ENDPOINT, {
-            'curie': mesh,
+            'curie': curie,
             'conflate': 'true'
         })
         if not response.ok:
             pass
         else:
-            result = response.json().get(mesh, {})
+            result = response.json().get(curie, {})
             if result:
                 normalized_id = result.get('id', {})
                 normalized_identifier = normalized_id.get('identifier')
@@ -247,6 +253,7 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
                     pass
                 else:
                     annot['nn_id'] = normalized_identifier
+                    annot['nn_category'] = result.get('type')[0]
                     annot['nn_label'] = normalized_label
 
     return annotations
@@ -275,20 +282,26 @@ def annotate_dbgap_data_dict(method):
     assert dbgap_date_created is not None
     assert dbgap_description is not None
     with open(output_file, 'w') as f:
-        f.write(f"dbGaP data dictionary {OUTPUT_DBGAP_DATA_DICT_FILE}\n")
-        f.write(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}\n")
-        f.write(f" - Description: {dbgap_description}\n")
+        logging.info(f"dbGaP data dictionary {OUTPUT_DBGAP_DATA_DICT_FILE}\n")
+        logging.info(f" - Table: {dbgap_table_id}, Study: {dbgap_study_id}, Date created: {dbgap_date_created}\n")
+        logging.info(f" - Description: {dbgap_description}\n")
 
         for variable in data_table.findall('variable'):
             var_id = variable.get('id')
             var_name = variable.find('name').text
             var_desc = variable.find('description').text
-            # var_type = variable.find('type').text
+            var_type = variable.find('type').text
             values = map(lambda val: val.get('code') + ": " + val.text, variable.findall('value'))
 
-            f.write(f"   - Variable {var_id} ({var_name}): {var_desc}\n")
-            for value in values:
-                f.write(f"     - Value: {value}\n")
+            result_dict = {
+                'var_id': var_id,
+                'var_name': var_name,
+                'var_type': var_type,
+                'var_desc': var_desc,
+                'method': method,
+                'values': list(values),
+                'annotations': []
+            }
 
             if method == 'sapbert' or method == 'nameres':
                 annotations = annotate_variable_using_babel_nemoserve(var_name, var_desc, values,
@@ -299,12 +312,10 @@ def annotate_dbgap_data_dict(method):
                 assert Exception("input method must be sapbert, scigraph, or nameres.")
 
             for annotation in annotations:
-                nn_id_str = ""
-                # Not needed on Babel-SAPBERT, since entries are pre-normalized.
                 if 'nn_id' in annotation:
-                    nn_id_str = f" ({annotation['nn_id']} \"{annotation['nn_label']}\")"
-                f.write(f"     - Annotated \"{annotation['text']}\" to {annotation['id']}{nn_id_str}: "
-                        f"{annotation['obj']}\n")
+                    annotation['normalized_id'] = annotation['nn_id']
+                    annotation['normalized_label'] = annotation['nn_label']
+                    annotation['normalized_category'] = annotation.get('nn_category', '')
 
 def annotation_string(annotation):
     """
@@ -400,6 +411,9 @@ def run_summary_report():
                 }
 
                 writer.writerow(output)
+            result_dict['annotations'] = list(annotations)
+
+            f.write(json.dumps(result_dict) + "\n")
 
 @pytest.mark.parametrize('dbgap_data_dict_url', DBGAP_DATA_DICTS_TO_TEST)
 def test_download_dbgap_data_dict(dbgap_data_dict_url):
