@@ -1,17 +1,15 @@
+import logging
+import math
+import yaml
 import numpy as np
 import pandas as pd
-import logging
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
 from src.utils.tokenizer import tokenizer
-import yaml
 
 
 logger = logging.Logger("gunicorn.error")
-
-class WindowOverflowError(Exception):
-    pass
 
 class ModelNotFoundError(Exception):
     pass
@@ -25,7 +23,6 @@ class ModelWrapper:
     def __call__(self, query_text):
         """ Make a call to initialized model's Predict function"""
         raise NotImplementedError("Call to wrapped model is required")
-
 
 class TokenClassificationModelWrapper(ModelWrapper):
     def __init__(self, model_path):
@@ -41,6 +38,31 @@ class TokenClassificationModelWrapper(ModelWrapper):
         """
         tokens = self.model.tokenizer.text_to_tokens(text)
         return len(tokens)
+
+    def _sentence_chunks(self, text, window_size=512):
+        """Break large sentences into chunks the model can accept
+
+        This method assumes you've alredy decided the text is too big and needs
+        to be split.
+
+        :param text: Text to break
+        :param window_size: Max token size to split
+        :return: Array of split text
+        """
+        tokens = self.model.tokenizer.text_to_tokens(text)
+        token_count = len(tokens)
+        # This should be something close to equal blocks of tokens. Chunking it
+        # this way reduces the chance of a small chunk at the end of a string of
+        # text.
+        nchunks = math.ceil(token_count/window_size)
+        chunk_size = math.ceil(window_size/nchunks)
+
+        rval = []
+        ct = 0
+        while ct * window_size < chunk_size:
+            rval += self.model.tokenizer.tokens_to_text(
+                tokens[ct*chunk_size:(ct+1)*chunk_size])
+        return rval
 
     def sliding_window(self, text, window_size=512):
         """
@@ -61,10 +83,13 @@ class TokenClassificationModelWrapper(ModelWrapper):
             for index, sentence in enumerate(sentences[current_index:]):
                 sentence_token_length = self._get_token_length(sentence)
                 if sentence_token_length >= window_size:
-                    raise WindowOverflowError(
-                        f"string {current_string} cannot be subdivided "
-                        f"further but is long than "
-                        f"window_size {window_size}.")
+                    # Try splitting on semicolons into sentence fragments
+                    split_list = text.split(';')
+                    for fragment in split_list:
+                        # Break any fragment over window_size into bits.
+                        yield from self._sentence_chunks(
+                            fragment, window_size)
+
                 if current_token_length + sentence_token_length >= window_size:
                     # New sentence would make the chunk too long. Yield the
                     # existing chunk and start a new chunk.
