@@ -8,8 +8,8 @@ from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
 from src.utils.tokenizer import tokenizer
 
-
 logger = logging.Logger("gunicorn.error")
+
 
 class ModelNotFoundError(Exception):
     pass
@@ -24,6 +24,7 @@ class ModelWrapper:
         """ Make a call to initialized model's Predict function"""
         raise NotImplementedError("Call to wrapped model is required")
 
+
 class TokenClassificationModelWrapper(ModelWrapper):
     def __init__(self, model_path):
         """ Initializes NLP Model
@@ -31,91 +32,103 @@ class TokenClassificationModelWrapper(ModelWrapper):
         """
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
+        # Make this an instance variable so that it's easier to mock in
+        # testing:
+        self.sentence_tokenizer = tokenizer
 
-    def _get_token_length(self, text):
+    def _get_token_length(self, input_text):
         """Return the length in tokens as understood by the model's own internal
         tokenizer.
         """
-        tokens = self.model.tokenizer.text_to_tokens(text)
+        tokens = self.model.tokenizer.text_to_tokens(input_text)
         return len(tokens)
 
-    def _sentence_chunks(self, text, window_size=512):
-        """Break large sentences into chunks the model can accept
+    def _token_chunks(self, input_text, window_size=512):
+        """Break sentences into lists of tokens. Return a list of token lists.
 
-        This method assumes you've alredy decided the text is too big and needs
-        to be split.
-
-        :param text: Text to break
-        :param window_size: Max token size to split
-        :return: Array of split text
+        Each token list will be smaller than window_size
         """
-        tokens = self.model.tokenizer.text_to_tokens(text)
+        logger.debug("_token_chunks called on text: %s", input_text)
+        tokens = self.model.tokenizer.text_to_tokens(input_text)
         token_count = len(tokens)
+        logger.debug("Text tokenized to %d tokens", token_count)
         # This should be something close to equal blocks of tokens. Chunking it
         # this way reduces the chance of a small chunk at the end of a string of
         # text.
         nchunks = math.ceil(token_count/window_size)
+        if not nchunks:
+            logger.debug("Zero tokens found, returning None")
+            return []
         chunk_size = math.ceil(window_size/nchunks)
+        logger.debug("Sentence will be broken into %d chunks of size %d",
+                     nchunks, chunk_size)
 
-        rval = []
         ct = 0
-        while ct * window_size < chunk_size:
-            rval += self.model.tokenizer.tokens_to_text(
-                tokens[ct*chunk_size:(ct+1)*chunk_size])
-        return rval
+        while ct * chunk_size < token_count:
+            new_chunk = tokens[ct*chunk_size:(ct+1)*chunk_size]
+            logger.debug("Token chunk added: %s", str(new_chunk))
+            yield new_chunk
+            ct += 1
 
-    def sliding_window(self, text, window_size=512):
+    def _sentences_to_chunks(self, sentences, window_size):
         """
-        Tokenize original query into smaller chunks that the model is able to process
+        Take a list of sentences, return an array of lists of otkens that are
+        all smaller than window_size.
+        """
+        for sentence in sentences:
+            sentence_token_length = self._get_token_length(sentence)
+            if sentence_token_length >= window_size:
+                logger.debug("Found an extra-long sentence, "
+                             "breaking it up:\n%s\n", sentence)
+
+                # Try splitting on semicolons into sentence fragments
+                split_list = sentence.split(';')
+                logger.debug("Semicolon split broke it into %d pieces",
+                             len(split_list))
+
+                for fragment in split_list:
+                    # Break any fragment over window_size into bits.
+                    chunks = self._token_chunks(fragment, window_size)
+                    for chunk in chunks:
+                        yield (len(chunk),
+                               self.model.tokenizer.tokens_to_text(chunk))
+            else:
+                logger.debug("Sentence is under chunk size (has %d tokens, "
+                             "returning: %s", sentence_token_length, sentence)
+                yield (sentence_token_length, sentence)
+
+    def sliding_window(self, input_text, window_size=512):
+        """
+        Tokenize original query into smaller chunks that the model can process
+
+        This refactored function uses a stack data structure instead of a
+        rolling window.
         :param text: Text to split up
         :param window_size: Max token size to split
         :return: Array of split text
         """
-        sentences = tokenizer.tokenize(text)
-        window_end = False
-        current_index = 0
+        logger.debug("sliding window called with text of length %d chars",
+                     len(input_text))
+        sentences = self.sentence_tokenizer.tokenize(input_text)
+        logger.debug("Text broken into %d sentences", len(sentences))
 
-        # Tracks how many split sentences have been added to chunks overall.
-        splitted = 0
-        while not window_end:
-            current_token_length = 0
-            current_string = ""
-            for index, sentence in enumerate(sentences[current_index:]):
-                sentence_token_length = self._get_token_length(sentence)
-                if sentence_token_length >= window_size:
-                    # Try splitting on semicolons into sentence fragments
-                    split_list = text.split(';')
-                    for fragment in split_list:
-                        # Break any fragment over window_size into bits.
-                        yield from self._sentence_chunks(
-                            fragment, window_size)
-
-                if current_token_length + sentence_token_length >= window_size:
-                    # New sentence would make the chunk too long. Yield the
-                    # existing chunk and start a new chunk.
-                    logger.debug("sliding_window: Returning %d tokens: %s",
-                                 current_token_length, current_string)
-                    yield current_string
-                    current_string = ""
-                    current_token_length = 0
-                    current_index += index
-                    break
-
-                # We can add the next sentence without going over the window, so
-                # we do so.
-                logger.debug("sliding_window: Adding %d tokens to chunk: %s",
-                             sentence_token_length, sentence)
-                current_string += sentence
-                current_token_length += sentence_token_length
-                splitted += 1
-
-            if splitted == len(sentences):
-                # we've reached the end of the text buffer. Spit out whatever
-                # remains.
-                logger.debug("Reached end of text input, returning %s",
-                             current_string)
-                window_end = True
+        current_string = ""
+        current_token_length = 0
+        for (chunk_token_length, chunk) in self._sentences_to_chunks(sentences, window_size):
+            logger.debug("sliding_window is working on sentence chunk %s",
+                         str(chunk))
+            if current_token_length + chunk_token_length >= window_size:
+                # New sentence would make the chunk too long. Yield the
+                # existing chunk and start a new chunk.
                 yield current_string
+                current_string = chunk
+                current_token_length = chunk_token_length
+            else:
+                current_string += chunk
+                current_token_length += chunk_token_length
+                logger.debug("current_string is %d tokens long",
+                             current_token_length)
+        yield current_string
 
     def _pubannotate(self, q, inferred):
         queries = [q.strip().split() for q in q]
@@ -125,12 +138,13 @@ class TokenClassificationModelWrapper(ModelWrapper):
         denotations = []
         for query in queries:
             end_idx += len(query)
-            # extract predictions for the current query from the list of all predictions
+            # extract predictions for the current query from the list of all
+            # predictions
             preds = inferred[start_idx:end_idx]
             start_idx = end_idx
             for j, word in enumerate(query):
-                # strip out the punctuation to attach the entity tag to the word not to a punctuation mark
-                # that follows the word
+                # strip out the punctuation to attach the entity tag to the word
+                # not to a punctuation mark that follows the word
                 if not word[-1].isalpha():
                     word = word[:-1]
                 pad = 0 if j == 0 else 1
@@ -139,10 +153,11 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
                 label = ids_to_labels[preds[j]]
 
-                is_not_pad_label = (label != self.model._cfg.dataset.pad_label and label != '0')
+                is_not_pad_label = (label != self.model._cfg.dataset.pad_label
+                                    and label != '0')
 
                 if not is_not_pad_label:
-                    # For things like fitness to practice where model labels it as fitness[B-biolink:NamedThing] to[0] practice[I-biolink:NamedThing]
+                    # For things like fitness to practice where model labels it as fitness[B-biolink:NamedThing] to[0] # practice[I-biolink:NamedThing]
                     # @TODO: investigate why [ De no ##vo ma ##li ##gna ##ncy following re ##nal transplant ##ation ] would return I-biolink without a B-
                     if len(denotations) and j + 1 < len(query) and ids_to_labels[preds[j + 1]].startswith('I-'):
                         denotations[-1]['text'] += " " + word
@@ -171,7 +186,9 @@ class TokenClassificationModelWrapper(ModelWrapper):
             self, queries, batch_size: int = 32
     ):
         """
-        Add predicted token labels to the queries. Use this method for debugging and prototyping.
+        Add predicted token labels to the queries.
+
+        Use this method for debugging and prototyping.
         Args:
             queries: text
             batch_size: batch size to use during inference.
@@ -242,8 +259,9 @@ class SapbertModelWrapper(ModelWrapper):
 
     def __call__(self, query_text, count):
         """ Runs prediction on text"""
-        toks = self.tokenizer.batch_encode_plus([query_text], padding="max_length", max_length=25, truncation=True,
-                                                return_tensors="pt")
+        toks = self.tokenizer.batch_encode_plus(
+            [query_text], padding="max_length", max_length=25, truncation=True,
+            return_tensors="pt")
         toks_cuda = {}
         for k, v in toks.items():
             toks_cuda[k] = v.cuda(0)
@@ -259,7 +277,8 @@ class SapbertModelWrapper(ModelWrapper):
             }]
         count_dist = np.argpartition(dist, count, axis=None)
         result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
-        indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten()) for d in result_dist]
+        indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten())
+                   for d in result_dist]
         indices = sum(indices, [])
         return [
             {
@@ -287,16 +306,19 @@ class ModelFactory:
         pass
 
     @staticmethod
-    def load_model(name, path, model_class, ground_truth_data_path=None, ground_truth_data_ids_path=None):
+    def load_model(name, path, model_class, ground_truth_data_path=None,
+                   ground_truth_data_ids_path=None):
         if name in ModelFactory.models.keys():
-            logger.info(f"Model {name} already in class skipping initialization")
+            logger.info("Model %s already in class skipping initialization",
+                        name)
             return
         else:
             logger.info(f"Initializing model {name}")
             assert issubclass(model_class, ModelWrapper), "Error please provide a subclass type of ModelWrapper"
             # initializes model and makes its prediction a callable
             if ground_truth_data_path:
-                ModelFactory.models[name] = model_class(path, ground_truth_data_path, ground_truth_data_ids_path)
+                ModelFactory.models[name] = model_class(
+                    path, ground_truth_data_path, ground_truth_data_ids_path)
             else:
                 ModelFactory.models[name] = model_class(path)
 
@@ -304,7 +326,8 @@ class ModelFactory:
     def query_model(model_name, query_text, query_count=1):
         if model_name not in ModelFactory.models:
             raise ModelNotFoundError(f"Model {model_name} not found")
-        # since we have model as a callable class we can just treat it like a function
+        # since we have model as a callable class we can just treat it like a
+        # function
         return ModelFactory.models[model_name](query_text, query_count)
 
     @staticmethod
