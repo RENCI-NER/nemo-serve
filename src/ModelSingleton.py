@@ -1,5 +1,6 @@
 import logging
 import math
+import re
 import yaml
 import numpy as np
 import pandas as pd
@@ -90,7 +91,9 @@ class TokenClassificationModelWrapper(ModelWrapper):
                              "breaking it up:\n%s\n", sentence)
 
                 # Try splitting on semicolons into sentence fragments
-                split_list = sentence.split(';')
+                # re.split with a lookbehind pattern includes the semicolon on
+                # the split text.
+                split_list = re.split(r'(?<=\;)', sentence)
                 logger.debug("Semicolon split broke it into %d pieces",
                              len(split_list))
 
@@ -376,10 +379,14 @@ def init_models(config_file_path):
         logger.info(f"Loaded {cls} model from {path} as {model_name}")
 
 
-# test this factory by setting the model path
-if __name__ == '__main__':
+def run_main():
+    "pulling this into a function keeps the top-level namespace cleaner"
     model_path = "/models/medmentions-v0.1.nemo"
     ModelFactory.load_model('medmentions', path=model_path, model_class=TokenClassificationModelWrapper)
     text = """Scientific fraud: the McBride case--judgment. Dr W G McBride, who was a specialist obstetrician and gynaecologist and the first to publish on the teratogenicity of thalidomide, has been removed from the medical register after a four-year inquiry by the Medical Tribunal of New South Wales. Of the 44 medical practice allegations made against him by the Department of Health only one minor one was found proved but 24 of the medical research allegations were found proved. Of these latter, the most serious was that in 1982 he published a scientific journal, spurious results relating to laboratory experiments on pregnant rabbits dosed with scopolamine. Had Dr McBride used any of the many opportunities available to him to make an honest disclosure of his misdemeanour, his conduct would have been excused by the Tribunal. However, he persisted in denying his fraudulent conduct for several years, including the four years of the Inquiry. The Tribunal unanimously found Dr McBride not of good character in the context of fitness to practice medicine. The decision to deregister was taken by a majority of 3 to 1. Since research science is not organized as a profession, there are no formal sanctions which can be taken against his still engaging in such research. Scientific fraud: the McBride case--judgment. Aflatoxin exposure in Singapore: blood aflatoxin levels in normal subjects, hepatitis B virus carriers and primary hepatocellular carcinoma patients. Blood screening conducted on Singaporeans over 1991-1992 showed exposure to predominantly aflatoxin B1 and to a lesser extent G1. The extent of exposure to B1 among three groups of residents in Singapore, namely normal subjects (n = 423), hepatitis B virus carriers (n = 302) and primary hepatocellular carcinoma (PHC) patients (n = 58) were extensive as reflected by the positive rates of 15.1, 0.7 and 1.7 per cent respectively. However, the degree of individual exposure to this toxin among the three groups was considered low as shown by the low respective mean blood levels of 5.4 +/- 3.2 (range 3.0-17), 7.7 (range 7.5-7.9) and 7.5 picogrammes per ml of blood. It is not immediately clear whether or not such low levels would precipitate an undesirable health effect. The higher positive rate seen in normal subjects as compared with the other groups could be due to differences in dietary intake of aflatoxin B1, differences in metabolic patterns or both. About 70 per cent of PHC patients studied were carriers. The degree of aflatoxin B1 exposure among normal subjects in Singapore was a factor of 22.1 times less than that in Japan, 40.9 times less than that in Indonesia and 51.3 times less than that in the Philippines. Similarly, the extent of exposure among hepatitis B carriers in Singapore was a factor of 8.2 times, 39.6 times and 24.2 times less than those in the other three Asiatic countries respectively. The results reflected stringent Government control over the quality of food stuff imported into this country. As Singapore imports almost all of its dietary needs from elsewhere, it can afford to be selective at a cost. Aflatoxin M1, a metabolite of B1, was most commonly encountered in the liver tissues of deceased (n = 154) who died of causes other than sickness or disease in 1992-93, consistent with our blood findings of prevalence of aflatoxin B1. High performance liquid chromatography (HPLC) with fluorescence detection using one of the aflatoxins G2 or B2 as an internal standard was used for the detection and quantification of aflatoxins. The use of an internal standard structurally and chemically similar to those required to be quantified minimizes errors in quantifications. This is because differences in the quenching of fluorescence between specimen extracts and spiked-standard extracts were internally standardized and compensated for. The presence of an internal standard also helped to locate aflatoxins of interest more accurately.(ABSTRACT TRUNCATED AT 400 WORDS)"""
     result = ModelFactory.query_model('medmentions', text)
     print(result)
+
+# test this factory by setting the model path
+if __name__ == '__main__':
+    run_main()
