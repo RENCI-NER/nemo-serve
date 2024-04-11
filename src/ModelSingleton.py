@@ -52,23 +52,31 @@ class TokenClassificationModelWrapper(ModelWrapper):
         tokens = self.model.tokenizer.text_to_tokens(input_text)
         token_count = len(tokens)
         logger.debug("Text tokenized to %d tokens", token_count)
-        # This should be something close to equal blocks of tokens. Chunking it
-        # this way reduces the chance of a small chunk at the end of a string of
-        # text.
-        nchunks = math.ceil(token_count/window_size)
-        if not nchunks:
-            logger.debug("Zero tokens found, returning None")
-            return []
-        chunk_size = math.ceil(window_size/nchunks)
-        logger.debug("Sentence will be broken into %d chunks of size %d",
-                     nchunks, chunk_size)
 
-        ct = 0
-        while ct * chunk_size < token_count:
-            new_chunk = tokens[ct*chunk_size:(ct+1)*chunk_size]
-            logger.debug("Token chunk added: %s", str(new_chunk))
-            yield new_chunk
-            ct += 1
+        if token_count < window_size:
+            # Chunk has been sufficiently split before now. Just kick it back.
+            yield (token_count, input_text)
+
+        else:
+            # This should be something close to equal blocks of tokens. Chunking
+            # it this way reduces the chance of a small chunk at the end of a
+            # string of text.
+
+            nchunks = math.ceil(token_count/window_size)
+            if not nchunks:
+                logger.debug("Zero tokens found, returning None")
+                return []
+            chunk_size = math.ceil(window_size/nchunks)
+            logger.debug("Sentence will be broken into %d chunks of size %d",
+                         nchunks, chunk_size)
+
+            ct = 0
+            while ct * chunk_size < token_count:
+                new_chunk = tokens[ct*chunk_size:(ct+1)*chunk_size]
+                logger.debug("Token chunk added: %s", str(new_chunk))
+                yield (len(new_chunk),
+                       self.model.tokenizer.tokens_to_text(new_chunk))
+                ct += 1
 
     def _sentences_to_chunks(self, sentences, window_size):
         """
@@ -88,10 +96,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
                 for fragment in split_list:
                     # Break any fragment over window_size into bits.
-                    chunks = self._token_chunks(fragment, window_size)
-                    for chunk in chunks:
-                        yield (len(chunk),
-                               self.model.tokenizer.tokens_to_text(chunk))
+                    yield from self._token_chunks(fragment, window_size)
             else:
                 logger.debug("Sentence is under chunk size (has %d tokens, "
                              "returning: %s", sentence_token_length, sentence)
