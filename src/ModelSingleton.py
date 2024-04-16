@@ -93,7 +93,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 # Try splitting on semicolons into sentence fragments
                 # re.split with a lookbehind pattern includes the semicolon on
                 # the split text.
-                split_list = re.split(r'(?<=\;)', sentence)
+                split_list = re.split(r'(?<=\;)(?<=\;\s)', sentence)
                 logger.debug("Semicolon split broke it into %d pieces",
                              len(split_list))
 
