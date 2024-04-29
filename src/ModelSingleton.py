@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import logging
-from functools import reduce
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
 from scipy.spatial.distance import cdist
@@ -14,6 +13,8 @@ import yaml
 
 logger = logging.Logger("gunicorn.error")
 
+class WindowOverflowError(Exception):
+    pass
 
 class ModelNotFoundError(Exception):
     pass
@@ -37,6 +38,13 @@ class TokenClassificationModelWrapper(ModelWrapper):
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
 
+    def _get_token_length(self, text):
+        """Return the length in tokens as understood by the model's own internal
+        tokenizer.
+        """
+        tokens = self.model.tokenizer.text_to_tokens(text)
+        return len(tokens)
+
     def sliding_window(self, text, window_size=512):
         """
         Tokenize original query into smaller chunks that the model is able to process
@@ -47,20 +55,45 @@ class TokenClassificationModelWrapper(ModelWrapper):
         sentences = tokenizer.tokenize(text)
         window_end = False
         current_index = 0
+
+        # Tracks how many split sentences have been added to chunks overall.
         splitted = 0
         while not window_end:
-            current_string = []
+            current_token_length = 0
+            current_string = ""
             for index, sentence in enumerate(sentences[current_index:]):
-                if reduce(lambda x, y: x + len(y.split(" ")), current_string, 0) >= window_size:
-                    yield "".join(current_string)
+                sentence_token_length = self._get_token_length(sentence)
+                if sentence_token_length >= window_size:
+                    raise WindowOverflowError(
+                        f"string {current_string} cannot be subdivided "
+                        f"further but is long than "
+                        f"window_size {window_size}.")
+                if current_token_length + sentence_token_length >= window_size:
+                    # New sentence would make the chunk too long. Yield the
+                    # existing chunk and start a new chunk.
+                    logger.debug("sliding_window: Returning %d tokens: %s",
+                                 current_token_length, current_string)
+                    yield current_string
+                    current_string = ""
+                    current_token_length = 0
                     current_index += index
                     break
-                current_string.append(sentence)
+
+                # We can add the next sentence without going over the window, so
+                # we do so.
+                logger.debug("sliding_window: Adding %d tokens to chunk: %s",
+                             sentence_token_length, sentence)
+                current_string += sentence
+                current_token_length += sentence_token_length
                 splitted += 1
 
             if splitted == len(sentences):
+                # we've reached the end of the text buffer. Spit out whatever
+                # remains.
+                logger.debug("Reached end of text input, returning %s",
+                             current_string)
                 window_end = True
-                yield "".join(current_string)
+                yield current_string
 
     def _pubannotate(self, q, inferred):
         queries = [q.strip().split() for q in q]
@@ -150,8 +183,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
             result['text'] += a['text']
             result['denotations'] += new_denotations
         return result
-
-    async def __call__(self, query_text):
+    def __call__(self, query_text, *args, **kwargs):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text, 100)]

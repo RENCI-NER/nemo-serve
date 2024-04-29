@@ -20,6 +20,8 @@ This is an integration test: it will use two API endpoints that can be configure
 by environmental variables:
 - The Nemo-Serve URL, which defaults to https://med-nemo.apps.renci.org/
 - The SAPBERT URL, which defaults to https://med-nemo-sapbert.apps.renci.org/
+
+You can run this individual test by running `pytest tests/integration/test_pubannotator.py`.
 """
 
 import json
@@ -41,16 +43,23 @@ SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://med-nemo-sapbert.apps.renci.org/
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 
+# Configuration: the `/get_normalized_nodes` endpoint on a Node Normalization instance to use.
+NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/1.3/get_normalized_nodes')
+
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_pubannotator"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Which PubMed IDs (starting with 'PMID:') or PubMed Central IDs (starting with
 # 'PMC...') should be downloaded from PubAnnotator?
 PUBMED_IDS_TO_TEST = [
-    'PMID:7837719',         # https://pubmed.ncbi.nlm.nih.gov/7837719/
+    'PMID:7837719'         # https://pubmed.ncbi.nlm.nih.gov/7837719/
     # Korn et al (2021) COVID-KOP: integrating emerging COVID-19 data with the ROBOKOP database
-    'PMID:33175089',        # https://pubmed.ncbi.nlm.nih.gov/33175089/
-    'PMC7890668'            # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7890668/
+    #'PMID:33175089',        # https://pubmed.ncbi.nlm.nih.gov/33175089/
+    #'PMC7890668',           # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7890668/
+    # 'PMC3921439'
+    # 'PMID:18513871'
+    # 'PMID:23512406'
 ]
 
 logging.basicConfig(level=logging.INFO)
@@ -77,7 +86,7 @@ def test_with_pubannotator(pubmed_id):
     # output later!
 
     # Log what we're doing with this result.
-    logging.info(f"Target: {pubannotator['target']} ({pubannotator['sourcedb']}:{pubannotator['sourceid']}) [{pubannotator['source_url']}]")
+    logging.info(f"Target: {pubannotator['target']} ({pubannotator['sourcedb']}:{pubannotator['sourceid']}) [{pubannotator.get('source_url', '(none)')}]")
     text = pubannotator['text']
     logging.info(f" - Text [{len(text)}]: {text}")
 
@@ -117,6 +126,7 @@ def test_with_pubannotator(pubmed_id):
 
         denotation = dict(token)
         denotation['obj'] = f"MESH:{first_result['curie']} ({first_result['label']}, score: {first_result['distance_score']})"
+        denotation['mesh'] = f"MESH:{first_result['curie']}"
         count_sapbert_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
         # don't render this.
@@ -127,6 +137,34 @@ def test_with_pubannotator(pubmed_id):
 
     assert count_sapbert_annotations > 0, f"No SAPBERT annotations found for {pubmed_id}, given these BioMegatron annotations: {track_token_classification}"
 
+    # Normalize nodes.
+    node_norm_tracks = []
+    for sapbert_denot in track_sapbert:
+        # Try to normalize the MeSH.
+        mesh = sapbert_denot['mesh']
+
+        response = requests.get(NODE_NORM_ENDPOINT, {
+            'curie': mesh,
+            'conflate': 'true'
+        })
+        if not response.ok:
+            pass
+        else:
+            result = response.json().get(mesh, {})
+            if result:
+                normalized_id = result.get('id', {})
+                normalized_identifier = normalized_id.get('identifier')
+
+                if not normalized_identifier:
+                    pass
+                else:
+                    nn_denot = sapbert_denot.copy()
+                    nn_denot['obj'] = normalized_identifier
+                    label = normalized_id.get('label')
+                    if label:
+                        nn_denot['obj'] = nn_denot['obj'] + " (" + label + ")"
+                    node_norm_tracks.append(nn_denot)
+
     # Write the annotations from Nemo-Serve and SAPBERT into the output file as separate tracks.
     annotated['tracks'] = [{
         'project': NEMOSERVE_ANNOTATE_ENDPOINT,
@@ -134,6 +172,9 @@ def test_with_pubannotator(pubmed_id):
     }, {
         'project': SAPBERT_ANNOTATE_ENDPOINT,
         'denotations': track_sapbert
+    }, {
+        'project': NODE_NORM_ENDPOINT,
+        'denotations': node_norm_tracks
     }]
     del annotated['denotations']
 
