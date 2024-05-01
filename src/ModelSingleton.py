@@ -45,9 +45,10 @@ class TokenClassificationModelWrapper(ModelWrapper):
         return len(tokens)
 
     def _token_chunks(self, input_text, window_size=512):
-        """Break sentences into lists of tokens. Return a list of token lists.
+        """Break sentences into chunks. Yields a tuple of token count, string.
 
-        Each token list will be smaller than window_size
+        Each chunk will be smaller than window_size tokens.
+        This function is a generator
         """
         logger.debug("_token_chunks called on text: %s", input_text)
         tokens = self.model.tokenizer.text_to_tokens(input_text)
@@ -63,21 +64,25 @@ class TokenClassificationModelWrapper(ModelWrapper):
             # it this way reduces the chance of a small chunk at the end of a
             # string of text.
 
-            nchunks = math.ceil(token_count/window_size)
+            # This calculates the number of chunks to split.
+            # There are often more tokens than words in a string, so we use
+            # a factor of 4 to cover of that. Pieces may be re-assembled in
+            # sliding_window.
+            nchunks = math.ceil(token_count/(window_size * 4))
             if not nchunks:
                 logger.debug("Zero tokens found, returning None")
                 return []
-            chunk_size = math.ceil(window_size/nchunks)
-            logger.debug("Sentence will be broken into %d chunks of size %d",
-                         nchunks, chunk_size)
+            chunk_size = math.ceil(token_count/nchunks)
+            logger.debug(
+                "Sentence will be broken into %d chunks of size %d words",
+                nchunks, chunk_size)
 
-            ct = 0
-            while ct * chunk_size < token_count:
-                new_chunk = tokens[ct*chunk_size:(ct+1)*chunk_size]
-                logger.debug("Token chunk added: %s", str(new_chunk))
-                yield (len(new_chunk),
-                       self.model.tokenizer.tokens_to_text(new_chunk))
-                ct += 1
+            for match in re.finditer(r'((?:\S+\s+){1,100}(?:\S+\s*))',
+                                     failing_text):
+                if match and match.lastindex > 0:
+                    chunk = match.group(1)
+                    chunk_token_count = self._get_token_length(chunk)
+                    yield (chunk_token_count, chunk)
 
     def _sentences_to_chunks(self, sentences, window_size):
         """
@@ -93,7 +98,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 # Try splitting on semicolons into sentence fragments
                 # re.split with a lookbehind pattern includes the semicolon on
                 # the split text.
-                split_list = re.split(r'(?<=\;)(?<=\;\s)', sentence)
+                split_list = re.split(r'(?<=\;\s)|(?<=\;)', sentence)
                 logger.debug("Semicolon split broke it into %d pieces",
                              len(split_list))
 
@@ -122,13 +127,15 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
         current_string = ""
         current_token_length = 0
-        for (chunk_token_length, chunk) in self._sentences_to_chunks(sentences, window_size):
+        for (chunk_token_length, chunk) in self._sentences_to_chunks(
+                sentences, window_size):
             logger.debug("sliding_window is working on sentence chunk %s",
                          str(chunk))
             if current_token_length + chunk_token_length >= window_size:
                 # New sentence would make the chunk too long. Yield the
                 # existing chunk and start a new chunk.
-                yield current_string
+                if current_string:
+                    yield current_string
                 current_string = chunk
                 current_token_length = chunk_token_length
             else:
