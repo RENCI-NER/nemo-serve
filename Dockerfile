@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/nemo:1.23.0
+FROM nvcr.io/nvidia/nemo:23.10
 ARG VERSION=main
 RUN mkdir /var/web
 WORKDIR /var/web
