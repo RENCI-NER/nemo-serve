@@ -9,7 +9,7 @@ token_classification:
 sapbert:
   path: "/data/SapBERT-from-PubMedBERT-fulltext"
   class: SapbertWrapper
-  storage: "redis"
+  storage: "qdrant"
 #   If using elasticsearch use the following connection parameters
 #   storage: "elasticsearch"
 #   connectionParams:
@@ -19,7 +19,7 @@ sapbert:
 #     index: "sap_index"
   connectionParams:
     host: "localhost"
-    port: 6378
+    port: 6333
     password: ""
     index: "sap_index"
   ground_truth_predictions_path: "/data/pubmed_mesh_prediction_output.npy"
