@@ -2,6 +2,7 @@ fastapi
 uvicorn
 pyyaml
 requests
+elasticsearch[async]==8.6.1
 numpy
 pandas
 nemo-toolkit
@@ -30,4 +31,7 @@ cython
 youtokentome
 pytest
 gunicorn
+redis==4.5.4
 qdrant-client
+protobuf==3.20
+wandb==0.16.6

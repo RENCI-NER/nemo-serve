@@ -10,7 +10,6 @@ class SAPQdrant:
                  , vector_similarity="dot_product", scheme="https", port="443", *args, **kwargs):
         self.client = AsyncQdrantClient(
             url=f"{scheme}://{host}:{port}",
-            port=443
         )
         self.index = index
 
