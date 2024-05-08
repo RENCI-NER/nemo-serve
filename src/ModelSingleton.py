@@ -242,7 +242,8 @@ class TokenClassificationModelWrapper(ModelWrapper):
             result['text'] += a['text']
             result['denotations'] += new_denotations
         return result
-    def __call__(self, query_text, *args, **kwargs):
+
+    async def __call__(self, query_text, *args, **kwargs):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text, 500)]
