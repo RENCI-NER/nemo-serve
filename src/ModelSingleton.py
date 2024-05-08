@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 from nemo.collections.nlp.models import TokenClassificationModel
+import torch
 from src.utils.SAPRedis import RedisMemory
 from src.utils.SAPQdrant import SAPQdrant
 from src.utils.tokenizer import tokenizer
@@ -275,7 +276,10 @@ class SapbertModelWrapper(ModelWrapper):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        self.model = AutoModel.from_pretrained(model_path).cuda(0)
+        if torch.cuda.is_available():
+            self.model = AutoModel.from_pretrained(model_path).cuda(0)
+        else:
+            self.model = AutoModel.from_pretrained(model_path)
         if backend == 'redis':
             self.storage_client = RedisMemory(
                 **connection_config
