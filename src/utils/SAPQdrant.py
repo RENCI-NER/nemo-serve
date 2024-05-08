@@ -116,10 +116,10 @@ class SAPQdrant:
             )
         return [
             {
-                "score": x["score"],
+                "score": x.score,
                 # @TODO when loading rename this field
-                "category": x["payload"]["categories"],
-                "name": x["payload"]["name"],
-                "curie": x["payload"]["curie"]
+                "category": x.payload["categories"],
+                "name": x.payload["name"],
+                "curie": x.payload["curie"]
             } for x in results
         ]
