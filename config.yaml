@@ -9,19 +9,14 @@ token_classification:
 sapbert:
   path: "/data/SapBERT-from-PubMedBERT-fulltext"
   class: SapbertWrapper
+  # if using redis rename storage: "redis" and configure connection parametes. Note connection.scheme is not required for redis.
   storage: "qdrant"
-#   If using elasticsearch use the following connection parameters
-#   storage: "elasticsearch"
-#   connectionParams:
-#     host: "http://localhost:9200"
-#     username: "elastic"
-#     password: ""
-#     index: "sap_index"
   connectionParams:
     host: "localhost"
     port: 6333
     password: ""
     index: "sap_index"
+    scheme: ""
   ground_truth_predictions_path: "/data/pubmed_mesh_prediction_output.npy"
-  ground_truth_id_name_pairs_path: "/data/pubmed_mesh_name_ids.csv"
+  ground_truth_data_name_id_pairs_path: "/data/pubmed_mesh_name_ids.csv"
   ground_truth_data_id_type_pairs_path: "/data/pubmed_mesh_name_types.csv"

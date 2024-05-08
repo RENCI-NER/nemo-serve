@@ -77,7 +77,7 @@ def main(args):
         with open(config) as stream:
             config_yaml = yaml.load(stream, Loader=yaml.FullLoader)
         gt_predictions_path = config_yaml[model_name]['ground_truth_predictions_path']
-        gt_id_name_path = config_yaml[model_name]['ground_truth_id_name_pairs_path']
+        gt_id_name_path = config_yaml[model_name]['ground_truth_data_name_id_pairs_path']
         gt_id_type_path = config_yaml[model_name]['ground_truth_data_id_type_pairs_path']
         storage_backend = config_yaml[model_name]['storage']
         connection_params = config_yaml[model_name]['connectionParams']
@@ -106,7 +106,9 @@ if __name__ == "__main__":
     # index command and options
     parser_index = sub_parsers.add_parser("index", help="Index SAPBert ground truth to elasticsearch. Note this uses `sapbert` config section in config file passed as paramter."
                                                         "Please refer to ../config.yaml `sapbert` section for details.")
-
+    parser_index.add_argument(
+        "-k", "--key", default="", help="Np array key if any"
+    )
     args = parser.parse_args()
 
     main(args)
