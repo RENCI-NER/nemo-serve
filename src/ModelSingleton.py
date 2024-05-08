@@ -276,7 +276,8 @@ class SapbertModelWrapper(ModelWrapper):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        if torch.cuda.is_available():
+        self.gpu_avaialble = torch.cuda.is_available()
+        if self.gpu_avaialble:
             self.model = AutoModel.from_pretrained(model_path).cuda(0)
         else:
             self.model = AutoModel.from_pretrained(model_path)
@@ -296,7 +297,7 @@ class SapbertModelWrapper(ModelWrapper):
             return_tensors="pt")
         toks_cuda = {}
         for k, v in toks.items():
-            toks_cuda[k] = v.cuda(0)
+            toks_cuda[k] = v.cuda(0) if self.gpu_avaialble else v
         output = self.model(**toks_cuda)
         cls_rep = output[0][:, 0, :]
         vector = cls_rep.cpu().detach().numpy().tolist()[0]

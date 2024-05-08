@@ -91,7 +91,7 @@ class SAPQdrant:
 
     async def search(self, query_vector, top_n=10, bl_type=None, *args, **kwargs):
         if bl_type:
-            return await self.client.search(
+            results = await self.client.search(
                 collection_name=self.index,
                 query_vector=query_vector,
                 with_payload=True,
@@ -107,10 +107,19 @@ class SAPQdrant:
                     ]
                 )
             )
-        return await self.client.search(
-            collection_name=self.index,
-            query_vector=query_vector,
-            with_payload=True,
-            limit=top_n,
-
-        )
+        else:
+            results = await self.client.search(
+                collection_name=self.index,
+                query_vector=query_vector,
+                with_payload=True,
+                limit=top_n,
+            )
+        return [
+            {
+                "score": x["score"],
+                # @TODO when loading rename this field
+                "category": x["payload"]["categories"],
+                "name": x["payload"]["name"],
+                "curie": x["payload"]["curie"]
+            } for x in results
+        ]
