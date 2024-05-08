@@ -289,6 +289,8 @@ class SapbertModelWrapper(ModelWrapper):
             self.storage_client = SAPQdrant(
                 **connection_config
             )
+        else:
+            raise ValueError(f"Unsupported storage backend: {backend}")
 
     async def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
         """ Runs prediction on text"""

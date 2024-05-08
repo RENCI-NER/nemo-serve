@@ -62,7 +62,7 @@ class SAPQdrant:
             payload = {
                 "curie": data['curies'][0],
                 "name": data['name'],
-                "categories": data['categories'][0]
+                "category": data['categories'][0]
             }
             to_insert += [
                 models.PointStruct(id=counter, vector=vector, payload=payload)
@@ -123,3 +123,10 @@ class SAPQdrant:
                 "curie": x.payload["curie"]
             } for x in results
         ]
+
+    async def refresh_index(self):
+        await self.client.create_payload_index(
+            collection_name=f"{self.index}",
+            field_name="category",
+            field_schema="keyword",
+        )

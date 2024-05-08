@@ -3,15 +3,18 @@ import pandas as pd
 from functools import partial
 import ast
 import asyncio
-from src.utils.SAPElastic import SAPElastic
+from src.utils.SAPQdrant import SAPQdrant
 from src.utils.SAPRedis import RedisMemory
 import logging
 
 logger = logging.getLogger()
 
 
-def open_numpy_pickle(file_path):
+def open_numpy_pickle(file_path, sub_path=""):
+    print("subpath: ", sub_path)
     arr = np.load(file_path)
+    if sub_path:
+        return arr[sub_path]
     return arr
 
 
@@ -28,9 +31,9 @@ def get_id_type_dict(file_path):
     return result
 
 
-def iter_files(np_file, name_id_file, id_type_file, index_name, normalize=False):
+def iter_files(np_file, name_id_file, id_type_file, index_name, np_key=""):
     logger.info("opening np array file")
-    np_arr = open_numpy_pickle(np_file)
+    np_arr = open_numpy_pickle(np_file, np_key)
     logger.info(f"found {np_arr.size} vector rows.")
     logger.info("opening name id csv file")
     n_id_arr = open_csv(name_id_file)
@@ -42,8 +45,6 @@ def iter_files(np_file, name_id_file, id_type_file, index_name, normalize=False)
     for vector, curies in zip(np_arr, n_id_arr['ID']):
         # convert list string to actual list
         curies = ast.literal_eval(curies)
-        if normalize:
-            vector = SAPElastic.normalize_vector(vector)
         doc = {
           "curies": curies,
           "embedding": vector,
@@ -57,15 +58,17 @@ def iter_files(np_file, name_id_file, id_type_file, index_name, normalize=False)
 
 
 
-def index_docs(storage, connection_params, np_file, name_id_file, id_type_file):
-    if storage == "elastic":
-        client = SAPElastic(**connection_params)
-    else:
+def index_docs(storage, connection_params, np_file, name_id_file, id_type_file, np_key=""):
+    if storage=="qdrant":
+        client = SAPQdrant(**connection_params)
+    elif storage=="redis":
         client = RedisMemory(**connection_params)
+    else:
+        raise ValueError(f"Unsupported storage: {storage}")
     loop = asyncio.get_event_loop()
     loop.run_until_complete(client.delete_index())
     loop.run_until_complete(client.create_index())
-    loop.run_until_complete(client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, connection_params['index'])))
+    loop.run_until_complete(client.populate_index(partial(iter_files, np_file, name_id_file, id_type_file, connection_params['index'], np_key)))
     loop.run_until_complete(client.refresh_index())
     loop.run_until_complete(client.close())
 
