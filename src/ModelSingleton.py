@@ -276,7 +276,13 @@ class SapbertModelWrapper(ModelWrapper):
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.gpu_available = torch.cuda.is_available()
         if self.gpu_available:
-            self.model = AutoModel.from_pretrained(model_path).cuda(0)
+            # In K8s when the host Node machine has GPU , but the pod is not allowed to use
+            # it we get assertion error.
+            try:
+                self.model = AutoModel.from_pretrained(model_path).cuda(0)
+            except:
+
+                self.model = AutoModel.from_pretrained(model_path)
         else:
             self.model = AutoModel.from_pretrained(model_path)
         if backend == 'redis':
