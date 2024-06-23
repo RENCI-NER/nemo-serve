@@ -1,7 +1,9 @@
-from src.ModelSingleton import ModelFactory, init_models
-import yaml
-import json
 import argparse
+import json
+import yaml
+
+from src.ModelSingleton import ModelFactory, init_models
+from src.index import index_docs
 
 
 from logging import getLogger
@@ -56,25 +58,60 @@ def process(input_file_path, output_file_path, model_name):
         progress += 1
     log.info(f"finished processing {progress + 1} lines")
 
+def main(args):
+    command = args.sub_command
+    config = args.config_file
 
+    if command == "annotate":
+        input_file = args.input_file
+        output_file = args.output_file
+        model_name = args.model
+        init_models(config_file_path=config)
+        process(input_file_path=input_file,
+                output_file_path=output_file,
+                model_name=model_name)
+    elif command == "index":
+        # making this static for now, we only have sapbert that we want to index to elastic.
+        # so we will read its previous config here.
+        model_name = "sapbert"
+        with open(config) as stream:
+            config_yaml = yaml.load(stream, Loader=yaml.FullLoader)
+        gt_predictions_path = config_yaml[model_name]['ground_truth_predictions_path']
+        gt_id_name_path = config_yaml[model_name]['ground_truth_data_name_id_pairs_path']
+        gt_id_type_path = config_yaml[model_name]['ground_truth_data_id_type_pairs_path']
+        storage_backend = config_yaml[model_name]['storage']
+        connection_params = config_yaml[model_name]['connectionParams']
+        index_docs(storage = storage_backend,
+                   connection_params=connection_params,
+                   np_file=gt_predictions_path,
+                   name_id_file=gt_id_name_path,
+                   id_type_file=gt_id_type_path)
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Annotate long text offline.")
-    parser.add_argument("-i", "--input-file", help="Input file path", default=None)
-    parser.add_argument("-o", "--output-file", help="Output file path", default=None)
-    parser.add_argument("-c", "--config-file", help="Config file path", default=None)
-    parser.add_argument("-m", "--model", help="Model to run", default=None)
+    parser = argparse.ArgumentParser(description="CLI toolkit for nemo-serve. Supported operations include:\n"
+                                                 "\t - Offline annotation model\n"
+                                                 "\t - Building Elasticsearch index for SAPBert Entity linking")
+    sub_parsers = parser.add_subparsers(dest="sub_command", help="Sub commands")
+    # Nemo-serve config file for model and parameter config
+    parser.add_argument("-c", "--config-file", help="Config file path", required=True)
+
+    # annotate command and options
+    parser_annotate = sub_parsers.add_parser("annotate", help="Perform an offline annotation on an input file via "
+                                                              "provided model")
+    parser_annotate.add_argument("-i", "--input-file", help="Input file path", default=None)
+    parser_annotate.add_argument("-o", "--output-file", help="Output file path", default=None)
+    parser_annotate.add_argument("-m", "--model", help="Model to run", default=None)
+
+    # index command and options
+    parser_index = sub_parsers.add_parser("index", help="Index SAPBert ground truth to elasticsearch. Note this uses `sapbert` config section in config file passed as paramter."
+                                                        "Please refer to ../config.yaml `sapbert` section for details.")
+    parser_index.add_argument(
+        "-k", "--key", default="", help="Np array key if any"
+    )
     args = parser.parse_args()
 
-    config = args.config_file
-    input_file = args.input_file
-    output_file = args.output_file
-    model_name = args.model
-    init_models(config_file_path=config)
-    process(input_file_path=input_file,
-            output_file_path=output_file,
-            model_name=model_name)
+    main(args)
 
 
 
