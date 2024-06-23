@@ -1,11 +1,7 @@
 import logging
 import math
 import re
-import yaml
-import numpy as np
-import pandas as pd
 from transformers import AutoTokenizer, AutoModel
-from nemo.collections.nlp.models import TokenClassificationModel
 import torch
 from src.utils.SAPRedis import RedisMemory
 from src.utils.SAPQdrant import SAPQdrant
@@ -36,6 +32,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         """ Initializes NLP Model
         :param model_path: Path to model to load
         """
+        from nemo.collections.nlp.models import TokenClassificationModel
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
         # Make this an instance variable so that it's easier to mock in
