@@ -48,7 +48,7 @@ SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for 
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/get_normalized_nodes')
 
 # Configuration: the Monarch SciGraph endpoint.
-MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/v3/api/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
+MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/v3/api/annotate/entities'
 
 # Configuration: NameRes
 NAMERES_URL = 'http://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
@@ -208,29 +208,31 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
 
     # Make a request to Monarch SciGraph to annotate all the text: variable name, description, values.
     text = make_annotation_text(var_name, desc, permissible_values)
-    request_url = MONARCH_SCIGRAPH_URL + urllib.parse.quote(text)
-    logging.debug(f"Request to SciGraph: {request_url}")
-    response = requests.post(request_url, timeout=TIMEOUT)
+    response = requests.post(MONARCH_SCIGRAPH_URL, json={
+        'content': text
+    }, timeout=TIMEOUT)
     logging.debug(f"Response from SciGraph: {response.content}")
     assert response.status_code == 200
     annotated = response.json()
     logging.info(f" - SciGraph result: {json.dumps(annotated)}")
 
-    for span in annotated['spans']:
-        text = span['text']
-        tokens = span['token']
+    for result in annotated:
+        text = result['text']
+        start = result['start']
+        end = result['end']
 
-        for token in tokens:
+        for token in result['tokens']:
             token_id = token['id']
+            token_name = token['name']
             token_category = token['category']
-            token_terms = '|'.join(token['terms'])
 
             denotation = dict(token)
             denotation['text'] = text
-            denotation['name'] = token_terms
+            denotation['name'] = token_name
+            denotation['synonyms'] = "|".join(token['synonym'])
             denotation['id'] = token_id
             denotation['category'] = token_category
-            denotation['obj'] = f"{token_id} ({token_category}: {token_terms})"
+            denotation['obj'] = f"{token_id} ({token_category}: {token_name})"
 
             annotations.append(denotation)
 
