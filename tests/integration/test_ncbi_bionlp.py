@@ -45,7 +45,7 @@ PUBMED_IDS_TO_TEST = [
 ]
 
 # Set up logging.
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 # Set up requests to retry.
 session = requests.Session()
@@ -156,7 +156,7 @@ def test_with_pubannotator(pubmed_id):
 
         # Add the Biolink type if we have one (and we should).
         if 'obj' in token and token['obj'] and token['obj'].startswith('biolink:'):
-            request['args']['bl_type'] = token['obj'][8:]
+            request['args']['bl_type'] = token['obj']
 
         response = session.post(SAPBERT_ANNOTATE_ENDPOINT, json=request)
         assert response.ok, f"SAPBERT annotate endpoint failed for request {request}: {response}"
@@ -193,4 +193,3 @@ def test_with_pubannotator(pubmed_id):
     filename = re.sub(r'[^A-Za-z0-9_]', '_', pubmed_id) + ".json"
     with open(os.path.join(OUTPUT_DIR, filename), "w") as f:
         json.dump(annotated, f, sort_keys=True, indent=2)
-
