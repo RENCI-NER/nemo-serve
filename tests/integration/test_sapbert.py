@@ -3,7 +3,7 @@ This test file tests SAPBert via the Nemo-serve API.
 
 This is an integration test: it will test the endpoint you set the
 NEMOSAPBERT_URL environmental variable to, but will default to
-https://med-nemo-sapbert.apps.renci.org/
+https://sap-qdrant.apps.renci.org/docs
 """
 
 import os
@@ -11,7 +11,7 @@ import urllib.parse
 
 import requests
 
-NEMOSAPBERT_URL = os.getenv('NEMOSAPBERT_URL', 'https://med-nemo-sapbert.apps.renci.org/')
+NEMOSAPBERT_URL = os.getenv('NEMOSAPBERT_URL', 'https://sap-qdrant.apps.renci.org')
 ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSAPBERT_URL, '/annotate/')
 
 

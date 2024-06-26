@@ -25,7 +25,7 @@ NEMOSERVE_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 NEMOSERVE_MODEL_NAME = "token_classification"
 
 # Configuration: get the SAPBERT URL and figure out the annotate path.
-SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
+SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://sap-qdrant.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 
@@ -73,9 +73,10 @@ def get_text_from_pmid(pmid):
     bioc_json = bioc_json_response.json()
 
     chunks = []
-    for document in bioc_json['documents']:
-        for passage in document['passages']:
-            chunks.append(passage['text'])
+    for result in bioc_json:
+        for document in result['documents']:
+            for passage in document['passages']:
+                chunks.append(passage['text'])
     text = "\n\n".join(chunks)
 
     # Log what we're doing with this result.
@@ -99,9 +100,10 @@ def get_text_from_pmcid(pmcid):
     bioc_json = bioc_json_response.json()
 
     chunks = []
-    for document in bioc_json['documents']:
-        for passage in document['passages']:
-            chunks.append(passage['text'])
+    for result in bioc_json:
+        for document in result['documents']:
+            for passage in document['passages']:
+                chunks.append(passage['text'])
     text = "\n\n".join(chunks)
 
     # Log what we're doing with this result.

@@ -30,13 +30,16 @@ import requests
 import csv
 import pytest
 
+# Configuration: timeout.
+TIMEOUT = 10
+
 # Configuration: get the Nemo-Serve URL and figure out the annotate path.
 NEMOSERVE_URL = os.getenv('NEMOSERVE_URL', 'https://med-nemo.apps.renci.org/')
 NEMOSERVE_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 NEMOSERVE_MODEL_NAME = "token_classification"
 
 # Configuration: get the SAPBERT URL and figure out the annotate path.
-SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
+SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://sap-qdrant.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for reasonable results.
@@ -45,7 +48,7 @@ SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for 
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/get_normalized_nodes')
 
 # Configuration: the Monarch SciGraph endpoint.
-MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
+MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/v3/api/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
 
 # Configuration: NameRes
 NAMERES_URL = 'http://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
@@ -178,7 +181,7 @@ def annotate_variable_using_babel_nemoserve(var_name, desc, permissible_values, 
 
         # These should already be normalized. So let's set nn_id and nn_label.
         denotation['nn_id'] = denotation['id']
-        denotation['nn_label'] = denotation['name']
+        denotation['nn_label'] = denotation['label']
 
         count_annotations += 1
         # This is fine for PubAnnotator format (I think?), but PubAnnotator editors
@@ -207,7 +210,7 @@ def annotate_variable_using_scigraph(var_name, desc, permissible_values):
     text = make_annotation_text(var_name, desc, permissible_values)
     request_url = MONARCH_SCIGRAPH_URL + urllib.parse.quote(text)
     logging.debug(f"Request to SciGraph: {request_url}")
-    response = requests.post(request_url)
+    response = requests.post(request_url, timeout=TIMEOUT)
     logging.debug(f"Response from SciGraph: {response.content}")
     assert response.status_code == 200
     annotated = response.json()
