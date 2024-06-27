@@ -5,7 +5,7 @@
       "denotations": [
         {
           "id": "I2-",
-          "obj": "biolink:MolecularActivity",
+          "obj": "biolink:SmallMolecule",
           "span": {
             "begin": 16,
             "end": 44
@@ -38,6 +38,15 @@
             "end": 112
           },
           "text": "tuberculous meningitis]"
+        },
+        {
+          "id": "I15-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 118,
+            "end": 123
+          },
+          "text": "level"
         },
         {
           "id": "I20-",
@@ -157,15 +166,6 @@
           "text": "tuberculous meningitis"
         },
         {
-          "id": "I64-",
-          "obj": "biolink:Protein",
-          "span": {
-            "begin": 475,
-            "end": 478
-          },
-          "text": "ADA"
-        },
-        {
           "id": "I65-",
           "obj": "biolink:MolecularActivity",
           "span": {
@@ -182,6 +182,15 @@
             "end": 514
           },
           "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I71-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 519,
+            "end": 527
+          },
+          "text": "serially"
         },
         {
           "id": "I78-",
@@ -256,6 +265,15 @@
           "text": "ADA"
         },
         {
+          "id": "I100-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 696,
+            "end": 700
+          },
+          "text": "high"
+        },
+        {
           "id": "I101-",
           "obj": "biolink:MolecularActivity",
           "span": {
@@ -283,7 +301,7 @@
           "text": "disease"
         },
         {
-          "id": "I3-1",
+          "id": "I112-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 756,
@@ -292,7 +310,7 @@
           "text": "cases"
         },
         {
-          "id": "I5-1",
+          "id": "I114-",
           "obj": "biolink:Protein",
           "span": {
             "begin": 766,
@@ -301,8 +319,17 @@
           "text": "ADA"
         },
         {
-          "id": "I9-1",
-          "obj": "biolink:Activity",
+          "id": "I117-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 779,
+            "end": 783
+          },
+          "text": "high"
+        },
+        {
+          "id": "I118-",
+          "obj": "biolink:MolecularActivity",
           "span": {
             "begin": 784,
             "end": 792
@@ -310,16 +337,25 @@
           "text": "activity"
         },
         {
-          "id": "I13-1",
+          "id": "I122-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 808,
-            "end": 826
+            "end": 817
           },
-          "text": "gradually declined"
+          "text": "gradually"
         },
         {
-          "id": "I18-1",
+          "id": "I123-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 818,
+            "end": 826
+          },
+          "text": "declined"
+        },
+        {
+          "id": "I127-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 843,
@@ -328,7 +364,7 @@
           "text": "normal"
         },
         {
-          "id": "I19-1",
+          "id": "I128-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 850,
@@ -337,7 +373,7 @@
           "text": "level"
         },
         {
-          "id": "I21-1",
+          "id": "I130-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 859,
@@ -346,7 +382,7 @@
           "text": "approximately"
         },
         {
-          "id": "I23-1",
+          "id": "I132-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 875,
@@ -355,7 +391,7 @@
           "text": "month"
         },
         {
-          "id": "I26-1",
+          "id": "I135-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 891,
@@ -364,7 +400,7 @@
           "text": "initiation"
         },
         {
-          "id": "I28-1",
+          "id": "I137-",
           "obj": "biolink:Procedure",
           "span": {
             "begin": 905,
@@ -373,7 +409,7 @@
           "text": "chemotherapy"
         },
         {
-          "id": "I33-1",
+          "id": "I142-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 937,
@@ -382,7 +418,7 @@
           "text": "decrease"
         },
         {
-          "id": "I36-1",
+          "id": "I145-",
           "obj": "biolink:Protein",
           "span": {
             "begin": 953,
@@ -391,7 +427,7 @@
           "text": "ADA"
         },
         {
-          "id": "I37-1",
+          "id": "I146-",
           "obj": "biolink:MolecularActivity",
           "span": {
             "begin": 957,
@@ -400,7 +436,16 @@
           "text": "activity"
         },
         {
-          "id": "I45-1",
+          "id": "I151-",
+          "obj": "biolink:Cell",
+          "span": {
+            "begin": 982,
+            "end": 987
+          },
+          "text": "cells"
+        },
+        {
+          "id": "I154-",
           "obj": "biolink:AnatomicalEntity",
           "span": {
             "begin": 995,
@@ -409,7 +454,7 @@
           "text": "cerebrospinal fluid"
         },
         {
-          "id": "I53-1",
+          "id": "I162-",
           "obj": "biolink:Procedure",
           "span": {
             "begin": 1047,
@@ -418,7 +463,7 @@
           "text": "removal"
         },
         {
-          "id": "I55-1",
+          "id": "I164-",
           "obj": "biolink:ChemicalEntity",
           "span": {
             "begin": 1058,
@@ -427,7 +472,7 @@
           "text": "mycobacterial antigen"
         },
         {
-          "id": "I59-1",
+          "id": "I168-",
           "obj": "biolink:Procedure",
           "span": {
             "begin": 1087,
@@ -436,7 +481,7 @@
           "text": "treatment"
         },
         {
-          "id": "I61-1",
+          "id": "I170-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 1102,
@@ -445,7 +490,7 @@
           "text": "level"
         },
         {
-          "id": "I63-1",
+          "id": "I172-",
           "obj": "biolink:Protein",
           "span": {
             "begin": 1111,
@@ -454,7 +499,7 @@
           "text": "ADA"
         },
         {
-          "id": "I66-1",
+          "id": "I175-",
           "obj": "biolink:AnatomicalEntity",
           "span": {
             "begin": 1122,
@@ -463,16 +508,25 @@
           "text": "cerebrospinal fluid"
         },
         {
-          "id": "I75-1",
+          "id": "I184-",
           "obj": "biolink:InformationContentEntity",
           "span": {
             "begin": 1173,
-            "end": 1188
+            "end": 1179
           },
-          "text": "useful measures"
+          "text": "useful"
         },
         {
-          "id": "I78-1",
+          "id": "I185-",
+          "obj": "biolink:InformationContentEntity",
+          "span": {
+            "begin": 1180,
+            "end": 1188
+          },
+          "text": "measures"
+        },
+        {
+          "id": "I187-",
           "obj": "biolink:Procedure",
           "span": {
             "begin": 1193,
@@ -481,7 +535,7 @@
           "text": "diagnosis"
         },
         {
-          "id": "I80-1",
+          "id": "I189-",
           "obj": "biolink:Activity",
           "span": {
             "begin": 1207,
@@ -490,7 +544,7 @@
           "text": "follow-up"
         },
         {
-          "id": "I82-1",
+          "id": "I191-",
           "obj": "biolink:Cohort",
           "span": {
             "begin": 1220,
@@ -499,7 +553,7 @@
           "text": "patients"
         },
         {
-          "id": "I84-1",
+          "id": "I193-",
           "obj": "biolink:Disease",
           "span": {
             "begin": 1234,
@@ -551,6 +605,16 @@
             "end": 112
           },
           "text": "tuberculous meningitis]"
+        },
+        {
+          "id": "I15-",
+          "mesh": "MESH:D016422",
+          "obj": "MESH:D016422 (Letter, score: 13.353)",
+          "span": {
+            "begin": 118,
+            "end": 123
+          },
+          "text": "level"
         },
         {
           "id": "I20-",
@@ -683,16 +747,6 @@
           "text": "tuberculous meningitis"
         },
         {
-          "id": "I64-",
-          "mesh": "MESH:D000243",
-          "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
-          "span": {
-            "begin": 475,
-            "end": 478
-          },
-          "text": "ADA"
-        },
-        {
           "id": "I65-",
           "mesh": "MESH:D006802",
           "obj": "MESH:D006802 (Human Activities, score: 11.026)",
@@ -711,6 +765,16 @@
             "end": 514
           },
           "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I71-",
+          "mesh": "MESH:D012692",
+          "obj": "MESH:D012692 (Serial Passage, score: 7.692)",
+          "span": {
+            "begin": 519,
+            "end": 527
+          },
+          "text": "serially"
         },
         {
           "id": "I78-",
@@ -793,6 +857,16 @@
           "text": "ADA"
         },
         {
+          "id": "I100-",
+          "mesh": "MESH:D018471",
+          "obj": "MESH:D018471 (Hypergravity, score: 12.82)",
+          "span": {
+            "begin": 696,
+            "end": 700
+          },
+          "text": "high"
+        },
+        {
           "id": "I101-",
           "mesh": "MESH:D006802",
           "obj": "MESH:D006802 (Human Activities, score: 11.026)",
@@ -823,7 +897,7 @@
           "text": "disease"
         },
         {
-          "id": "I3-1",
+          "id": "I112-",
           "mesh": "MESH:D002363",
           "obj": "MESH:D002363 (Case Reports, score: 10.385)",
           "span": {
@@ -833,7 +907,7 @@
           "text": "cases"
         },
         {
-          "id": "I5-1",
+          "id": "I114-",
           "mesh": "MESH:D000243",
           "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
@@ -843,7 +917,17 @@
           "text": "ADA"
         },
         {
-          "id": "I9-1",
+          "id": "I117-",
+          "mesh": "MESH:D018471",
+          "obj": "MESH:D018471 (Hypergravity, score: 12.82)",
+          "span": {
+            "begin": 779,
+            "end": 783
+          },
+          "text": "high"
+        },
+        {
+          "id": "I118-",
           "mesh": "MESH:D006802",
           "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
@@ -853,17 +937,27 @@
           "text": "activity"
         },
         {
-          "id": "I13-1",
-          "mesh": "MESH:D000075902",
-          "obj": "MESH:D000075902 (Clinical Deterioration, score: 11.792)",
+          "id": "I122-",
+          "mesh": "MESH:D059032",
+          "obj": "MESH:D059032 (Learning Curve, score: 12.921)",
           "span": {
             "begin": 808,
-            "end": 826
+            "end": 817
           },
-          "text": "gradually declined"
+          "text": "gradually"
         },
         {
-          "id": "I18-1",
+          "id": "I123-",
+          "mesh": "MESH:D045808",
+          "obj": "MESH:D045808 (Refusal to Participate, score: 9.822)",
+          "span": {
+            "begin": 818,
+            "end": 826
+          },
+          "text": "declined"
+        },
+        {
+          "id": "I127-",
           "mesh": "MESH:D006706",
           "obj": "MESH:D006706 (Homeostasis, score: 12.862)",
           "span": {
@@ -873,7 +967,7 @@
           "text": "normal"
         },
         {
-          "id": "I19-1",
+          "id": "I128-",
           "mesh": "MESH:D016422",
           "obj": "MESH:D016422 (Letter, score: 13.353)",
           "span": {
@@ -883,7 +977,7 @@
           "text": "level"
         },
         {
-          "id": "I21-1",
+          "id": "I130-",
           "mesh": "MESH:D033242",
           "obj": "MESH:D033242 (Minors, score: 13.264)",
           "span": {
@@ -893,7 +987,7 @@
           "text": "approximately"
         },
         {
-          "id": "I23-1",
+          "id": "I132-",
           "mesh": "MESH:D016081",
           "obj": "MESH:D016081 (Moon, score: 12.069)",
           "span": {
@@ -903,7 +997,7 @@
           "text": "month"
         },
         {
-          "id": "I26-1",
+          "id": "I135-",
           "mesh": "MESH:D061785",
           "obj": "MESH:D061785 (Transcription Initiation, Genetic, score: 12.394)",
           "span": {
@@ -913,7 +1007,7 @@
           "text": "initiation"
         },
         {
-          "id": "I28-1",
+          "id": "I137-",
           "mesh": "MESH:D004358",
           "obj": "MESH:D004358 (Drug Therapy, score: 10.609)",
           "span": {
@@ -923,7 +1017,7 @@
           "text": "chemotherapy"
         },
         {
-          "id": "I33-1",
+          "id": "I142-",
           "mesh": "MESH:D015536",
           "obj": "MESH:D015536 (Down-Regulation, score: 8.498)",
           "span": {
@@ -933,7 +1027,7 @@
           "text": "decrease"
         },
         {
-          "id": "I36-1",
+          "id": "I145-",
           "mesh": "MESH:D000243",
           "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
@@ -943,7 +1037,7 @@
           "text": "ADA"
         },
         {
-          "id": "I37-1",
+          "id": "I146-",
           "mesh": "MESH:D006802",
           "obj": "MESH:D006802 (Human Activities, score: 11.026)",
           "span": {
@@ -953,7 +1047,17 @@
           "text": "activity"
         },
         {
-          "id": "I45-1",
+          "id": "I151-",
+          "mesh": "MESH:D002477",
+          "obj": "MESH:D002477 (Cells, score: 0.008)",
+          "span": {
+            "begin": 982,
+            "end": 987
+          },
+          "text": "cells"
+        },
+        {
+          "id": "I154-",
           "mesh": "MESH:D002555",
           "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
@@ -963,7 +1067,7 @@
           "text": "cerebrospinal fluid"
         },
         {
-          "id": "I53-1",
+          "id": "I162-",
           "mesh": "MESH:D020878",
           "obj": "MESH:D020878 (Device Removal, score: 10.038)",
           "span": {
@@ -973,7 +1077,7 @@
           "text": "removal"
         },
         {
-          "id": "I55-1",
+          "id": "I164-",
           "mesh": "MESH:D009161",
           "obj": "MESH:D009161 (Mycobacterium, score: 11.21)",
           "span": {
@@ -983,7 +1087,7 @@
           "text": "mycobacterial antigen"
         },
         {
-          "id": "I59-1",
+          "id": "I168-",
           "mesh": "MESH:D013812",
           "obj": "MESH:D013812 (Therapeutics, score: 10.532)",
           "span": {
@@ -993,7 +1097,7 @@
           "text": "treatment"
         },
         {
-          "id": "I61-1",
+          "id": "I170-",
           "mesh": "MESH:D016422",
           "obj": "MESH:D016422 (Letter, score: 13.353)",
           "span": {
@@ -1003,7 +1107,7 @@
           "text": "level"
         },
         {
-          "id": "I63-1",
+          "id": "I172-",
           "mesh": "MESH:D000243",
           "obj": "MESH:D000243 (Adenosine Deaminase, score: 8.974)",
           "span": {
@@ -1013,7 +1117,7 @@
           "text": "ADA"
         },
         {
-          "id": "I66-1",
+          "id": "I175-",
           "mesh": "MESH:D002555",
           "obj": "MESH:D002555 (Cerebrospinal Fluid, score: 0.007)",
           "span": {
@@ -1023,17 +1127,27 @@
           "text": "cerebrospinal fluid"
         },
         {
-          "id": "I75-1",
+          "id": "I184-",
           "mesh": "MESH:D062527",
-          "obj": "MESH:D062527 (Meaningful Use, score: 11.684)",
+          "obj": "MESH:D062527 (Meaningful Use, score: 9.924)",
           "span": {
             "begin": 1173,
-            "end": 1188
+            "end": 1179
           },
-          "text": "useful measures"
+          "text": "useful"
         },
         {
-          "id": "I78-1",
+          "id": "I185-",
+          "mesh": "MESH:D008722",
+          "obj": "MESH:D008722 (Methods, score: 13.324)",
+          "span": {
+            "begin": 1180,
+            "end": 1188
+          },
+          "text": "measures"
+        },
+        {
+          "id": "I187-",
           "mesh": "MESH:D003933",
           "obj": "MESH:D003933 (Diagnosis, score: 0.007)",
           "span": {
@@ -1043,7 +1157,7 @@
           "text": "diagnosis"
         },
         {
-          "id": "I80-1",
+          "id": "I189-",
           "mesh": "MESH:D005500",
           "obj": "MESH:D005500 (Follow-Up Studies, score: 5.27)",
           "span": {
@@ -1053,7 +1167,7 @@
           "text": "follow-up"
         },
         {
-          "id": "I82-1",
+          "id": "I191-",
           "mesh": "MESH:D010361",
           "obj": "MESH:D010361 (Patients, score: 0.008)",
           "span": {
@@ -1063,7 +1177,7 @@
           "text": "patients"
         },
         {
-          "id": "I84-1",
+          "id": "I193-",
           "mesh": "MESH:D014390",
           "obj": "MESH:D014390 (Tuberculosis, Meningeal, score: 9.103)",
           "span": {
@@ -1076,7 +1190,228 @@
       "project": "https://med-nemo-sapbert.apps.renci.org/annotate/"
     },
     {
-      "denotations": [],
+      "denotations": [
+        {
+          "id": "I2-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 16,
+            "end": 44
+          },
+          "text": "adenosine deaminase activity"
+        },
+        {
+          "id": "I7-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 52,
+            "end": 71
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I12-",
+          "mesh": "MESH:D014390",
+          "obj": "MONDO:0006042 (meningeal tuberculosis)",
+          "span": {
+            "begin": 89,
+            "end": 112
+          },
+          "text": "tuberculous meningitis]"
+        },
+        {
+          "id": "I23-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 169,
+            "end": 188
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I33-",
+          "mesh": "MESH:D014390",
+          "obj": "MONDO:0006042 (meningeal tuberculosis)",
+          "span": {
+            "begin": 236,
+            "end": 258
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I39-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 287,
+            "end": 315
+          },
+          "text": "adenosine deaminase activity"
+        },
+        {
+          "id": "I44-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 323,
+            "end": 342
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I49-",
+          "mesh": "MESH:D014390",
+          "obj": "MONDO:0006042 (meningeal tuberculosis)",
+          "span": {
+            "begin": 360,
+            "end": 382
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I60-",
+          "mesh": "MESH:D014390",
+          "obj": "MONDO:0006042 (meningeal tuberculosis)",
+          "span": {
+            "begin": 444,
+            "end": 466
+          },
+          "text": "tuberculous meningitis"
+        },
+        {
+          "id": "I68-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 495,
+            "end": 514
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I83-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 607,
+            "end": 610
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I87-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 627,
+            "end": 646
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I95-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 677,
+            "end": 680
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I108-",
+          "mesh": "MESH:D004194",
+          "obj": "MONDO:0000001 (disease)",
+          "span": {
+            "begin": 736,
+            "end": 743
+          },
+          "text": "disease"
+        },
+        {
+          "id": "I114-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 766,
+            "end": 769
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I145-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 953,
+            "end": 956
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I151-",
+          "mesh": "MESH:D002477",
+          "obj": "UMLS:C0007634 (Cells)",
+          "span": {
+            "begin": 982,
+            "end": 987
+          },
+          "text": "cells"
+        },
+        {
+          "id": "I154-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 995,
+            "end": 1014
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I164-",
+          "mesh": "MESH:D009161",
+          "obj": "NCBITaxon:1763 (Mycobacterium)",
+          "span": {
+            "begin": 1058,
+            "end": 1079
+          },
+          "text": "mycobacterial antigen"
+        },
+        {
+          "id": "I172-",
+          "mesh": "MESH:D000243",
+          "obj": "MESH:D000243 (Adenosine Deaminase)",
+          "span": {
+            "begin": 1111,
+            "end": 1114
+          },
+          "text": "ADA"
+        },
+        {
+          "id": "I175-",
+          "mesh": "MESH:D002555",
+          "obj": "UBERON:0001359 (cerebrospinal fluid)",
+          "span": {
+            "begin": 1122,
+            "end": 1141
+          },
+          "text": "cerebrospinal fluid"
+        },
+        {
+          "id": "I193-",
+          "mesh": "MESH:D014390",
+          "obj": "MONDO:0006042 (meningeal tuberculosis)",
+          "span": {
+            "begin": 1234,
+            "end": 1256
+          },
+          "text": "tuberculous meningitis"
+        }
+      ],
       "project": "https://nodenormalization-sri.renci.org/1.3/get_normalized_nodes"
     }
   ]
