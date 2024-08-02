@@ -36,7 +36,7 @@ NEMOSERVE_ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSERVE_URL, '/annotate/')
 NEMOSERVE_MODEL_NAME = "token_classification"
 
 # Configuration: get the SAPBERT URL and figure out the annotate path.
-SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://babel-sapbert.apps.renci.org/')
+SAPBERT_URL = os.getenv('SAPBERT_URL', 'https://sap-qdrant.apps.renci.org/')
 SAPBERT_ANNOTATE_ENDPOINT = urllib.parse.urljoin(SAPBERT_URL, '/annotate/')
 SAPBERT_MODEL_NAME = "sapbert"
 SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for reasonable results.
@@ -45,10 +45,10 @@ SAPBERT_COUNT = 10000 # We've found that 1000 is about the minimum you need for 
 NODE_NORM_ENDPOINT = os.getenv('NODE_NORM_ENDPOINT', 'https://nodenormalization-sri.renci.org/get_normalized_nodes')
 
 # Configuration: the Monarch SciGraph endpoint.
-MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/api/nlp/annotate/entities?min_length=4&longest_only=false&include_abbreviation=false&include_acronym=false&include_numbers=false&content='
+MONARCH_SCIGRAPH_URL = 'https://api.monarchinitiative.org/v3/api/annotate/entities?text='
 
 # Configuration: NameRes
-NAMERES_URL = 'http://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
+NAMERES_URL = 'https://name-resolution-sri.renci.org/lookup?offset=0&limit=10&string='
 
 # Where should these output files be written out?
 OUTPUT_DIR = "tests/integration/data/test_dbgap"

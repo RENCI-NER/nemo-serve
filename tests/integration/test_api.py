@@ -22,7 +22,7 @@ def test_openapi():
     response = requests.get(OPENAPI_ENDPOINT)
     assert response.status_code == 200
     openapi_response = response.json()
-    assert openapi_response['openapi'] == '3.0.2'
+    assert openapi_response['openapi'] == '3.1.0'
     assert openapi_response['paths'].keys() == {'/annotate/', '/models/'}
 
 

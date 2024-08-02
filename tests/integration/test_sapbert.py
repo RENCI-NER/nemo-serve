@@ -11,7 +11,7 @@ import urllib.parse
 
 import requests
 
-NEMOSAPBERT_URL = os.getenv('NEMOSAPBERT_URL', 'https://med-nemo-sapbert.apps.renci.org/')
+NEMOSAPBERT_URL = os.getenv('NEMOSAPBERT_URL', 'https://sap-qdrant.apps.renci.org/')
 ANNOTATE_ENDPOINT = urllib.parse.urljoin(NEMOSAPBERT_URL, '/annotate/')
 
 
