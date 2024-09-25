@@ -264,12 +264,7 @@ class TokenClassificationModelWrapperMock(ModelWrapper):
 
 
 class SapbertModelWrapper(ModelWrapper):
-    """
-        host: "http://localhost:9200"
-    username: "elastic"
-    password: ""
-    index: "sap_index"
-    """
+
     def __init__(self, model_path, connection_config, backend='redis'):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
