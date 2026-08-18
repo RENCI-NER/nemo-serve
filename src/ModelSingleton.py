@@ -1,8 +1,11 @@
+import asyncio
 import logging
 import math
+import os
 import re
 from transformers import AutoTokenizer, AutoModel
 import torch
+from starlette.concurrency import run_in_threadpool
 from src.utils.SAPRedis import RedisMemory
 from src.utils.SAPQdrant import SAPQdrant
 from src.utils.tokenizer import tokenizer
@@ -15,6 +18,47 @@ logger = logging.Logger("gunicorn.error")
 
 class ModelNotFoundError(Exception):
     pass
+
+
+def _cgroup_cpu_limit():
+    """The container's CPU limit, or None when unlimited / not in a cgroup.
+
+    os.cpu_count() reports the host's cores, which on a 96-core node bears no
+    relation to a 4-CPU pod.
+    """
+    try:
+        # cgroup v2, then v1. ponytail: files only, no dependency on a lib.
+        with open("/sys/fs/cgroup/cpu.max") as f:
+            quota, period = f.read().split()
+        return None if quota == "max" else int(quota) / int(period)
+    except OSError:
+        pass
+    try:
+        with open("/sys/fs/cgroup/cpu/cpu.cfs_quota_us") as f:
+            quota = int(f.read())
+        with open("/sys/fs/cgroup/cpu/cpu.cfs_period_us") as f:
+            period = int(f.read())
+        return None if quota <= 0 else quota / period
+    except OSError:
+        return None
+
+
+def _cap_torch_threads():
+    """torch sizes its thread pool from os.cpu_count(), i.e. the host's cores,
+    not the container's CPU limit. On a 96-core node with a 4-CPU limit that is
+    48 OpenMP threads fighting over 4 CPUs of quota: measured 880ms per SapBERT
+    forward pass vs 56ms at 4 threads.
+
+    OMP_NUM_THREADS in the pod spec is the primary fix; this is the backstop for
+    when it is missing.
+    """
+    if os.environ.get("OMP_NUM_THREADS"):
+        return  # operator has spoken
+    limit = _cgroup_cpu_limit()
+    if limit:
+        torch.set_num_threads(max(1, int(limit)))
+        logger.info("Capped torch threads to %d from cgroup CPU limit %.2f",
+                    torch.get_num_threads(), limit)
 
 
 class ModelWrapper:
@@ -268,6 +312,16 @@ class SapbertModelWrapper(ModelWrapper):
     def __init__(self, model_path, connection_config, backend='redis'):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
+        _cap_torch_threads()
+        # One forward pass already occupies torch.get_num_threads() CPUs, so
+        # only cpus/threads of them fit at once. starlette's threadpool defaults
+        # to 40 workers, which on a 4-CPU pod means up to 160 OS threads and the
+        # same oversubscription _cap_torch_threads exists to prevent. Measured
+        # on a 4-CPU pod at 4 torch threads: 19.9ms p50 / 46 req/s at 1 pass in
+        # flight, 194.4ms p50 / 20.7 req/s at 4.
+        cpus = _cgroup_cpu_limit() or os.cpu_count() or 1
+        self._embed_slots = asyncio.Semaphore(
+            max(1, int(cpus) // torch.get_num_threads()))
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.gpu_available = torch.cuda.is_available()
         if self.gpu_available:
@@ -291,19 +345,30 @@ class SapbertModelWrapper(ModelWrapper):
         else:
             raise ValueError(f"Unsupported storage backend: {backend}")
 
+    def _embed(self, query_text):
+        """CPU/GPU-bound forward pass. Runs off the event loop, see __call__."""
+        # padding=True pads to the longest item in the batch (here: the query
+        # itself) instead of always to max_length. A 3-token query costs 3
+        # tokens, not 25.
+        toks = self.tokenizer.batch_encode_plus(
+            [query_text], padding=True, max_length=25, truncation=True,
+            return_tensors="pt")
+        if self.gpu_available:
+            toks = {k: v.cuda(0) for k, v in toks.items()}
+        with torch.inference_mode():
+            output = self.model(**toks)
+        cls_rep = output[0][:, 0, :]
+        return cls_rep.cpu().numpy().tolist()[0]
+
     async def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
         """ Runs prediction on text"""
-        toks = self.tokenizer.batch_encode_plus(
-            [query_text], padding="max_length", max_length=25, truncation=True,
-            return_tensors="pt")
-        toks_cuda = {}
-        for k, v in toks.items():
-            toks_cuda[k] = v.cuda(0) if self.gpu_available else v
-        output = self.model(**toks_cuda)
-        cls_rep = output[0][:, 0, :]
-        vector = cls_rep.cpu().detach().numpy().tolist()[0]
+        # torch releases the GIL during the forward pass, but calling it inline
+        # in an async def still blocks the event loop for the duration, which
+        # serialises every concurrent request. Hand it to the threadpool, but
+        # bounded — see _embed_slots.
+        async with self._embed_slots:
+            vector = await run_in_threadpool(self._embed, query_text)
         logger.info(f"Calculated Vector of {len(vector)} dims,")
-        logger.info("sending vector to elasticsearch")
         return await self.storage_client.search(
             query_vector=vector,
             top_n=count,
