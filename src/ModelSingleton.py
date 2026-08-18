@@ -3,6 +3,10 @@ import logging
 import math
 import os
 import re
+import sys
+import yaml
+import numpy as np
+import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import torch
 from starlette.concurrency import run_in_threadpool
@@ -83,6 +87,18 @@ class TokenClassificationModelWrapper(ModelWrapper):
         # testing:
         self.sentence_tokenizer = tokenizer
 
+        # The model can only accept sequences up to max_seq_length tokens,
+        # INCLUDING the [CLS]/[SEP] special tokens the model adds internally.
+        # `text_to_tokens` (used throughout chunking) does NOT count those, so
+        # we reserve 2 slots for them. Feeding a chunk longer than the model's
+        # limit produces out-of-range indices in a CUDA kernel, which triggers
+        # a device-side assert that permanently corrupts the CUDA context for
+        # the life of this process, so every chunk MUST stay under this.
+        self.max_seq_length = self.model._cfg.dataset.max_seq_length
+        self.window_size = self.max_seq_length - 2
+        logger.info("Model max_seq_length=%d, using content window_size=%d",
+                    self.max_seq_length, self.window_size)
+
     def _get_token_length(self, input_text):
         """Return the length in tokens as understood by the model's own internal
         tokenizer.
@@ -106,29 +122,56 @@ class TokenClassificationModelWrapper(ModelWrapper):
             yield (token_count, input_text)
 
         else:
-            # This should be something close to equal blocks of tokens. Chunking
-            # it this way reduces the chance of a small chunk at the end of a
-            # string of text.
-
-            # This calculates the number of chunks to split.
-            # There are often more tokens than words in a string, so we use
-            # a factor of 4 to cover of that. Pieces may be re-assembled in
-            # sliding_window.
-            nchunks = math.ceil(token_count/(window_size * 4))
-            if not nchunks:
+            # Walk the words greedily, packing as many as fit under window_size
+            # and flushing a group just before it would overflow.
+            words = input_text.split()
+            if not words:
                 logger.debug("Zero tokens found, returning None")
-                return []
-            chunk_size = math.ceil(token_count/nchunks)
-            logger.debug(
-                "Sentence will be broken into %d chunks of size %d words",
-                nchunks, chunk_size)
+                return
 
-            for match in re.finditer(r'((?:\S+\s+){1,100}(?:\S+\s*))',
-                                     failing_text):
-                if match and match.lastindex > 0:
-                    chunk = match.group(1)
-                    chunk_token_count = self._get_token_length(chunk)
-                    yield (chunk_token_count, chunk)
+            word_token_counts = self._word_token_counts(tokens, words)
+
+            group = []
+            group_tokens = 0
+            for word, word_tokens in zip(words, word_token_counts):
+                if group and group_tokens + word_tokens >= window_size:
+                    # Adding this word would overflow; flush the current group.
+                    yield (group_tokens, " ".join(group) + " ")
+                    group = []
+                    group_tokens = 0
+                group.append(word)
+                group_tokens += word_tokens
+            if group:
+                # A lone word longer than the window can't be split further; it
+                # is truncated in __add_predictions before it reaches the model.
+                yield (group_tokens, " ".join(group) + " ")
+
+    @staticmethod
+    def _word_token_counts(tokens, words):
+        """Map the flat list of wordpiece tokens back onto how many tokens each
+        whitespace word contributed, in a single pass (no extra tokenizer
+        calls). Wordpiece continuation tokens start with '##'; each token that
+        is NOT a continuation marks the start of a new word.
+
+        Returns a list of per-word token counts aligned with `words`. If the
+        tokenizer's word boundaries can't be reconciled with whitespace words
+        (unexpected), falls back to an even split so callers still get a usable
+        estimate rather than an error.
+        """
+        counts = []
+        for tok in tokens:
+            if tok.startswith("##") and counts:
+                counts[-1] += 1
+            else:
+                counts.append(1)
+        if len(counts) != len(words):
+            # Boundaries didn't line up (e.g. punctuation split differently).
+            # Distribute total tokens roughly evenly; correctness is still
+            # guaranteed by the final _truncate_to_window safety net.
+            total = len(tokens)
+            per = max(1, total // max(1, len(words)))
+            counts = [per] * len(words)
+        return counts
 
     def _sentences_to_chunks(self, sentences, window_size):
         """
@@ -256,8 +299,40 @@ class TokenClassificationModelWrapper(ModelWrapper):
         Returns:
             result: text with added entities
         """
-        inferred = self.model._infer(queries, batch_size)
-        return self._pubannotate(queries, inferred)
+        # Last-resort safety net. Chunking already packs every query under the
+        # model limit word-by-word, so this normally does nothing (fast path
+        # returns the query unchanged). It only bites when a SINGLE whitespace
+        # word tokenizes to >= window_size tokens -- something that can't be
+        # split on word boundaries and essentially never occurs in real text.
+        # In that lone case we drop the word's tail rather than let an
+        # over-length sequence reach the model and trigger a CUDA device-side
+        # assert that would take down the whole server. Losing annotations on
+        # one pathological word is strictly better than crashing for everyone.
+        safe_queries = [self._truncate_to_window(q) for q in queries]
+        inferred = self.model._infer(safe_queries, batch_size)
+        return self._pubannotate(safe_queries, inferred)
+
+    def _truncate_to_window(self, query):
+        """
+        Return query trimmed to at most window_size model tokens (whole words
+        are dropped from the end, since token labels map back to whole words).
+        """
+        tokens = self.model.tokenizer.text_to_tokens(query)
+        if len(tokens) <= self.window_size:
+            return query
+        words = query.split()
+        word_token_counts = self._word_token_counts(tokens, words)
+        kept = []
+        running = 0
+        for word, count in zip(words, word_token_counts):
+            if running + count > self.window_size:
+                break
+            kept.append(word)
+            running += count
+        logger.warning(
+            "Query over window (%d tokens > %d); truncated to %d words",
+            len(tokens), self.window_size, len(kept))
+        return " ".join(kept)
 
     @staticmethod
     def _merge_pub_annotator_annotations(annotations):
@@ -287,11 +362,24 @@ class TokenClassificationModelWrapper(ModelWrapper):
     async def __call__(self, query_text, *args, **kwargs):
         """ Runs prediction on text"""
         try:
-            queries = [x for x in self.sliding_window(query_text, 500)]
+            queries = [x for x in self.sliding_window(query_text,
+                                                      self.window_size)]
             all_predictions = [self.__add_predictions([x]) for x in queries]
             return self._merge_pub_annotator_annotations(all_predictions)
-        except Exception as E:
-            raise E
+        except RuntimeError as E:
+            # A CUDA device-side assert (e.g. an out-of-range index from an
+            # over-length input) permanently corrupts the CUDA context for the
+            # whole process: every subsequent request would get the same error.
+            # Toggling train mode does NOT recover it. The only real fix is a
+            # fresh process, so exit hard and let the orchestrator (k8s) restart
+            # this pod with a clean context instead of serving errors forever.
+            if "CUDA" in str(E) or "device-side assert" in str(E):
+                logger.error("Unrecoverable CUDA error, exiting to force "
+                             "restart: %s", E)
+                sys.stderr.flush()
+                sys.stdout.flush()
+                os._exit(1)
+            raise
         finally:
             # reset the model, recover
             self.model.train(mode=self.model.training)
