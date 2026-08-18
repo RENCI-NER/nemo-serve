@@ -9,5 +9,14 @@ token_classification:
 sapbert:
   path: "/data/SapBERT-from-PubMedBERT-fulltext"
   class: SapbertWrapper
-  ground_truth_data_path: "/data/pubmed_mesh_prediction_output.npy"
-  ground_truth_data_ids_path: "/data/pubmed_mesh_name_ids.csv"
+  # if using redis rename storage: "redis" and configure connection parametes. Note connection.scheme is not required for redis.
+  storage: "qdrant"
+  connectionParams:
+    host: "localhost"
+    port: 6333
+    password: ""
+    index: "sap_index"
+    scheme: ""
+  ground_truth_predictions_path: "/data/pubmed_mesh_prediction_output.npy"
+  ground_truth_data_name_id_pairs_path: "/data/pubmed_mesh_name_ids.csv"
+  ground_truth_data_id_type_pairs_path: "/data/pubmed_mesh_name_types.csv"

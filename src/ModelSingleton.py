@@ -1,4 +1,6 @@
+import asyncio
 import logging
+import math
 import os
 import re
 import sys
@@ -6,15 +8,61 @@ import yaml
 import numpy as np
 import pandas as pd
 from transformers import AutoTokenizer, AutoModel
-from nemo.collections.nlp.models import TokenClassificationModel
-from scipy.spatial.distance import cdist
+import torch
+from starlette.concurrency import run_in_threadpool
+from src.utils.SAPRedis import RedisMemory
+from src.utils.SAPQdrant import SAPQdrant
 from src.utils.tokenizer import tokenizer
+
+import yaml
+
 
 logger = logging.Logger("gunicorn.error")
 
 
 class ModelNotFoundError(Exception):
     pass
+
+
+def _cgroup_cpu_limit():
+    """The container's CPU limit, or None when unlimited / not in a cgroup.
+
+    os.cpu_count() reports the host's cores, which on a 96-core node bears no
+    relation to a 4-CPU pod.
+    """
+    try:
+        # cgroup v2, then v1. ponytail: files only, no dependency on a lib.
+        with open("/sys/fs/cgroup/cpu.max") as f:
+            quota, period = f.read().split()
+        return None if quota == "max" else int(quota) / int(period)
+    except OSError:
+        pass
+    try:
+        with open("/sys/fs/cgroup/cpu/cpu.cfs_quota_us") as f:
+            quota = int(f.read())
+        with open("/sys/fs/cgroup/cpu/cpu.cfs_period_us") as f:
+            period = int(f.read())
+        return None if quota <= 0 else quota / period
+    except OSError:
+        return None
+
+
+def _cap_torch_threads():
+    """torch sizes its thread pool from os.cpu_count(), i.e. the host's cores,
+    not the container's CPU limit. On a 96-core node with a 4-CPU limit that is
+    48 OpenMP threads fighting over 4 CPUs of quota: measured 880ms per SapBERT
+    forward pass vs 56ms at 4 threads.
+
+    OMP_NUM_THREADS in the pod spec is the primary fix; this is the backstop for
+    when it is missing.
+    """
+    if os.environ.get("OMP_NUM_THREADS"):
+        return  # operator has spoken
+    limit = _cgroup_cpu_limit()
+    if limit:
+        torch.set_num_threads(max(1, int(limit)))
+        logger.info("Capped torch threads to %d from cgroup CPU limit %.2f",
+                    torch.get_num_threads(), limit)
 
 
 class ModelWrapper:
@@ -32,6 +80,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
         """ Initializes NLP Model
         :param model_path: Path to model to load
         """
+        from nemo.collections.nlp.models import TokenClassificationModel
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
         # Make this an instance variable so that it's easier to mock in
@@ -310,7 +359,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
             result['denotations'] += new_denotations
         return result
 
-    def __call__(self, query_text, *args, **kwargs):
+    async def __call__(self, query_text, *args, **kwargs):
         """ Runs prediction on text"""
         try:
             queries = [x for x in self.sliding_window(query_text,
@@ -347,47 +396,76 @@ class TokenClassificationModelWrapperMock(ModelWrapper):
 
 
 class SapbertModelWrapper(ModelWrapper):
-    def __init__(self, model_path, all_reps_path, all_reps_ids_path):
+
+    def __init__(self, model_path, connection_config, backend='redis'):
         """ Initializes NLP Model"""
         super(SapbertModelWrapper, self).__init__()
+        _cap_torch_threads()
+        # One forward pass already occupies torch.get_num_threads() CPUs, so
+        # only cpus/threads of them fit at once. starlette's threadpool defaults
+        # to 40 workers, which on a 4-CPU pod means up to 160 OS threads and the
+        # same oversubscription _cap_torch_threads exists to prevent. Measured
+        # on a 4-CPU pod at 4 torch threads: 19.9ms p50 / 46 req/s at 1 pass in
+        # flight, 194.4ms p50 / 20.7 req/s at 4.
+        cpus = _cgroup_cpu_limit() or os.cpu_count() or 1
+        self._embed_slots = asyncio.Semaphore(
+            max(1, int(cpus) // torch.get_num_threads()))
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        self.model = AutoModel.from_pretrained(model_path).cuda(0)
-        self.all_reps_emb = np.load(all_reps_path)
-        all_reps_name_ids = pd.read_csv(all_reps_ids_path, header=0, dtype=str)
-        self.all_reps_names = all_reps_name_ids['Name']
-        self.all_reps_ids = all_reps_name_ids['ID']
+        self.gpu_available = torch.cuda.is_available()
+        if self.gpu_available:
+            # In K8s when the host Node machine has GPU , but the pod is not allowed to use
+            # it we get assertion error.
+            try:
+                self.model = AutoModel.from_pretrained(model_path).cuda(0)
+            except:
 
-    def __call__(self, query_text, count):
-        """ Runs prediction on text"""
+                self.model = AutoModel.from_pretrained(model_path)
+        else:
+            self.model = AutoModel.from_pretrained(model_path)
+        if backend == 'redis':
+            self.storage_client = RedisMemory(
+                **connection_config
+            )
+        elif backend =="qdrant":
+            self.storage_client = SAPQdrant(
+                **connection_config
+            )
+        else:
+            raise ValueError(f"Unsupported storage backend: {backend}")
+
+    def _embed(self, query_text):
+        """CPU/GPU-bound forward pass. Runs off the event loop, see __call__."""
+        # padding=True pads to the longest item in the batch (here: the query
+        # itself) instead of always to max_length. A 3-token query costs 3
+        # tokens, not 25.
         toks = self.tokenizer.batch_encode_plus(
-            [query_text], padding="max_length", max_length=25, truncation=True,
+            [query_text], padding=True, max_length=25, truncation=True,
             return_tensors="pt")
-        toks_cuda = {}
-        for k, v in toks.items():
-            toks_cuda[k] = v.cuda(0)
-        output = self.model(**toks_cuda)
+        if self.gpu_available:
+            toks = {k: v.cuda(0) for k, v in toks.items()}
+        with torch.inference_mode():
+            output = self.model(**toks)
         cls_rep = output[0][:, 0, :]
-        dist = cdist(cls_rep.cpu().detach().numpy(), self.all_reps_emb)
-        if count == 1:
-            nn_index = np.argmin(dist)
-            return [{
-                "label": self.all_reps_names[nn_index],
-                "curie": self.all_reps_ids[nn_index],
-                "distance_score": round(dist[0, nn_index], 3)
-            }]
-        count_dist = np.argpartition(dist, count, axis=None)
-        result_dist = np.sort(dist[0, count_dist[:count]], axis=None)
-        indices = [list(np.asarray(np.where(dist.flatten() == d)).flatten())
-                   for d in result_dist]
-        indices = sum(indices, [])
-        return [
-            {
-                "label": self.all_reps_names[idx],
-                "curie": self.all_reps_ids[idx],
-                "distance_score": round(dist[0, idx], 3)
-            }
-            for idx in indices[:count]
-        ]
+        return cls_rep.cpu().numpy().tolist()[0]
+
+    async def __call__(self, query_text, count=10, similarity="cosine", bl_type=""):
+        """ Runs prediction on text"""
+        # torch releases the GIL during the forward pass, but calling it inline
+        # in an async def still blocks the event loop for the duration, which
+        # serialises every concurrent request. Hand it to the threadpool, but
+        # bounded — see _embed_slots.
+        async with self._embed_slots:
+            vector = await run_in_threadpool(self._embed, query_text)
+        logger.info(f"Calculated Vector of {len(vector)} dims,")
+        return await self.storage_client.search(
+            query_vector=vector,
+            top_n=count,
+            bl_type=bl_type,
+            algorithm=similarity
+        )
+
+
+
 
 
 class ModelFactory:
@@ -406,8 +484,7 @@ class ModelFactory:
         pass
 
     @staticmethod
-    def load_model(name, path, model_class, ground_truth_data_path=None,
-                   ground_truth_data_ids_path=None):
+    def load_model(name, path, model_class, extra_params=None):
         if name in ModelFactory.models.keys():
             logger.info("Model %s already in class skipping initialization",
                         name)
@@ -416,19 +493,17 @@ class ModelFactory:
             logger.info(f"Initializing model {name}")
             assert issubclass(model_class, ModelWrapper), "Error please provide a subclass type of ModelWrapper"
             # initializes model and makes its prediction a callable
-            if ground_truth_data_path:
-                ModelFactory.models[name] = model_class(
-                    path, ground_truth_data_path, ground_truth_data_ids_path)
+            if extra_params:
+                ModelFactory.models[name] = model_class(path, **extra_params)
             else:
                 ModelFactory.models[name] = model_class(path)
 
     @staticmethod
-    def query_model(model_name, query_text, query_count=1):
+    async def query_model(model_name, query_text, query_count=1, **kwargs):
         if model_name not in ModelFactory.models:
             raise ModelNotFoundError(f"Model {model_name} not found")
-        # since we have model as a callable class we can just treat it like a
-        # function
-        return ModelFactory.models[model_name](query_text, query_count)
+        # since we have model as a callable class we can just treat it like a function
+        return await ModelFactory.models[model_name](query_text, query_count, **kwargs)
 
     @staticmethod
     def get_model_names():
@@ -445,29 +520,22 @@ def init_models(config_file_path):
         config = yaml.load(config_stream, Loader=yaml.SafeLoader)
     logger.info(config)
     for model_name in config:
-        cls = None
-        gt_path = None
         logger.info(model_name)
-        if model_name == 'token_classification':
-            cls = ModelFactory.model_classes.get(config[model_name]['class'])
-            path = config[model_name]['path']
-
-        elif model_name == 'sapbert':
-            path = config[model_name]['path']
-            cls = ModelFactory.model_classes.get(config[model_name]['class'])
-            gt_path = config[model_name]['ground_truth_data_path']
-            gt_id_path = config[model_name]['ground_truth_data_ids_path']
-            logger.info(f'path: {path}, cls: {cls}, gt_path: {gt_path}, gt_id_path: {gt_id_path}')
+        cls = ModelFactory.model_classes.get(config[model_name]['class'], None)
         if cls is None:
             raise ValueError(
                 f"model class {config[model_name]['class']} not found please use one of {ModelFactory.model_classes.keys()}, "
                 f"Or add your wrapper to ModelFactory.model_classes dictionary")
-        if gt_path:
-            ModelFactory.load_model(name=model_name, path=path, model_class=cls, ground_truth_data_path=gt_path,
-                                    ground_truth_data_ids_path=gt_id_path)
-            logger.info('after loading sapbert model')
-        else:
-            ModelFactory.load_model(name=model_name, path=path, model_class=cls)
+
+        path = config[model_name]['path']
+        extra_params = None
+
+        if model_name == 'sapbert':
+            extra_params = {"connection_config": config[model_name].get('connectionParams', None),
+                            "backend": config[model_name]["storage"]}
+
+        ModelFactory.load_model(name=model_name, path=path, model_class=cls, extra_params=extra_params)
+
         logger.info(f"Loaded {cls} model from {path} as {model_name}")
 
 
@@ -482,3 +550,4 @@ def run_main():
 # test this factory by setting the model path
 if __name__ == '__main__':
     run_main()
+

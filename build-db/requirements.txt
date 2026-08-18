@@ -1,0 +1,5 @@
+numpy==1.26.4
+pandas==2.2.0
+qdrant-client==1.11.3
+tqdm==4.66.5
+asyncio==3.4.3
