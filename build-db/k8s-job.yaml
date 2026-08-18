@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # Name of your job
+  name: sapbert-builder
+spec:
+  template:
+    spec:
+      containers:
+      - name: sapbert-builder
+        # Replace with the image you want to run
+        image: containers.renci.org/helxplatform/sapbert-build
+        # Replace with the command your container should run
+        args:
+          - "--host"
+          - "sap-qdrant-v2-q1"
+          - "--port"
+          - "6333"
+          - "--scheme"
+          - "http"
+          - "--index"
+          - "sapbert"
+          - "--root-path"
+          - "/data"
+          - "--folders"
+          - "mapping_conflated_2025jan23"
+#          - "mapping_gene_2025jan23"
+#          - "mapping_other_2025jan23"
+#          - "mapping_protein_2025jan23"
+          - "--chunk-size"
+          - "1000"
+          - "--max-retries"
+          - "10"
+          - "--vector-size"
+          - "768"
+          - "--shard-number"
+          - "9"
+          - "--replication-factor"
+          - "1"
+          - "--progress-file"
+          - "/data/progress.json"
+          - "--exclude-prefix"
+          - "PUBCHEM.COMPOUND"
+          - "--delete-existing"
+        resources:
+          limits:
+            memory: 80Gi
+        volumeMounts:
+        - name: shared-storage
+          # The path inside the container where the volume will be mounted
+          mountPath: /data
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          # This must match the name of your existing PersistentVolumeClaim
+          claimName: babel-sapbert-pvc
+      # Ensures the Job doesn't restart pods if they fail
+      restartPolicy: Never
+  # Optional: specifies how many times the Job should retry if a pod fails
+  backoffLimit: 4

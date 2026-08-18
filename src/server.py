@@ -25,7 +25,7 @@ def init_nlp_model():
 async def annotate_text(query: Query):
     if query.model_name not in ModelFactory.get_model_names():
         return {"error": f"please provide a valid model name from {ModelFactory.get_model_names()}"}, 400
-    return ModelFactory.query_model(model_name=query.model_name, query_text=query.text, query_count=query.count)
+    return await ModelFactory.query_model(model_name=query.model_name, query_text=query.text, query_count=query.count, **query.args)
 
 
 @app.get("/models/")
