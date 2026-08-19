@@ -9,7 +9,9 @@ spec:
       containers:
       - name: sapbert-builder
         # Replace with the image you want to run
-        image: containers.renci.org/helxplatform/sapbert-build
+        # Pinned, not :latest — this tag has the create_index perf config and
+        # the --id-offset guard. digest sha256:2f146ca9ec885f...
+        image: containers.renci.org/helxplatform/sapbert-build:2026-08-18
         # Replace with the command your container should run
         args:
           - "--host"
@@ -23,9 +25,9 @@ spec:
           - "--root-path"
           - "/data"
           - "--folders"
-          - "mapping_conflated_2025jan23"
+#          - "mapping_conflated_2025jan23"
 #          - "mapping_gene_2025jan23"
-#          - "mapping_other_2025jan23"
+          - "mapping_other_2025jan23"
 #          - "mapping_protein_2025jan23"
           - "--chunk-size"
           - "1000"
@@ -39,12 +41,16 @@ spec:
           - "1"
           - "--progress-file"
           - "/data/progress.json"
-          - "--exclude-prefix"
+          # Existing points occupy ids 419466114..420166224. Start above them.
+          # Redundant while /data/progress.json survives (total_counter is
+          # already 420166225), but explicit beats accidental.
+          - "--id-offset"
+          - "420166225"
+          - "--exclude-prefixes"
           - "PUBCHEM.COMPOUND"
-          - "--delete-existing"
         resources:
           limits:
-            memory: 80Gi
+            memory: 10Gi
         volumeMounts:
         - name: shared-storage
           # The path inside the container where the volume will be mounted

@@ -10,8 +10,12 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import torch
 from starlette.concurrency import run_in_threadpool
-from src.utils.SAPRedis import RedisMemory
-from src.utils.SAPQdrant import SAPQdrant
+# SAPRedis/SAPQdrant are imported lazily in SapbertModelWrapper.__init__ rather
+# than here. They pull in redis and qdrant_client, which are absent from the
+# token-classification images (ghcr.io/renci-ner/nemo-serve:v1.3.1 and friends);
+# importing them at module scope makes this file unimportable there and takes the
+# whole app down, sapbert backend or not. Same reason `nemo` is imported inside
+# TokenClassificationModelWrapper.__init__.
 from src.utils.tokenizer import tokenizer
 
 import yaml
@@ -81,8 +85,24 @@ class TokenClassificationModelWrapper(ModelWrapper):
         :param model_path: Path to model to load
         """
         from nemo.collections.nlp.models import TokenClassificationModel
+        from omegaconf import open_dict
         super(TokenClassificationModelWrapper, self).__init__()
         self.model = TokenClassificationModel.restore_from(model_path)
+        # NeMo's _infer builds a fresh DataLoader per call and reads
+        # num_workers off the checkpoint's config -- medmentions-v0.2.nemo ships
+        # num_workers=2. Forking two worker processes to feed a handful of
+        # sentences costs a measured 130ms per _infer call vs 0.8ms at 0
+        # workers. Inference batches are tiny; there is nothing to prefetch.
+        with open_dict(self.model._cfg):
+            self.model._cfg.dataset.num_workers = 0
+        # _infer captures self.training and restores it in a finally block. Pin
+        # eval mode once here so that restore is a no-op and concurrent calls
+        # from the threadpool can't flip the model into train mode mid-forward.
+        self.model.eval()
+        # GPU work serialises on the CUDA stream anyway; 2 slots let one
+        # request's tokenisation/post-processing overlap another's forward pass
+        # without oversubscribing.
+        self._infer_slots = asyncio.Semaphore(2)
         # Make this an instance variable so that it's easier to mock in
         # testing:
         self.sentence_tokenizer = tokenizer
@@ -96,6 +116,14 @@ class TokenClassificationModelWrapper(ModelWrapper):
         # the life of this process, so every chunk MUST stay under this.
         self.max_seq_length = self.model._cfg.dataset.max_seq_length
         self.window_size = self.max_seq_length - 2
+        # _pubannotate reads these once per WORD. Every read walks omegaconf's
+        # DictConfig resolution machinery (~29us a hit, measured 2.3s of the
+        # 2.5s spent annotating a 200-sentence document). They never change
+        # after load, so resolve them here and read plain Python objects in the
+        # loop.
+        self.ids_to_labels = {v: k
+                              for k, v in self.model._cfg.label_ids.items()}
+        self.pad_label = self.model._cfg.dataset.pad_label
         logger.info("Model max_seq_length=%d, using content window_size=%d",
                     self.max_seq_length, self.window_size)
 
@@ -143,7 +171,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
                 group_tokens += word_tokens
             if group:
                 # A lone word longer than the window can't be split further; it
-                # is truncated in __add_predictions before it reaches the model.
+                # is truncated in _predict_all before it reaches the model.
                 yield (group_tokens, " ".join(group) + " ")
 
     @staticmethod
@@ -236,7 +264,8 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
     def _pubannotate(self, q, inferred):
         queries = [q.strip().split() for q in q]
-        ids_to_labels = {v: k for k, v in self.model._cfg.label_ids.items()}
+        ids_to_labels = self.ids_to_labels
+        pad_label = self.pad_label
         start_idx = 0
         end_idx = 0
         denotations = []
@@ -257,8 +286,7 @@ class TokenClassificationModelWrapper(ModelWrapper):
 
                 label = ids_to_labels[preds[j]]
 
-                is_not_pad_label = (label != self.model._cfg.dataset.pad_label
-                                    and label != '0')
+                is_not_pad_label = (label != pad_label and label != '0')
 
                 if not is_not_pad_label:
                     # For things like fitness to practice where model labels it as fitness[B-biolink:NamedThing] to[0] # practice[I-biolink:NamedThing]
@@ -286,31 +314,39 @@ class TokenClassificationModelWrapper(ModelWrapper):
             'denotations': denotations
         }
 
-    def __add_predictions(
-            self, queries, batch_size: int = 32
-    ):
-        """
-        Add predicted token labels to the queries.
+    def _predict_all(self, queries, batch_size: int = 32):
+        """Annotate every chunk of one document in a single _infer call.
 
-        Use this method for debugging and prototyping.
-        Args:
-            queries: text
-            batch_size: batch size to use during inference.
-        Returns:
-            result: text with added entities
+        _infer has a fixed per-call cost (DataLoader construction, eval/train
+        toggling, a cuda sync) and batches internally, so calling it once per
+        chunk paid that cost N times and left the GPU running batches of one.
+        _infer returns one prediction per whitespace word, concatenated in
+        query order, so the flat result slices cleanly back per chunk --
+        _pubannotate's own span offsets are chunk-relative, and
+        _merge_pub_annotator_annotations re-bases them onto the full text.
         """
-        # Last-resort safety net. Chunking already packs every query under the
-        # model limit word-by-word, so this normally does nothing (fast path
-        # returns the query unchanged). It only bites when a SINGLE whitespace
-        # word tokenizes to >= window_size tokens -- something that can't be
-        # split on word boundaries and essentially never occurs in real text.
-        # In that lone case we drop the word's tail rather than let an
-        # over-length sequence reach the model and trigger a CUDA device-side
-        # assert that would take down the whole server. Losing annotations on
-        # one pathological word is strictly better than crashing for everyone.
-        safe_queries = [self._truncate_to_window(q) for q in queries]
+        # _truncate_to_window is a last-resort safety net. Chunking already
+        # packs every query under the model limit word-by-word, so it normally
+        # does nothing (fast path returns the query unchanged). It only bites
+        # when a SINGLE whitespace word tokenizes to >= window_size tokens --
+        # something that can't be split on word boundaries and essentially
+        # never occurs in real text. In that lone case we drop the word's tail
+        # rather than let an over-length sequence reach the model and trigger a
+        # CUDA device-side assert that would take down the whole server. Losing
+        # annotations on one pathological word is strictly better than crashing
+        # for everyone.
+        safe_queries = [self._truncate_to_window(q) for q in queries
+                        if q and q.strip()]
+        if not safe_queries:
+            return {"text": "", "denotations": []}
         inferred = self.model._infer(safe_queries, batch_size)
-        return self._pubannotate(safe_queries, inferred)
+        per_chunk = []
+        start = 0
+        for query in safe_queries:
+            end = start + len(query.strip().split())
+            per_chunk.append(self._pubannotate([query], inferred[start:end]))
+            start = end
+        return self._merge_pub_annotator_annotations(per_chunk)
 
     def _truncate_to_window(self, query):
         """
@@ -364,8 +400,11 @@ class TokenClassificationModelWrapper(ModelWrapper):
         try:
             queries = [x for x in self.sliding_window(query_text,
                                                       self.window_size)]
-            all_predictions = [self.__add_predictions([x]) for x in queries]
-            return self._merge_pub_annotator_annotations(all_predictions)
+            # Inference is sync and CPU/GPU-bound: running it inline in an
+            # async def blocks the event loop, which serialises every other
+            # request (and starves the health checks) for its whole duration.
+            async with self._infer_slots:
+                return await run_in_threadpool(self._predict_all, queries)
         except RuntimeError as E:
             # A CUDA device-side assert (e.g. an out-of-range index from an
             # over-length input) permanently corrupts the CUDA context for the
@@ -423,10 +462,12 @@ class SapbertModelWrapper(ModelWrapper):
         else:
             self.model = AutoModel.from_pretrained(model_path)
         if backend == 'redis':
+            from src.utils.SAPRedis import RedisMemory
             self.storage_client = RedisMemory(
                 **connection_config
             )
-        elif backend =="qdrant":
+        elif backend == "qdrant":
+            from src.utils.SAPQdrant import SAPQdrant
             self.storage_client = SAPQdrant(
                 **connection_config
             )
