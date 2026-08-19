@@ -13,10 +13,12 @@ import argparse
 import logging
 from typing import Dict, Generator, Optional, List
 from pathlib import Path
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from datetime import datetime
 import signal
 import sys
+import sqlite3
+import gc
 
 csv.field_size_limit(10 ** 7)
 
@@ -89,6 +91,7 @@ class Config:
     delete_existing: bool = False
     resume: bool = True
     prefetch_size: int = 5  # Number of vectors to prefetch
+    exclude_prefixes: List[str] = field(default_factory=list)
 
     @classmethod
     def from_args(cls, args: argparse.Namespace) -> 'Config':
@@ -109,7 +112,8 @@ class Config:
             progress_file=args.progress_file,
             delete_existing=args.delete_existing,
             resume=args.resume,
-            prefetch_size=args.prefetch_size
+            prefetch_size=args.prefetch_size,
+            exclude_prefixes=args.exclude_prefixes
         )
 
 
@@ -155,31 +159,96 @@ def get_id_type_dict(file_path: str) -> Dict[str, str]:
     return result
 
 
-def get_name_id_dict(file_path: str) -> Dict[str, str]:
-    """Load name to ID mapping with progress tracking"""
-    result = {}
-    try:
-        with open(file_path, mode='r', newline='') as csvfile:
-            total = sum(1 for _ in csvfile) - 1
-            csvfile.seek(0)
+class NameIdSQLite:
+    """Folder-scoped SQLite manager for name-to-ID lookups."""
+
+    FILENAME = "name_ids.db"
+
+    def __init__(self, folder_path: str):
+        self.folder_path = folder_path
+        self.csv_path = os.path.join(folder_path, "name_ids.csv")
+        self.db_path = os.path.join(folder_path, self.FILENAME)
+        self.conn: Optional[sqlite3.Connection] = None
+        self.cur: Optional[sqlite3.Cursor] = None
+
+    def prepare(self, batch_insert_size: int = 100_000):
+        """Build SQLite DB from name_ids.csv if not already present."""
+        if not os.path.exists(self.csv_path):
+            raise FileNotFoundError(f"No name_ids.csv found in {self.folder_path}")
+
+        if os.path.exists(self.db_path):
+            logger.info(f"Reusing existing SQLite DB: {self.db_path}")
+            self.conn = sqlite3.connect(self.db_path)
+            self.cur = self.conn.cursor()
+            return
+
+        logger.info(f"Building SQLite DB for folder: {self.folder_path}")
+        # Use a temporary DB in same folder
+        self.conn = sqlite3.connect(self.db_path)
+        self.cur = self.conn.cursor()
+        self.cur.execute("CREATE TABLE IF NOT EXISTS name_ids (Name TEXT PRIMARY KEY, ID TEXT);")
+
+        with open(self.csv_path, newline='') as csvfile:
             reader = csv.DictReader(csvfile)
-            for row in tqdm(reader, total=total, desc=f"Loading {Path(file_path).name}"):
-                result[row['Name']] = ast.literal_eval(row['ID'])[0]
-    except Exception as e:
-        logger.error(f"Error loading {file_path}: {e}")
-        raise
-    return result
+            batch = []
+            count = 0
+            for row in reader:
+                name = row.get('Name')
+                id_val = row.get('ID')
+                batch.append((name, id_val))
+                count += 1
+                if count % batch_insert_size == 0:
+                    self.cur.executemany("INSERT OR REPLACE INTO name_ids VALUES (?, ?);", batch)
+                    self.conn.commit()
+                    batch.clear()
+                    logger.info(f"  inserted {count:,} rows...")
+            if batch:
+                self.cur.executemany("INSERT OR REPLACE INTO name_ids VALUES (?, ?);", batch)
+                self.conn.commit()
+
+        self.cur.execute("CREATE INDEX IF NOT EXISTS idx_name ON name_ids(Name);")
+        self.conn.commit()
+        logger.info(f"SQLite DB ready: {self.db_path}")
+
+    def get(self, name: str) -> Optional[str]:
+        """Fetch ID for a given Name, or None if not found."""
+        if not self.cur:
+            raise RuntimeError("SQLite DB not prepared yet. Call .prepare() first.")
+        row = self.cur.execute("SELECT ID FROM name_ids WHERE Name = ?", (name,)).fetchone()
+        if not row:
+            return None
+        try:
+            return ast.literal_eval(row[0])[0]
+        except Exception:
+            return row[0]
+
+    def cleanup(self):
+        """Close connection and delete DB file."""
+        if self.conn:
+            self.conn.close()
+        gc.collect()
+        if os.path.exists(self.db_path):
+            try:
+                os.remove(self.db_path)
+                logger.info(f"Deleted SQLite DB: {self.db_path}")
+            except Exception as e:
+                logger.warning(f"Could not delete sqlite DB {self.db_path}: {e}")
 
 
-def iter_files(np_file: str, name_id_file: str, id_type_file: str,
-               type_id_dict: Dict, name_id_dict: Dict,
-               start_index: int = 0) -> Generator:
-    """Generate documents from files with optional start index for resume"""
+def iter_files(np_file: str,
+               name_id_csv_path: str,
+               id_type_file: str,
+               type_id_dict: Dict,
+               name_lookup: Optional[NameIdSQLite] = None,
+               start_index: int = 0,
+               exclude_prefixes: Optional[List[str]] = None) -> Generator:
+    """Generate documents from files with optional start index for resume. This is streaming and memory-safe."""
+    excluded = {p.upper() for p in (exclude_prefixes or [])}
     logger.info(f"Opening numpy array file: {np_file}")
     np_arr = open_numpy_pickle(np_file)
     logger.info(f"Found {np_arr.shape[0]} vector rows")
 
-    with open(name_id_file) as name_id_csv:
+    with open(name_id_csv_path) as name_id_csv:
         total_rows = sum(1 for _ in name_id_csv) - 1
         name_id_csv.seek(0)
         reader = csv.DictReader(name_id_csv)
@@ -192,8 +261,23 @@ def iter_files(np_file: str, name_id_file: str, id_type_file: str,
         for row in tqdm(reader, total=total_rows - start_index,
                         desc="Processing rows", initial=start_index):
             try:
-                curies = ast.literal_eval(row['ID'])
-                vector = np_arr[index]
+                # Prefer explicit ID in row; otherwise try name lookup
+                id_field = row.get('ID')
+                if id_field and id_field.strip():
+                    curies = ast.literal_eval(id_field)
+                elif name_lookup:
+                    lookup_id = name_lookup.get(row.get('Name'))
+                    curies = [lookup_id] if lookup_id else []
+                else:
+                    curies = []
+
+                if excluded:
+                    curies = [c for c in curies if c.split(':', 1)[0].upper() not in excluded]
+                    if not curies:
+                        index += 1
+                        continue
+
+                vector = np_arr[index].astype(np.float32, copy=False)
 
                 # Validate vector
                 if np.any(np.isnan(vector)) or np.any(np.isinf(vector)):
@@ -204,7 +288,7 @@ def iter_files(np_file: str, name_id_file: str, id_type_file: str,
                 doc = {
                     "curies": curies,
                     "embedding": vector,
-                    "name": row['Name'].strip('"'),
+                    "name": row.get('Name', '').strip('"'),
                     "categories": [type_id_dict.get(c, "unknown") for c in curies]
                 }
                 index += 1
@@ -344,9 +428,9 @@ class SAPQdrant:
 
                 vector = np.array(data['embedding']).astype(np.float32)
                 payload = {
-                    "curie": data['curies'][0],
+                    "curie": data['curies'][0] if data['curies'] else None,
                     "name": data['name'],
-                    "categories": data['categories'][0]
+                    "categories": data['categories'][0] if data['categories'] else None
                 }
 
                 to_insert.append(
@@ -436,16 +520,25 @@ async def main(config: Config):
             embeddings = sorted(glob.glob(os.path.join(folder_path, "embedding", "*.np*")))
             name_id_chunk_files = sorted(glob.glob(os.path.join(folder_path, "metadata", "name_ids*")))
             id_type_file = os.path.join(folder_path, "metadata", "id_types.csv")
-            name_id_file = os.path.join(folder_path, "name_ids.csv")
+            master_name_id_file = os.path.join(folder_path, "name_ids.csv")
 
             if not embeddings or not name_id_chunk_files:
                 logger.warning(f"No files found in {folder_path}, skipping")
                 continue
 
-            # Load metadata
-            logger.info(f"Loading metadata from {folder}")
+            # Build or reuse sqlite for this folder (from master name_ids.csv)
+            name_lookup = None
+            try:
+                name_lookup = NameIdSQLite(folder_path)
+                name_lookup.prepare()
+            except FileNotFoundError:
+                # If there's no master name_ids.csv, we'll still process using per-chunk metadata
+                logger.info(f"No master name_ids.csv for {folder_path}; proceeding without sqlite")
+                name_lookup = None
+
+            # Load id->type mapping
+            logger.info(f"Loading id_types from {id_type_file}")
             type_id_dict = get_id_type_dict(id_type_file)
-            id_name_dict = get_name_id_dict(name_id_file)
 
             # Determine start file index
             start_file_idx = 0
@@ -470,7 +563,8 @@ async def main(config: Config):
 
                 try:
                     counter = await client.populate_index(
-                        iter_files(emb, name_id, id_type_file, type_id_dict, id_name_dict),
+                        iter_files(emb, name_id, id_type_file, type_id_dict, name_lookup,
+                                   exclude_prefixes=config.exclude_prefixes),
                         counter,
                         shutdown_handler
                     )
@@ -494,6 +588,13 @@ async def main(config: Config):
                     if progress:
                         progress.save(config.progress_file)
                     raise
+
+            # Cleanup sqlite for this folder to reclaim disk space
+            if name_lookup:
+                try:
+                    name_lookup.cleanup()
+                except Exception as e:
+                    logger.warning(f"Error cleaning up sqlite for {folder_path}: {e}")
 
             # Clear completed files for next folder
             completed_files = []
@@ -531,7 +632,9 @@ def parse_args():
     parser.add_argument("--progress-file", default="upload_progress.json", help="Progress file path")
     parser.add_argument("--delete-existing", action="store_true", help="Delete existing index")
     parser.add_argument("--no-resume", dest="resume", action="store_false", help="Disable resume")
-    parser.add_argument("--prefetc-size", type=int, default=5, help="Prefetch buffer size")
+    parser.add_argument("--prefetch-size", type=int, default=5, help="Prefetch buffer size")
+    parser.add_argument("--exclude-prefixes", nargs="*", default=[],
+                        help="Skip rows whose curie prefix matches (e.g. PUBCHEM.COMPOUND UMLS). Case-insensitive.")
 
     return parser.parse_args()
 

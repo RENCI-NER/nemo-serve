@@ -1,8 +1,33 @@
+import asyncio
 import logging
+import grpc
+from grpc.aio import AioRpcError
 from qdrant_client import AsyncQdrantClient, models
 import numpy as np
 
 logger = logging.getLogger()
+
+# gRPC holds one long-lived HTTP/2 connection. Through a ClusterIP that
+# connection gets reaped while idle, and the client does not notice until it
+# tries to use it: the *first request after a dormant period* fails with
+# "recvmsg:Connection reset by peer", then everything is fine again. Not random
+# — it tracks idle gaps, which means it lands precisely on the cold request a
+# human is waiting for. REST reconnected per request, so it never showed this.
+# Keepalive stops the connection going stale; the retry below covers the rest.
+# qdrant_client.connection.parse_channel_options() calls .items(), so this must
+# be a dict, not grpc's usual list of tuples. Its own defaults
+# (grpc.max_{send,receive}_message_length) are preserved for keys we omit.
+GRPC_OPTIONS = {
+    "grpc.keepalive_time_ms": 30_000,
+    "grpc.keepalive_timeout_ms": 10_000,
+    # Ping even with no RPCs in flight; the idle case is the whole problem here.
+    "grpc.keepalive_permit_without_calls": 1,
+    "grpc.http2.max_pings_without_data": 0,
+}
+
+# A search is a pure read, so retrying is safe. UNAVAILABLE means the RPC never
+# landed; DEADLINE_EXCEEDED can be a dead connection we have not noticed yet.
+RETRYABLE_CODES = (grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED)
 
 
 # Scalar int8 quantization loses a little recall. Rescoring the shortlist
@@ -28,8 +53,29 @@ class SAPQdrant:
             grpc_port=grpc_port,
             prefer_grpc=prefer_grpc,
             https=(scheme == "https"),
+            grpc_options=GRPC_OPTIONS if prefer_grpc else None,
         )
         self.index = index
+
+    @staticmethod
+    async def _retrying(call, attempts=3):
+        """Run an idempotent qdrant call, retrying transient gRPC failures.
+
+        Keepalive makes reaped connections rare; this makes them invisible.
+        """
+        delay = 0.05
+        for attempt in range(1, attempts + 1):
+            try:
+                return await call()
+            except AioRpcError as e:
+                if e.code() not in RETRYABLE_CODES or attempt == attempts:
+                    raise
+                logger.warning(
+                    "qdrant gRPC %s (%s); retry %d/%d",
+                    e.code().name, e.details(), attempt, attempts - 1,
+                )
+                await asyncio.sleep(delay)
+                delay *= 2
 
     async def delete_index(self):
         exists = await self.client.collection_exists(collection_name=self.index)
@@ -108,32 +154,26 @@ class SAPQdrant:
 
 
     async def search(self, query_vector, top_n=10, bl_type=None, *args, **kwargs):
+        query_filter = None
         if bl_type:
-            results = await self.client.search(
-                collection_name=self.index,
-                query_vector=query_vector,
-                with_payload=True,
-                limit=top_n,
-                search_params=SEARCH_PARAMS,
-                query_filter=models.Filter(
-                    must=[
-                        models.FieldCondition(
-                            key="categories",
-                            match=models.MatchValue(
-                                value=bl_type
-                            )
+            query_filter = models.Filter(
+                must=[
+                    models.FieldCondition(
+                        key="categories",
+                        match=models.MatchValue(
+                            value=bl_type
                         )
-                    ]
-                )
+                    )
+                ]
             )
-        else:
-            results = await self.client.search(
-                collection_name=self.index,
-                query_vector=query_vector,
-                with_payload=True,
-                limit=top_n,
-                search_params=SEARCH_PARAMS,
-            )
+        results = await self._retrying(lambda: self.client.search(
+            collection_name=self.index,
+            query_vector=query_vector,
+            with_payload=True,
+            limit=top_n,
+            search_params=SEARCH_PARAMS,
+            query_filter=query_filter,
+        ))
         return [
             {
                 "score": x.score,

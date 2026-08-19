@@ -87,6 +87,7 @@ class Config:
     vector_size: int = 768
     shard_number: int = 9
     replication_factor: int = 1
+    id_offset: int = 0
     progress_file: str = "upload_progress.json"
     delete_existing: bool = False
     resume: bool = True
@@ -109,6 +110,7 @@ class Config:
             vector_size=args.vector_size,
             shard_number=args.shard_number,
             replication_factor=args.replication_factor,
+            id_offset=args.id_offset,
             progress_file=args.progress_file,
             delete_existing=args.delete_existing,
             resume=args.resume,
@@ -322,6 +324,12 @@ class SAPQdrant:
             logger.error(f"Error checking collection existence: {e}")
             return False
 
+    async def count(self) -> int:
+        """Number of points currently in the collection (0 if it does not exist)"""
+        if not await self.collection_exists():
+            return 0
+        return (await self.client.count(collection_name=self.index, exact=True)).count
+
     async def delete_index(self):
         """Delete the index/collection"""
         if await self.collection_exists():
@@ -345,18 +353,24 @@ class SAPQdrant:
                 hnsw_config=HnswConfigDiff(
                     m=16,
                     ef_construct=100,
-                    on_disk=True  # Store HNSW graph on disk
+                    # Storage is NetApp NFS, so on_disk=True makes every HNSW
+                    # graph hop a network round trip: measured 137.9ms vs 3.0ms
+                    # p50. Recreating the collection with on_disk=True silently
+                    # undoes that.
+                    on_disk=False
                 ),
                 optimizers_config=OptimizersConfigDiff(
                     memmap_threshold=200000,
                     max_segment_size=10_000_000,
-                    indexing_threshold=0  # Start with indexing disabled
+                    indexing_threshold=0,  # Start with indexing disabled
+                    max_optimization_threads=4
                 ),
                 quantization_config=ScalarQuantization(
                     scalar=ScalarQuantizationConfig(
                         type="int8",
                         quantile=0.99,
-                        always_ram=False
+                        # ~1KB per vector, against 64Gi per pod.
+                        always_ram=True
                     )
                 )
             )
@@ -498,7 +512,22 @@ async def main(config: Config):
         # Create index if needed
         await recreate_index(client, delete=config.delete_existing)
 
-        counter = progress.total_counter if progress else 0
+        # Point ids are sequential integers from `counter`, and upsert replaces
+        # on collision. Without a progress file to carry the previous run's
+        # counter forward, starting at an unconsidered 0 is how you overwrite
+        # points. Make the caller say what they mean.
+        if not progress and config.id_offset == 0 and not config.delete_existing:
+            existing = await client.count()
+            if existing:
+                raise SystemExit(
+                    f"Refusing to start: collection '{config.index}' already holds "
+                    f"{existing:,} points, there is no progress file to resume from, "
+                    f"and --id-offset is 0. Pass --id-offset above the highest existing "
+                    f"id, or --delete-existing to deliberately wipe the collection."
+                )
+
+        counter = progress.total_counter if progress else config.id_offset
+        logger.info(f"First point id for this run: {counter}")
         start_folder_idx = 0
 
         # Find resume point
@@ -629,6 +658,11 @@ def parse_args():
     parser.add_argument("--vector-size", type=int, default=768, help="Vector dimension size")
     parser.add_argument("--shard-number", type=int, default=9, help="Number of shards")
     parser.add_argument("--replication-factor", type=int, default=1, help="Replication factor")
+    parser.add_argument("--id-offset", type=int, default=0,
+                        help="First point id to use when not resuming. Point ids are "
+                             "sequential integers and upsert replaces on collision, so "
+                             "loading into a populated collection must start above the "
+                             "highest existing id.")
     parser.add_argument("--progress-file", default="upload_progress.json", help="Progress file path")
     parser.add_argument("--delete-existing", action="store_true", help="Delete existing index")
     parser.add_argument("--no-resume", dest="resume", action="store_false", help="Disable resume")
