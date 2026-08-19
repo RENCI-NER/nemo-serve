@@ -10,8 +10,12 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import torch
 from starlette.concurrency import run_in_threadpool
-from src.utils.SAPRedis import RedisMemory
-from src.utils.SAPQdrant import SAPQdrant
+# SAPRedis/SAPQdrant are imported lazily in SapbertModelWrapper.__init__ rather
+# than here. They pull in redis and qdrant_client, which are absent from the
+# token-classification images (ghcr.io/renci-ner/nemo-serve:v1.3.1 and friends);
+# importing them at module scope makes this file unimportable there and takes the
+# whole app down, sapbert backend or not. Same reason `nemo` is imported inside
+# TokenClassificationModelWrapper.__init__.
 from src.utils.tokenizer import tokenizer
 
 import yaml
@@ -458,10 +462,12 @@ class SapbertModelWrapper(ModelWrapper):
         else:
             self.model = AutoModel.from_pretrained(model_path)
         if backend == 'redis':
+            from src.utils.SAPRedis import RedisMemory
             self.storage_client = RedisMemory(
                 **connection_config
             )
-        elif backend =="qdrant":
+        elif backend == "qdrant":
+            from src.utils.SAPQdrant import SAPQdrant
             self.storage_client = SAPQdrant(
                 **connection_config
             )
